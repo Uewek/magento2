@@ -1,0 +1,1 @@
+php bin/magento setup:install --base-url=http://magento21.loc/ --db-host=127.0.0.1 --db-name=magento21 --db-user=root --db-password=root --admin-firstname=Admin --admin-lastname=Adminov --admin-email=admin@mail.com --admin-user=admin --admin-password=123123q --language=en_US --currency=USD --timezone=America/Chicago --use-rewrites=1 --cleanup-database --backend-frontname=admin
