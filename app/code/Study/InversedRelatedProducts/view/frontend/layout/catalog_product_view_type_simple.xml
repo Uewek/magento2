@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <body>
-    <referenceContainer name="content">
+    <referenceContainer name="product.info.main">
         <block class="Study\InversedRelatedProducts\Block\Product\View\Extra"
                name="product.info.inversedrelations"
-               template="Study_InversedRelatedProducts::product/view/extra.phtml">
+               template="Study_InversedRelatedProducts::product/view/extra.phtml"
+               after="product.price.tier">
         </block>
     </referenceContainer>
-    <move element="product.info.inversedrelations" destination="product.info.main" after="product.info.price"/>
 </body>
