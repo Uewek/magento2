@@ -1,10 +1,17 @@
 <?php
+declare(strict_types=1);
 
 namespace Study\InversedRelatedProducts\Model;
+
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
-class Config implements ConfigInterface{
+/**
+ * Class Config
+ * get system config from adminpage
+ */
+class Config implements ConfigInterface
+{
 
     private $scopeConfig;
 
@@ -16,12 +23,16 @@ class Config implements ConfigInterface{
         $this->scopeConfig = $scopeConfig;
     }
 
-    public function isEnabled():bool
+    /**
+     * Return config enabled/disabled
+     *
+     * @return bool
+     */
+    public function isEnabled(): bool
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
     }
-
 }

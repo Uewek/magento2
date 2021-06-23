@@ -1,15 +1,15 @@
 <?php
 /* @var \Study\InversedRelatedProducts\Block\Product\View\Extra $block */
- $inversedRelatedProductsArray=$block->getInversedRelatedProducts();
+$inversedRelatedProductsArray = $block->getInversedRelatedProducts();
 ?>
 
-<?php if(count($inversedRelatedProductsArray)!=0&&$block->canShowInversedProducts()): ?>
-<strong class="product name product-item-name">Please also check related products:
-<?php foreach($inversedRelatedProductsArray as $inversedRelatedProduct):?>
-        <a class="product-item-link"
-        title="<?= $inversedRelatedProduct->getName() ?>"
-        href="<?= $inversedRelatedProduct->getProductUrl() ?>">
-        <?= $inversedRelatedProduct->getName() ?></a>
-<?php endforeach;?>
-</strong>
+<?php if (count($inversedRelatedProductsArray) != 0 && $block->canShowInversedProducts()): ?>
+    <strong class="product name product-item-name">Please also check related products:
+        <?php foreach ($inversedRelatedProductsArray as $inversedRelatedProduct): ?>
+            <a class="product-item-link"
+               title="<?= $inversedRelatedProduct->getName() ?>"
+               href="<?= $inversedRelatedProduct->getProductUrl() ?>">
+                <?= $inversedRelatedProduct->getName() ?></a>
+        <?php endforeach; ?>
+    </strong>
 <?php endif; ?>
