@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Study\InversedRelatedProducts\Block\Product\View;
 
@@ -8,6 +9,8 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Study\InversedRelatedProducts\Model\Config;
 use Study\InversedRelatedProducts\Model\LinkedProductsFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Link;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 /**
  * Class Extra
@@ -21,82 +24,65 @@ class Extra extends Template
     private $config;
 
     /**
-     * @var LinkedProductsFactory
-     */
-    private $_linkedProductsFactory;
-    /**
      * @var Data
      */
     private $dataHelper;
 
-    private $productRepository;
+    /**
+     * @var Link
+     */
+    private $link;
+
+    /**
+     * @var CollectionFactory
+     */
+    private $productCollectionFactory;
 
     /**
      * Extra constructor.
      * @param Context $context
      * @param Config $config
-     * @param LinkedProductsFactory $linkedProductsFactory
      * @param Data $catalogData
-     * @param ProductRepositoryInterface $productRepository
+     * @param Link $link
+     * @param CollectionFactory $productCollectionFactory
      */
     public function __construct(
         Context $context,
         Config $config,
-        LinkedProductsFactory $linkedProductsFactory,
         Data $catalogData,
-        ProductRepositoryInterface $productRepository
+        Link $link,
+        CollectionFactory $productCollectionFactory
     ) {
-        $this->_linkedProductsFactory = $linkedProductsFactory;
+        $this->productCollectionFactory = $productCollectionFactory;
+        $this->link = $link;
         $this->config = $config;
         $this->dataHelper = $catalogData;
-        $this->productRepository = $productRepository;
         parent::__construct($context);
     }
 
     /**
-     * Get product by id
+     * Get limited collection of "base" products
      *
-     * @param int $id
-     * @return \Magento\Catalog\Api\Data\ProductInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
-    public function getProductById(int $id)
+    public function getLimitedProductCollection()
     {
-        $product = $this->productRepository->getById($id);
-        return $product;
+        $limitedCollection = $this->productCollectionFactory->create();
+        $limitedCollection->addAttributeToSelect('*');
+        $limitedCollection->addAttributeToFilter('entity_id', ['in' => $this->getLinkedParents()]);
+        $limitedCollection->setPageSize(3);
+        return $limitedCollection;
     }
 
     /**
-     * Prepare array with ids products that have inversed relations with current
+     * Return array of the "base" product ids
      *
-     * @param int $count
      * @return array
      */
-    private function getInversedRelations(int $count = 3): array
+    public function getLinkedParents(): array
     {
-        $relations = $this->_linkedProductsFactory->create();
-        $relationItems = $relations->getCollection()->getItems();
-        $arr = [];
-        foreach ($relationItems as $item) {
-            if ($item->toArray()['linked_product_id'] == $this->getCurrentProductId() && count($arr) < $count) {
-                $arr[] = $item->toArray()['product_id'];
-            }
-        }
-        return $arr;
-    }
+        return $this->link->getParentIdsByChild($this->getCurrentProductId(),1);
 
-    /**
-     *  Get products that have inversed relations with current
-     *
-     * @return array
-     */
-    public function getInversedRelatedProducts(): array
-    {
-        $products = [];
-        foreach ($this->getInversedRelations() as $inversedRelationId) {
-            $products[] = $this->getProductById($inversedRelationId);
-        }
-        return $products;
     }
 
     /**
@@ -106,17 +92,20 @@ class Extra extends Template
      */
     public function canShowInversedProducts(): bool
     {
-        $result = $this->config->isEnabled();
-        return $result;
+        return $this->config->isEnabled();
+
     }
 
     /**
      * Get id of current product
      *
-     * @return int
      */
-    public function getCurrentProductId(): int
+    public function getCurrentProductId()
     {
-        return $this->dataHelper->getProduct()->getId();
+        return  $this->dataHelper->getProduct()->getId();
     }
+
+
+
+
 }

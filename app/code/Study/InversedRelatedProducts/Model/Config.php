@@ -12,7 +12,9 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Config implements ConfigInterface
 {
-
+    /**
+     * @var ScopeConfigInterface
+     */
     private $scopeConfig;
 
     /**

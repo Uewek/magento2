@@ -1,9 +1,9 @@
 <?php
 /* @var \Study\InversedRelatedProducts\Block\Product\View\Extra $block */
-$inversedRelatedProductsArray = $block->getInversedRelatedProducts();
+$inversedRelatedProductsArray = $block->getLimitedProductCollection();;
 ?>
 
-<?php if (count($inversedRelatedProductsArray) != 0 && $block->canShowInversedProducts()): ?>
+<?php if ($block->canShowInversedProducts() && !empty($inversedRelatedProductsArray->getItems())): ?>
     <strong class="product name product-item-name">Please also check related products:
         <?php foreach ($inversedRelatedProductsArray as $inversedRelatedProduct): ?>
             <a class="product-item-link"
