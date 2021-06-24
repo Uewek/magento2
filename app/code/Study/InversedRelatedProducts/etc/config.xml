@@ -4,7 +4,7 @@
     <default>
         <catalog>
             <frontend>
-                <enable>1</enable>
+                <enableInversedRelations>1</enableInversedRelations>
             </frontend>
         </catalog>
     </default>

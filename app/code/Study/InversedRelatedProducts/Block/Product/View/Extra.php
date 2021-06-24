@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 namespace Study\InversedRelatedProducts\Block\Product\View;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Data;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Study\InversedRelatedProducts\Model\Config;
-use Study\InversedRelatedProducts\Model\LinkedProductsFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Link;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
@@ -61,6 +59,17 @@ class Extra extends Template
     }
 
     /**
+     * Check enabled/disabled status
+     *
+     * @return bool
+     */
+    public function canShowInversedProducts(): bool
+    {
+        return $this->config->isEnabled();
+
+    }
+
+    /**
      * Get limited collection of "base" products
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
@@ -79,20 +88,9 @@ class Extra extends Template
      *
      * @return array
      */
-    public function getLinkedParents(): array
+    private function getLinkedParents(): array
     {
         return $this->link->getParentIdsByChild($this->getCurrentProductId(),1);
-
-    }
-
-    /**
-     * Check enabled/disabled status
-     *
-     * @return bool
-     */
-    public function canShowInversedProducts(): bool
-    {
-        return $this->config->isEnabled();
 
     }
 
@@ -100,7 +98,7 @@ class Extra extends Template
      * Get id of current product
      *
      */
-    public function getCurrentProductId()
+    private function getCurrentProductId()
     {
         return  $this->dataHelper->getProduct()->getId();
     }
