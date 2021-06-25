@@ -76,7 +76,7 @@ class Extra extends Template
      *
      * @return Collection
      */
-    public function getInveresedRealtedProductsColection()
+    public function getInveresedRealtedProductsColection(): Collection
     {
         $inveresedRealtedProductsColection = $this->productCollectionFactory->create();
         $inveresedRealtedProductsColection->addAttributeToSelect('name');
@@ -94,7 +94,6 @@ class Extra extends Template
      */
     private function getLinkedParents(): array
     {
-
         return $this->link->getParentIdsByChild($this->getCurrentProductId(),1);
     }
 
@@ -104,11 +103,6 @@ class Extra extends Template
      */
     private function getCurrentProductId()
     {
-
         return  $this->dataHelper->getProduct()->getId();
     }
-
-
-
-
 }
