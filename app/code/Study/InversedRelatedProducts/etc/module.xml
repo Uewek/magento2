@@ -4,6 +4,7 @@
     <module name="Study_InversedRelatedProducts" setup_version="1.0.1">
         <sequence>
             <module name="Magento_Catalog"/>
+            <module name="Magento_Store"/>
         </sequence>
     </module>
 </config>

@@ -8,7 +8,7 @@ namespace Study\InversedRelatedProducts\Model;
  */
 interface ConfigInterface
 {
-    const XML_PATH_ENABLED = 'catalog/frontend/enableInversedRelations';
+    const XML_PATH_ENABLED = 'catalog/frontend/enable_inversed_relations';
 
     /**
      * Return config enabled/disabled

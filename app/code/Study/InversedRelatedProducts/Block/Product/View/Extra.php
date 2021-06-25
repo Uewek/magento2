@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Study\InversedRelatedProducts\Block\Product\View;
 
 use Magento\Catalog\Helper\Data;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Study\InversedRelatedProducts\Model\Config;
@@ -55,6 +56,7 @@ class Extra extends Template
         $this->link = $link;
         $this->config = $config;
         $this->dataHelper = $catalogData;
+
         parent::__construct($context);
     }
 
@@ -65,22 +67,24 @@ class Extra extends Template
      */
     public function canShowInversedProducts(): bool
     {
-        return $this->config->isEnabled();
 
+        return $this->config->isEnabled();
     }
 
     /**
      * Get limited collection of "base" products
      *
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
+     * @return Collection
      */
-    public function getLimitedProductCollection()
+    public function getInveresedRealtedProductsColection()
     {
-        $limitedCollection = $this->productCollectionFactory->create();
-        $limitedCollection->addAttributeToSelect('*');
-        $limitedCollection->addAttributeToFilter('entity_id', ['in' => $this->getLinkedParents()]);
-        $limitedCollection->setPageSize(3);
-        return $limitedCollection;
+        $inveresedRealtedProductsColection = $this->productCollectionFactory->create();
+        $inveresedRealtedProductsColection->addAttributeToSelect('name');
+        $inveresedRealtedProductsColection->addAttributeToSelect('productUrl');
+        $inveresedRealtedProductsColection->addAttributeToFilter('entity_id', ['in' => $this->getLinkedParents()]);
+        $inveresedRealtedProductsColection->getSelect()->limit(3);
+
+        return $inveresedRealtedProductsColection;
     }
 
     /**
@@ -90,8 +94,8 @@ class Extra extends Template
      */
     private function getLinkedParents(): array
     {
-        return $this->link->getParentIdsByChild($this->getCurrentProductId(),1);
 
+        return $this->link->getParentIdsByChild($this->getCurrentProductId(),1);
     }
 
     /**
@@ -100,6 +104,7 @@ class Extra extends Template
      */
     private function getCurrentProductId()
     {
+
         return  $this->dataHelper->getProduct()->getId();
     }
 
