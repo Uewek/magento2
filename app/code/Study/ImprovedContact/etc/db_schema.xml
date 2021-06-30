@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="study_advancedcontacts" resource="default" engine="innodb" comment="Advanced contacts">
+        <column xsi:type="int" name="contact_id" nullable="false" padding="15" identity="true" comment="Contact ID"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="63" comment="Name"/>
+        <column xsi:type="varchar" name="email" nullable="false" length="127" comment="Email"/>
+        <column xsi:type="varchar" name="telephone" nullable="false" length="255" comment="Phone"/>
+        <column xsi:type="text" name="comment" nullable="false" comment="Comment"/>
+        <column xsi:type="timestamp" name="created_at" nullable="true" default="CURRENT_TIMESTAMP"
+                comment="Create Time"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="contact_id"/>
+        </constraint>
+    </table>
+</schema>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Contact\Controller\Index\Post">
+        <plugin name="improvedcontact_post_plugin" type="Study\ImprovedContact\Plugin\Controller\Index\Post"/>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="improvedcontact_data_source" xsi:type="string">
+                    Study\ImprovedContact\Model\ResourceModel\Contact\Grid\Collection
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Study\ImprovedContact\Model\ResourceModel\Contact\Grid\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">study_advancedcontacts</argument>
+            <argument name="resourceModel" xsi:type="string">Study\ImprovedContact\Model\ResourceModel\Contact
+            </argument>
+        </arguments>
+    </virtualType>
+</config>

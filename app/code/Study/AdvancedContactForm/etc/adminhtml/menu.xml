@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
-    <menu>
-        <add id="Study_AdvancedContactForm::advancedcontacts" title="Marketing Contact us Requests" translate="title" module="Study_AdvancedContactForm" parent="Magento_Reports::report" sortOrder="99" resource="Magento_Reports::salesroot_sales"/>
-        <add id="Study_AdvancedContactForm::advancedcontacts_admin" title="Advanced contacts admin page" translate="title" module="Study_AdvancedContactForm" parent="Study_AdvancedContactForm::advancedcontacts" sortOrder="10"  action="uiform/index/index" resource="Magento_Reports::salesroot_sales"/>
-    </menu>
-</config>
