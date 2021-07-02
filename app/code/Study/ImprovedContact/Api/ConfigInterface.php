@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Study\ImprovedContact\Model;
+namespace Study\ImprovedContact\Api;
 
 /**
  * Interface ConfigInterface
  */
 interface ConfigInterface
 {
-    const XML_PATH_ENABLED = 'reports/options/advanced_contacts_enabled';
+    const XML_IMPRIVEDCONTACTS_ENABLED = 'reports/options/advanced_contacts_enabled';
 
     /**
      * Return config enabled/disabled

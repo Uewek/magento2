@@ -4,18 +4,35 @@
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">
-                improvedcontact_form_listing.improvedcontact_listing_data_source
+                contactors_info_listing.contactors_info_listing_data_source
             </item>
-            <item name="deps" xsi:type="string">improvedcontact_form_listing.improvedcontact_listing_data_source
+            <item name="deps" xsi:type="string">contactors_info_listing.contactors_info_listing_data_source
             </item>
         </item>
         <item name="spinner" xsi:type="string">spinner_columns</item>
     </argument>
-    <dataSource name="improvedcontact_listing_data_source">
+    <listingToolbar name="listing_top">
+        <filters name="listing_filters">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="params" xsi:type="array">
+                        <item name="filters_modifier" xsi:type="array"/>
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <statefull>
+                    <property name="applied" xsi:type="boolean">false</property>
+                </statefull>
+            </settings>
+        </filters>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <dataSource name="contactors_info_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Study\ImprovedContact\Ui\DataProvider\Contact\DataProvider
             </argument>
-            <argument name="name" xsi:type="string">improvedcontact_listing_data_source</argument>
+            <argument name="name" xsi:type="string">contactors_info_listing_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">contact_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
@@ -29,6 +46,7 @@
             </argument>
         </argument>
     </dataSource>
+
     <columns name="spinner_columns">
         <column name="contact_id">
             <argument name="data" xsi:type="array">

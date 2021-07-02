@@ -4,12 +4,13 @@ declare(strict_types=1);
 namespace Study\ImprovedContact\Ui\DataProvider\Contact;
 
 use Magento\Ui\DataProvider\AbstractDataProvider;
+use Study\ImprovedContact\Model\ResourceModel\AdvancedContactForm\Collection;
 use Study\ImprovedContact\Model\ResourceModel\AdvancedContactForm\CollectionFactory;
 
 class DataProvider extends AbstractDataProvider
 {
     /**
-     * @var CollectionFactory
+     * @var Collection
      */
     protected $collection;
 
@@ -17,7 +18,7 @@ class DataProvider extends AbstractDataProvider
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param CollectionFactory $colectionFactory
+     * @param CollectionFactory $collectionFactory
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -26,7 +27,7 @@ class DataProvider extends AbstractDataProvider
         $name,
         $primaryFieldName,
         $requestFieldName,
-        CollectionFactory $colectionFactory,
+        CollectionFactory $collectionFactory,
         array $meta = [],
         array $data = []
     ) {
@@ -37,6 +38,6 @@ class DataProvider extends AbstractDataProvider
             $meta,
             $data
         );
-        $this->collection = $colectionFactory->create();
+        $this->collection = $collectionFactory->create();
     }
 }

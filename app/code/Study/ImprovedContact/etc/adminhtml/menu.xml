@@ -2,14 +2,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Study_ImprovedContact::advancedcontacts" title="Marketing Contact us Requests" translate="title"
-             module="Study_ImprovedContact" parent="Magento_Reports::report" sortOrder="99"
-             resource="Magento_Reports::salesroot_sales"/>
-        <add id="Study_ImprovedContact::advancedcontacts_admin" title="Advanced contacts admin page"
-             translate="title" module="Study_ImprovedContact" parent="Study_ImprovedContact::advancedcontacts"
-             sortOrder="10" action="improvedcontact" resource="Magento_Reports::salesroot_sales"/>
-        <add id="Study_ImprovedContact::advancedcontacts_config" title="Go to config admin page" translate="title"
-             module="Study_ImprovedContact" parent="Study_ImprovedContact::advancedcontacts" sortOrder="20"
-             action="admin/system_config/edit/section/reports/" resource="Magento_Reports::salesroot_sales"/>
+        <add id="Study_ImprovedContact::advancedcontacts_admin" title="Marketing Contact us Requests"
+             translate="title" module="Study_ImprovedContact" parent="Magento_Reports::report_marketing"
+             sortOrder="70" action="improvedcontact" resource="Magento_Reports::salesroot_sales"/>
     </menu>
 </config>

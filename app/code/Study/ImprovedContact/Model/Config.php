@@ -5,6 +5,8 @@ namespace Study\ImprovedContact\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
+use Study\ImprovedContact\Api\ConfigInterface;
+
 
 /**
  * Class Config
@@ -33,7 +35,7 @@ class Config implements ConfigInterface
     public function isEnabled(): bool
     {
         return $this->scopeConfig->isSetFlag(
-            self::XML_PATH_ENABLED,
+            self::XML_IMPRIVEDCONTACTS_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
     }

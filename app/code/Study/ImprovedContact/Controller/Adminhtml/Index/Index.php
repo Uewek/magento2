@@ -8,14 +8,14 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ResponseInterface as ResponseInterfaceAlias;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\View\Result\Page as PageAlias;
+use Magento\Framework\View\Result\Page as Page;
 
 class Index extends Action implements HttpGetActionInterface
 {
     /**
      * Main method
      *
-     * @return ResponseInterfaceAlias|ResultInterface|PageAlias
+     * @return ResponseInterfaceAlias|ResultInterface|Page
      */
     public function execute()
     {

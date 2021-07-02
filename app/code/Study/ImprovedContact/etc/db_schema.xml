@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="study_advancedcontacts" resource="default" engine="innodb" comment="Advanced contacts">
+    <table name="study_contactors_info" resource="default" engine="innodb" comment="Advanced contacts">
         <column xsi:type="int" name="contact_id" nullable="false" padding="15" identity="true" comment="Contact ID"/>
         <column xsi:type="varchar" name="name" nullable="false" length="63" comment="Name"/>
         <column xsi:type="varchar" name="email" nullable="false" length="127" comment="Email"/>

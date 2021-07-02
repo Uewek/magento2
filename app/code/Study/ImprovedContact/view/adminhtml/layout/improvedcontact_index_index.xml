@@ -4,7 +4,7 @@
     <update handle="styles"/>
     <body>
         <referenceContainer name="content">
-            <uiComponent name="improvedcontact_form_listing"/>
+            <uiComponent name="contactors_info_listing"/>
         </referenceContainer>
     </body>
 </page>
