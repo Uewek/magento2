@@ -99,5 +99,10 @@
                 </item>
             </argument>
         </column>
+        <actionsColumn name="actions" class="Study\ImprovedContact\Ui\Component\Listing\Edit" sortOrder="200">
+            <settings>
+                <indexField>contact_id</indexField>
+            </settings>
+        </actionsColumn>
     </columns>
 </listing>
