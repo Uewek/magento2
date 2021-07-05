@@ -17,7 +17,7 @@
     </argument>
     <dataSource name="contact_edit_form_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Study\ImprovedContact\Ui\DataProvider\Contact\DataProvider</argument>
+            <argument name="class" xsi:type="string">Study\ImprovedContact\Ui\DataProvider\Form\DataProvider</argument>
             <argument name="name" xsi:type="string">contactors_info_listing_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">contact_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
