@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Study\ImprovedContact\Ui\Component\Listing;
 
 use Magento\Framework\UrlInterface;

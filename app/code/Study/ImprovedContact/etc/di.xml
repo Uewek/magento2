@@ -21,4 +21,6 @@
             </argument>
         </arguments>
     </virtualType>
+    <preference for="Study\ImprovedContact\Api\ContactRepositoryInterface"
+                type="Study\ImprovedContact\Model\ContactRepositoryModel" />
 </config>

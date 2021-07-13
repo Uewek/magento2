@@ -11,9 +11,9 @@
             <item name="namespace" xsi:type="string">contact_edit_form</item>
         </item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
-<!--        <item name="buttons" xsi:type="array">-->
-<!--            <item name="save" xsi:type="string">Study\ImprovedContact\Block\Adminhtml\SaveButton</item>-->
-<!--        </item>-->
+        <item name="buttons" xsi:type="array">
+            <item name="save" xsi:type="string">Study\ImprovedContact\Block\Adminhtml\Edit\Save</item>
+        </item>
     </argument>
     <dataSource name="contact_edit_form_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
@@ -25,6 +25,7 @@
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+                <item name="submit_url" path="*/*/save" xsi:type="url" />
             </item>
         </argument>
     </dataSource>
@@ -35,30 +36,13 @@
                 <item name="sortOrder" xsi:type="number">20</item>
             </item>
         </argument>
-<!--        <button name="custom_button">-->
-<!--            <argument name="data" xsi:type="array">-->
-<!--                <item name="config" xsi:type="array">-->
-<!--                    <item name="buttonClasses" xsi:type="string">save</item>-->
-<!--                    <item name="actions" xsi:type="array">-->
-<!--                        <item name="0" xsi:type="array">-->
-<!--                            <item name="targetName" xsi:type="string">TARGET_NAME</item>-->
-<!--                            <item name="actionName" xsi:type="string">ACTION_NAME</item>-->
-<!--                        </item>-->
-<!--                    </item>-->
-<!--                </item>-->
-<!--            </argument>-->
-<!--            <settings>-->
-<!--                <displayAsLink>false</displayAsLink>-->
-<!--                <title translate="true">Custom Button</title>-->
-<!--            </settings>-->
-<!--        </button>-->
-
         <field name="contact_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">int</item>
                     <item name="label" xsi:type="string" translate="true">Contact Id</item>
                     <item name="formElement" xsi:type="string">input</item>
+                    <item name="disabled" xsi:type="boolean">true</item>
                 </item>
             </argument>
         </field>
