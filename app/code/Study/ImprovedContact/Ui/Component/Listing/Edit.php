@@ -15,6 +15,14 @@ class Edit extends Column
      */
     protected $urlBuilder;
 
+    /**
+     * Edit constructor.
+     * @param ContextInterface $context
+     * @param UiComponentFactory $uiComponentFactory
+     * @param UrlInterface $urlBuilder
+     * @param array $components
+     * @param array $data
+     */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
@@ -25,7 +33,15 @@ class Edit extends Column
         $this->urlBuilder = $urlBuilder;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
-    public function prepareDataSource(array $dataSource) {
+
+    /**
+     * Prepare Data Source
+     *
+     * @param array $dataSource
+     * @return array
+     */
+    public function prepareDataSource(array $dataSource)
+    {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$contact) {
                 $contact[$this->getData('name')]['edit'] = [
@@ -40,5 +56,4 @@ class Edit extends Column
         }
         return $dataSource;
     }
-
 }

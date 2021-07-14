@@ -5,10 +5,8 @@ namespace Study\ImprovedContact\Model;
 use Study\ImprovedContact\Api\Data\ContactInterface;
 use Study\ImprovedContact\Model\ResourceModel\ContractorInfo as ModelResource;
 use Study\ImprovedContact\Api\ContactRepositoryInterface;
-use Magento\Framework\Model\AbstractModel;
 
-
-class ContactRepository extends AbstractModel implements ContactRepositoryInterface
+class ContactRepository implements ContactRepositoryInterface
 {
 
     /**
@@ -26,32 +24,36 @@ class ContactRepository extends AbstractModel implements ContactRepositoryInterf
      * @param ModelResource $modelResource
      * @param \Study\ImprovedContact\Model\ContactorInfoFactory $contactorInfoFactory
      */
-    public function __construct
-    (
+    public function __construct(
         ModelResource $modelResource,
         ContactorInfoFactory $contactorInfoFactory
-    )
-    {
+    ) {
         $this->modelRecource = $modelResource;
         $this->contactorInfoFactory = $contactorInfoFactory;
     }
 
     /**
-     * @param $id
+     * Get contact by id
+     *
+     * @param int $id
      * @return mixed|ContactorInfo
      */
-    public function getById($id)
+    public function getById(int $id)
     {
         $contact= $this->contactorInfoFactory->create();
-        $this->modelRecource->load($contact,$id);
+        $this->modelRecource->load($contact, $id);
+
         return $contact;
     }
 
     /**
+     * Save contact after edition
+     *
      * @param ContactInterface $contact
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @return void
      */
-    public function saveContact(ContactInterface $contact){
+    public function save(ContactInterface $contact)
+    {
         $this->modelRecource->save($contact);
     }
 }

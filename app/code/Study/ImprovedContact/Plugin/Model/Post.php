@@ -9,7 +9,6 @@ use Study\ImprovedContact\Model\ContactorInfoFactory;
 use Study\ImprovedContact\Model\Config;
 use Study\ImprovedContact\Model\ContactRepository;
 
-
 class Post
 {
     /**
@@ -37,29 +36,27 @@ class Post
      * @param ContactorInfoFactory $contactorInfoFactory
      * @param Config $config
      * @param PostController $postController
+     * @param ContactRepository $contactRepository
      */
     public function __construct(
         ContactorInfoFactory $contactorInfoFactory,
         Config $config,
         PostController $postController,
         ContactRepository $contactRepository
-
-
     ) {
         $this->postController = $postController;
         $this->config = $config;
         $this->contactorInfoFactory = $contactorInfoFactory;
         $this->repository = $contactRepository;
-
     }
 
     /**
      * Add data from contact form to table
      *
-     * @param ContactMailModel $subject
      * @return void
      */
-    public function aroundSend(ContactMailModel $subject ) {
+    public function beforeSend()
+    {
         if ($this->config->isEnabled()) {
             $data = $this->postController->getRequest()->getPostValue();
             $newContact=$this->contactorInfoFactory->create()

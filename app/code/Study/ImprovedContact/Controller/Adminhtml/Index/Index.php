@@ -12,6 +12,7 @@ use Magento\Framework\View\Result\Page as Page;
 
 class Index extends Action implements HttpGetActionInterface
 {
+
     /**
      * Main method
      *

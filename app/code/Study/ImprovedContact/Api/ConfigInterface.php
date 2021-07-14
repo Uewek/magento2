@@ -8,7 +8,8 @@ namespace Study\ImprovedContact\Api;
  */
 interface ConfigInterface
 {
-    const XML_IMPRIVEDCONTACTS_ENABLED = 'reports/options/advanced_contacts_enabled';
+
+    const XML_IMPROVEDCONTACTS_ENABLED = 'reports/options/advanced_contacts_enabled';
 
     /**
      * Return config enabled/disabled

@@ -9,15 +9,17 @@ interface ContactRepositoryInterface
 {
     /**
      * Save contact after update
+     *
+     * @param ContactInterface $contact
+     * @return void
      */
-    public function saveContact(ContactInterface $contact);
+    public function save(ContactInterface $contact);
 
     /**
      * Get entity by id
      *
-     * @param $id
+     * @param int $id
      * @return mixed
      */
-    public function getById($id);
-
+    public function getById(int $id);
 }

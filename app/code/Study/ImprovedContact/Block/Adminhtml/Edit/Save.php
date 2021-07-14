@@ -8,7 +8,10 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 class Save extends Template implements ButtonProviderInterface
 {
+
     /**
+     * Retrieve button data
+     *
      * @return array
      */
     public function getButtonData()
@@ -34,6 +37,4 @@ class Save extends Template implements ButtonProviderInterface
     {
         return $this->getUrl('improvedcontact/index/');
     }
-
-
 }

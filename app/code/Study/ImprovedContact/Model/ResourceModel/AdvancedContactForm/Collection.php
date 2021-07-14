@@ -9,6 +9,7 @@ use Study\ImprovedContact\Model\ResourceModel\ContractorInfo as ContactorInfoRes
 
 class Collection extends AbstractCollection
 {
+
     /**
      * Define resource model
      *

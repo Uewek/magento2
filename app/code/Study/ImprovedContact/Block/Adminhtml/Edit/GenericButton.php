@@ -6,9 +6,6 @@ namespace Study\ImprovedContact\Block\Adminhtml\Edit;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Framework\Registry;
 
-/**
- * Class GenericButton
- */
 class GenericButton
 {
     /**

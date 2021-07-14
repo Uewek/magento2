@@ -27,6 +27,4 @@ class DataProvider extends ListingDataProvider
         }
         return $this->loadedData;
     }
-
-
 }

@@ -9,6 +9,7 @@ use Study\ImprovedContact\Model\ResourceModel\AdvancedContactForm\CollectionFact
 
 class DataProvider extends AbstractDataProvider
 {
+
     /**
      * @var Collection
      */

@@ -9,7 +9,6 @@ use Study\ImprovedContact\Model\ResourceModel\ContractorInfo;
 
 class ContactorInfo extends AbstractModel implements ContactInterface
 {
-
     /**
      * Form constructor
      */
@@ -19,6 +18,8 @@ class ContactorInfo extends AbstractModel implements ContactInterface
     }
 
     /**
+     * Get contacts name
+     *
      * @return array|mixed|string|null
      */
     public function getName()
@@ -27,26 +28,34 @@ class ContactorInfo extends AbstractModel implements ContactInterface
     }
 
     /**
+     * Set new name
+     *
      * @param string $name
      * @return $this|ContactorInfo
      */
     public function setName($name)
     {
-        $this->setData(ContactInterface::NAME,$name);
+        $this->setData(ContactInterface::NAME, $name);
+
         return $this;
     }
 
     /**
+     * Set new telephone
+     *
      * @param string $telephone
      * @return $this|ContactorInfo
      */
     public function setTelephone($telephone)
     {
-        $this->setData(ContactInterface::TELEPHONE,$telephone);
+        $this->setData(ContactInterface::TELEPHONE, $telephone);
+
         return $this;
     }
 
     /**
+     * Get contact telephone
+     *
      * @return array|mixed|string|null
      */
     public function getTelephone()
@@ -55,25 +64,31 @@ class ContactorInfo extends AbstractModel implements ContactInterface
     }
 
     /**
+     * Get contact comment
+     *
      * @return array|mixed|string|null
      */
     public function getComment()
     {
         return $this->getData(ContactInterface::COMMENT);
-
     }
 
     /**
+     * Set new comment
+     *
      * @param string $comment
      * @return $this|ContactorInfo
      */
     public function setComment($comment)
     {
         $this->setData(ContactInterface::COMMENT, $comment);
+
         return $this;
     }
 
     /**
+     * Get contacts email
+     *
      * @return array|mixed|string|null
      */
     public function getEmail()
@@ -82,12 +97,15 @@ class ContactorInfo extends AbstractModel implements ContactInterface
     }
 
     /**
-     * @param $email
-     * @return mixed|void
+     * Set new contacts email
+     *
+     * @param string $email
+     * @return $this|mixed
      */
-    public function setEmail($email)
+    public function setEmail(string $email)
     {
         $this->setData(ContactInterface::EMAIL, $email);
+
         return $this;
     }
 }

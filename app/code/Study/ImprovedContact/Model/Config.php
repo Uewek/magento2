@@ -7,13 +7,13 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Study\ImprovedContact\Api\ConfigInterface;
 
-
 /**
  * Class Config
  * get system config from adminpage
  */
 class Config implements ConfigInterface
 {
+
     /**
      * @var ScopeConfigInterface
      */
@@ -35,7 +35,7 @@ class Config implements ConfigInterface
     public function isEnabled(): bool
     {
         return $this->scopeConfig->isSetFlag(
-            self::XML_IMPRIVEDCONTACTS_ENABLED,
+            self::XML_IMPROVEDCONTACTS_ENABLED,
             ScopeInterface::SCOPE_STORE
         );
     }
