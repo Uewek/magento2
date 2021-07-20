@@ -23,4 +23,6 @@
     </virtualType>
     <preference for="Study\ImprovedContact\Api\ContactRepositoryInterface"
                 type="Study\ImprovedContact\Model\ContactRepositoryModel" />
+    <preference for="Study\ImprovedContact\Api\Data\ContactSearchResultInterface"
+                type="Magento\Framework\Api\SearchResults" />
 </config>

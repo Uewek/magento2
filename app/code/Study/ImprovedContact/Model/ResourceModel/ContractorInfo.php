@@ -5,6 +5,9 @@ namespace Study\ImprovedContact\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
+/**
+ * Class ContractorInfo resource model
+ */
 class ContractorInfo extends AbstractDb
 {
 

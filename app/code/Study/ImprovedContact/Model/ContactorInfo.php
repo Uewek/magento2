@@ -7,6 +7,9 @@ use Magento\Framework\Model\AbstractModel;
 use Study\ImprovedContact\Api\Data\ContactInterface;
 use Study\ImprovedContact\Model\ResourceModel\ContractorInfo;
 
+/**
+ * Class ContactorInfo this is main model of this module
+ */
 class ContactorInfo extends AbstractModel implements ContactInterface
 {
     /**

@@ -9,6 +9,9 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class Index - controller of contact edit ui form
+ */
 class Index extends Action implements HttpGetActionInterface
 {
 

@@ -8,6 +8,9 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
 
+/**
+ * Class Edit need for contact edit ui form
+ */
 class Edit extends Column
 {
     /**
@@ -35,7 +38,7 @@ class Edit extends Column
     }
 
     /**
-     * Prepare Data Source
+     * Prepare Data Source for contact edit ui form
      *
      * @param array $dataSource
      * @return array

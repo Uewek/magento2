@@ -6,6 +6,9 @@ namespace Study\ImprovedContact\Block\Adminhtml\Edit;
 use Magento\Backend\Block\Template;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
+/**
+ * Class Save - logic of "save" button of contact edit form
+ */
 class Save extends Template implements ButtonProviderInterface
 {
 

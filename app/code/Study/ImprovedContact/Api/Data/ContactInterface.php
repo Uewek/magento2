@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Study\ImprovedContact\Api\Data;
 
+/**
+ * Interface ContactInterface  for contact model
+ */
 interface ContactInterface
 {
     const ID = 'contact_id';

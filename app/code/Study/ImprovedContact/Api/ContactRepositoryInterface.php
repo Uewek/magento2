@@ -4,7 +4,12 @@ declare(strict_types=1);
 namespace Study\ImprovedContact\Api;
 
 use Study\ImprovedContact\Api\Data\ContactInterface;
+use Study\ImprovedContact\Model\ContactorInfo;
+use Magento\Framework\Api\SearchCriteriaInterface;
 
+/**
+ * Interface ContactRepositoryInterface interface for contacts repository
+ */
 interface ContactRepositoryInterface
 {
     /**
@@ -13,13 +18,19 @@ interface ContactRepositoryInterface
      * @param ContactInterface $contact
      * @return void
      */
-    public function save(ContactInterface $contact);
+    public function save(ContactInterface $contact): void;
 
     /**
      * Get entity by id
      *
      * @param int $id
-     * @return mixed
      */
-    public function getById(int $id);
+    public function getById(int $id): ContactorInfo;
+
+    /**
+     * Get contact list
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     */
+    public function getList(SearchCriteriaInterface $searchCriteria);
 }

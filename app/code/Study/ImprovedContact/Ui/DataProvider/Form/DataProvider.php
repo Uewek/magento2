@@ -5,6 +5,9 @@ namespace Study\ImprovedContact\Ui\DataProvider\Form;
 
 use Study\ImprovedContact\Ui\DataProvider\Contact\DataProvider as ListingDataProvider;
 
+/**
+ * DataProvider for contact edit ui form
+ */
 class DataProvider extends ListingDataProvider
 {
     /**

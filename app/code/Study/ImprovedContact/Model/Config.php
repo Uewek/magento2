@@ -8,7 +8,7 @@ use Magento\Store\Model\ScopeInterface;
 use Study\ImprovedContact\Api\ConfigInterface;
 
 /**
- * Class Config
+ * Class Config - get configration from magento backend
  * get system config from adminpage
  */
 class Config implements ConfigInterface

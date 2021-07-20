@@ -7,6 +7,9 @@ use Magento\Ui\DataProvider\AbstractDataProvider;
 use Study\ImprovedContact\Model\ResourceModel\AdvancedContactForm\Collection;
 use Study\ImprovedContact\Model\ResourceModel\AdvancedContactForm\CollectionFactory;
 
+/**
+ * Class DataProvider for ui listing
+ */
 class DataProvider extends AbstractDataProvider
 {
 

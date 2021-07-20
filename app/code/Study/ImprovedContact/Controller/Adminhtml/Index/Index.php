@@ -10,6 +10,9 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\View\Result\Page as Page;
 
+/**
+ * Class Index - controller of ui listing page
+ */
 class Index extends Action implements HttpGetActionInterface
 {
 

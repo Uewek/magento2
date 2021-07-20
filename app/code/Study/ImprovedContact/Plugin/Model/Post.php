@@ -3,14 +3,22 @@ declare(strict_types=1);
 
 namespace Study\ImprovedContact\Plugin\Model;
 
-use Magento\Contact\Model\Mail as ContactMailModel;
-use Magento\Contact\Controller\Index\Post as PostController;
+use Magento\Framework\App\Request\Http;
 use Study\ImprovedContact\Model\ContactorInfoFactory;
 use Study\ImprovedContact\Model\Config;
 use Study\ImprovedContact\Model\ContactRepository;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
+/**
+ * Class Post that plugin save data from contact form
+ */
 class Post
 {
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
     /**
      * @var Config
      */
@@ -22,32 +30,36 @@ class Post
     private $contactorInfoFactory;
 
     /**
-     * @var PostController
-     */
-    private $postController;
-
-    /**
      * @var ContactRepository
      */
     private $repository;
 
     /**
+     * @var Http
+     */
+    protected $request;
+
+    /**
      * Post constructor.
+     *
+     * @param Http $request
      * @param ContactorInfoFactory $contactorInfoFactory
      * @param Config $config
-     * @param PostController $postController
      * @param ContactRepository $contactRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
+        Http $request,
         ContactorInfoFactory $contactorInfoFactory,
         Config $config,
-        PostController $postController,
-        ContactRepository $contactRepository
+        ContactRepository $contactRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
-        $this->postController = $postController;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->config = $config;
         $this->contactorInfoFactory = $contactorInfoFactory;
         $this->repository = $contactRepository;
+        $this->request = $request;
     }
 
     /**
@@ -58,11 +70,11 @@ class Post
     public function beforeSend()
     {
         if ($this->config->isEnabled()) {
-            $data = $this->postController->getRequest()->getPostValue();
+            $data = $this->request->getParams();
             $newContact=$this->contactorInfoFactory->create()
                 ->addData(['name' => $data['name'], 'email' => $data['email'],
                     'telephone' => $data['telephone'], 'comment' => $data['comment']]);
-            $this->repository->saveContact($newContact);
+            $this->repository->save($newContact);
         }
     }
 }
