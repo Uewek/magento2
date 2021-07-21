@@ -8,7 +8,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Study\ImprovedContact\Model\ContactRepository;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Study\ImprovedContact\Model\Validator;
 
 /**
  * Class Save - this controller saving contact after edit
@@ -21,23 +21,23 @@ class Save extends Action implements HttpPostActionInterface
     private $repository;
 
     /**
-     * @var SearchCriteriaBuilder
+     * @var Validator
      */
-    private $searchCriteriaBuilder;
+    private $validator;
 
     /**
      * Save constructor.
      * @param Context $context
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param Validator $validator
      * @param ContactRepository $contactRepository
      */
     public function __construct(
         Context $context,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
+        Validator $validator,
         ContactRepository $contactRepository
     ) {
         $this->repository = $contactRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->validator = $validator;
         parent::__construct($context);
     }
 
@@ -50,33 +50,20 @@ class Save extends Action implements HttpPostActionInterface
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('improvedcontact/');
-        $list=$this->repository->getList($this->setSearchCriteria('contact_id', 25));
         $data = $this->getRequest()->getParams();
         try {
-            $this->repository->validateData($data);
-            $contact = $this->repository->getById((int)$data['contact_id']);
-            $contact->setTelephone($data['telephone'])->setName($data['name'])->setComment($data['comment']);
+            $arguments=$this->validator->validateData($data)->prepareData($data);
+            $contact = $this->repository->getById((int)$arguments['contact_id']);
+            $contact->setTelephone($arguments['telephone'])
+                ->setName($arguments['name'])
+                ->setComment($arguments['comment'])
+                ->setEmail($arguments['email']);
             $this->repository->save($contact);
+            $this->messageManager->addSuccessMessage('Contact saved successfully !');
 
-            return $resultRedirect;
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage(__($e->getMessage()));
-
-            return $resultRedirect;
         }
-    }
-
-    /**
-     * Prepare and set searchCriteria
-     *
-     * @param string $field
-     * @param string|int $value
-     * @return \Magento\Framework\Api\SearchCriteria
-     */
-    private function setSearchCriteria($field, $value)
-    {
-        $searchCriteria = $this->searchCriteriaBuilder->addFilter($field, $value)->create();
-
-        return $searchCriteria;
+        return $resultRedirect;
     }
 }

@@ -114,30 +114,4 @@ class ContactRepository implements ContactRepositoryInterface
 
         return $searchResult;
     }
-
-    /**
-     * Validate data from fields
-     *
-     * @param array $data
-     *
-     * @throws LocalizedException
-     */
-    public function validateData(array $data)
-    {
-        $errorMessage="Required parameter ' %1 ' missed or absent. Please try again";
-
-        $contact=$this->contactorInfoFactory->create();
-        if (!$data[$contact::EMAIL] || $data[$contact::EMAIL]=='') {
-            throw new LocalizedException(__($errorMessage, $contact::EMAIL));
-        }
-        if (!$data[$contact::COMMENT] || $data[$contact::COMMENT]=='') {
-            throw new LocalizedException(__($errorMessage, $contact::COMMENT));
-        }
-        if (!$data[$contact::NAME] || $data[$contact::NAME]=='') {
-            throw new LocalizedException(__($errorMessage, $contact::NAME));
-        }
-        if (!$data[$contact::TELEPHONE] || $data[$contact::TELEPHONE]=='') {
-            throw new LocalizedException(__($errorMessage, $contact::TELEPHONE));
-        }
-    }
 }
