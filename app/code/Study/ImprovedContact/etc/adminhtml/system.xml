@@ -8,7 +8,7 @@
                        showInDefault="1" canRestore="1">
                     <label>Enable Advanced contact logging</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>If disabled, advanced contacts logging will be disabled</comment>
+                    <comment>![CDATA[If disabled, advanced contacts logging will be disabled]]</comment>
                 </field>
             </group>
         </section>

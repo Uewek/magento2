@@ -69,7 +69,7 @@ class ContactRepository implements ContactRepositoryInterface
      * Get contact by id
      *
      * @param int $id
-     * @return mixed|ContactorInfo
+     * @return ContactorInfo
      */
     public function getById(int $id): ContactorInfo
     {

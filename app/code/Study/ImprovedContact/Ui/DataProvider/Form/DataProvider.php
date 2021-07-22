@@ -15,7 +15,7 @@ class DataProvider extends ListingDataProvider
      */
     protected $loadedData;
     /**
-     * Get data
+     * Get data for edit form
      *
      * @return array
      */
@@ -25,9 +25,8 @@ class DataProvider extends ListingDataProvider
             return $this->loadedData;
         }
         $items = $this->collection->getItems();
-        foreach ($items as $contact) {
-            $this->loadedData[$contact->getId()] = $contact->getData();
-        }
+        $contact = array_shift($items)->getData();
+        $this->loadedData[$contact[$this->primaryFieldName]] = $contact;
         return $this->loadedData;
     }
 }

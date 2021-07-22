@@ -11,7 +11,6 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
  */
 class Save extends Template implements ButtonProviderInterface
 {
-
     /**
      * Retrieve button data
      *

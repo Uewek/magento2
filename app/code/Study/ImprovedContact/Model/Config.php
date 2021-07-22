@@ -13,7 +13,6 @@ use Study\ImprovedContact\Api\ConfigInterface;
  */
 class Config implements ConfigInterface
 {
-
     /**
      * @var ScopeConfigInterface
      */

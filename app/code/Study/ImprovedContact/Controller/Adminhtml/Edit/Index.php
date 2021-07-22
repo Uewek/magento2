@@ -14,7 +14,6 @@ use Magento\Framework\Controller\ResultFactory;
  */
 class Index extends Action implements HttpGetActionInterface
 {
-
     /**
      * Main method
      *

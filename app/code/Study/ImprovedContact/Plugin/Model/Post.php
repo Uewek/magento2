@@ -15,11 +15,6 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 class Post
 {
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
      * @var Config
      */
     private $config;
@@ -46,16 +41,13 @@ class Post
      * @param ContactorInfoFactory $contactorInfoFactory
      * @param Config $config
      * @param ContactRepository $contactRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         Http $request,
         ContactorInfoFactory $contactorInfoFactory,
         Config $config,
-        ContactRepository $contactRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        ContactRepository $contactRepository
     ) {
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->config = $config;
         $this->contactorInfoFactory = $contactorInfoFactory;
         $this->repository = $contactRepository;
@@ -72,8 +64,8 @@ class Post
         if ($this->config->isEnabled()) {
             $data = $this->request->getParams();
             $newContact=$this->contactorInfoFactory->create()
-                ->addData(['name' => $data['name'], 'email' => $data['email'],
-                    'telephone' => $data['telephone'], 'comment' => $data['comment']]);
+                ->setEmail($data['email'])->setName($data['name'])
+                ->setTelephone($data['telephone'])->setComment($data['comment']);
             $this->repository->save($newContact);
         }
     }
