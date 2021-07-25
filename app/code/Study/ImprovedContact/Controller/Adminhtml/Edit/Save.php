@@ -60,7 +60,6 @@ class Save extends Action implements HttpPostActionInterface
                 ->setEmail($data['email']);
             $this->repository->save($contact);
             $this->messageManager->addSuccessMessage(__('Contact saved successfully !'));
-
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage(__($e->getMessage()));
         }

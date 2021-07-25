@@ -16,7 +16,7 @@ class Save extends Template implements ButtonProviderInterface
      *
      * @return array
      */
-    public function getButtonData()
+    public function getButtonData(): array
     {
         return [
             'label' => __('Save'),
@@ -34,7 +34,7 @@ class Save extends Template implements ButtonProviderInterface
      *
      * @return string
      */
-    public function getBackUrl()
+    public function getBackUrl(): string
     {
         return $this->getUrl('improvedcontact/index/');
     }

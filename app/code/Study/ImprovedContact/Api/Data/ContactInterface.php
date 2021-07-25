@@ -28,7 +28,7 @@ interface ContactInterface
      * @param string $name
      * @return $this
      */
-    public function setName(string $name);
+    public function setName(string $name): ContactInterface;
 
     /**
      * Get telephone of contact
@@ -43,7 +43,7 @@ interface ContactInterface
      * @param string $telephone
      * @return $this
      */
-    public function setTelephone(string $telephone);
+    public function setTelephone(string $telephone): ContactInterface;
 
     /**
      * Get comment of the contact
@@ -58,7 +58,7 @@ interface ContactInterface
      * @param string $comment
      * @return $this
      */
-    public function setComment(string $comment);
+    public function setComment(string $comment): ContactInterface;
 
     /**
      * Get email of contact
@@ -73,5 +73,5 @@ interface ContactInterface
      * @param string $email
      * @return $this
      */
-    public function setEmail(string $email);
+    public function setEmail(string $email): ContactInterface;
 }

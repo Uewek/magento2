@@ -18,7 +18,7 @@ class Index extends Action implements HttpGetActionInterface
     /**
      * Main method
      *
-     * @return ResponseInterfaceAlias|ResultInterface|Page
+     * @return Page
      */
     public function execute()
     {

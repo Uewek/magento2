@@ -36,7 +36,7 @@ class ContactorInfo extends AbstractModel implements ContactInterface
      * @param string $name
      * @return $this
      */
-    public function setName(string $name)
+    public function setName(string $name): ContactInterface
     {
         $this->setData(ContactInterface::NAME, $name);
 
@@ -49,7 +49,7 @@ class ContactorInfo extends AbstractModel implements ContactInterface
      * @param string $telephone
      * @return $this
      */
-    public function setTelephone(string $telephone)
+    public function setTelephone(string $telephone): ContactInterface
     {
         $this->setData(ContactInterface::TELEPHONE, $telephone);
 
@@ -82,7 +82,7 @@ class ContactorInfo extends AbstractModel implements ContactInterface
      * @param string $comment
      * @return $this
      */
-    public function setComment(string $comment)
+    public function setComment(string $comment): ContactInterface
     {
         $this->setData(ContactInterface::COMMENT, $comment);
 
@@ -105,7 +105,7 @@ class ContactorInfo extends AbstractModel implements ContactInterface
      * @param string $email
      * @return $this
      */
-    public function setEmail(string $email)
+    public function setEmail(string $email): ContactInterface
     {
         $this->setData(ContactInterface::EMAIL, $email);
 

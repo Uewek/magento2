@@ -43,9 +43,9 @@ class GenericButton
     /**
      * Return the synonyms group Id.
      *
-     * @return int|null
+     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         $contact = $this->registry->registry('contact');
 
@@ -59,7 +59,7 @@ class GenericButton
      * @param   array $params
      * @return  string
      */
-    public function getUrl($route, $params)
+    public function getUrl($route, $params): string
     {
         return $this->urlBuilder->getUrl($route, $params);
     }

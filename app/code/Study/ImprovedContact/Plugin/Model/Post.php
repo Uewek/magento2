@@ -7,7 +7,6 @@ use Magento\Framework\App\Request\Http;
 use Study\ImprovedContact\Model\ContactorInfoFactory;
 use Study\ImprovedContact\Model\Config;
 use Study\ImprovedContact\Model\ContactRepository;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * Class Post that plugin save data from contact form
@@ -59,7 +58,7 @@ class Post
      *
      * @return void
      */
-    public function beforeSend()
+    public function beforeSend(): void
     {
         if ($this->config->isEnabled()) {
             $data = $this->request->getParams();

@@ -14,24 +14,6 @@ class Validator implements ValidatorInterface
     private const REQUIRED_FIELDS = ['contact_id', 'name', 'email', 'telephone', 'comment'];
 
     /**
-     * Prepare data for saving
-     *
-     * @param array $enteringData
-     * @return array
-     */
-    public function prepareData(array $enteringData): array
-    {
-        $result = [];
-        $result['contact_id'] = $enteringData['contact_id'];
-        $result['name'] = $enteringData['name'];
-        $result['telephone'] = $enteringData['telephone'];
-        $result['comment'] = $enteringData['comment'];
-        $result['email'] = $enteringData['email'];
-
-        return $result;
-    }
-
-    /**
      * Check incoming data array
      *
      * @param array $data

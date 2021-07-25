@@ -20,7 +20,7 @@ class DataProvider extends ListingDataProvider
      *
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         if (isset($this->loadedData)) {
             return $this->loadedData;
@@ -28,6 +28,7 @@ class DataProvider extends ListingDataProvider
         $items = $this->collection->getItems();
         $contact = array_shift($items)->getData();
         $this->loadedData[$contact[$this->primaryFieldName]] = $contact;
+
         return $this->loadedData;
     }
 }
