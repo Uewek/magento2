@@ -71,7 +71,7 @@ class ContactRepository implements ContactRepositoryInterface
      * @param int $id
      * @return ContactorInfo
      */
-    public function getById(int $id): ContactorInfo
+    public function getById(int $id): ContactInterface
     {
         $contact= $this->contactorInfoFactory->create();
         $this->modelRecource->load($contact, $id);
@@ -96,7 +96,7 @@ class ContactRepository implements ContactRepositoryInterface
      * @param SearchCriteriaInterface $searchCriteria
      * @return ContactSearchResultInterface
      */
-    public function getList(SearchCriteriaInterface $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria): ContactSearchResultInterface
     {
         $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);

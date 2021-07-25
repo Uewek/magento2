@@ -11,9 +11,10 @@ use Study\ImprovedContact\Ui\DataProvider\Contact\DataProvider as ListingDataPro
 class DataProvider extends ListingDataProvider
 {
     /**
-     * @var
+     * @var array
      */
     protected $loadedData;
+
     /**
      * Get data for edit form
      *

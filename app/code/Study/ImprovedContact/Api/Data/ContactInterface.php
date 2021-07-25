@@ -20,7 +20,7 @@ interface ContactInterface
      *
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Set new name of contact
@@ -28,14 +28,14 @@ interface ContactInterface
      * @param string $name
      * @return $this
      */
-    public function setName($name);
+    public function setName(string $name);
 
     /**
      * Get telephone of contact
      *
      * @return string
      */
-    public function getTelephone();
+    public function getTelephone(): string;
 
     /**
      * Set new telephone
@@ -43,14 +43,14 @@ interface ContactInterface
      * @param string $telephone
      * @return $this
      */
-    public function setTelephone($telephone);
+    public function setTelephone(string $telephone);
 
     /**
      * Get comment of the contact
      *
      * @return string
      */
-    public function getComment();
+    public function getComment(): string;
 
     /**
      * Set new comment
@@ -58,20 +58,20 @@ interface ContactInterface
      * @param string $comment
      * @return $this
      */
-    public function setComment($comment);
+    public function setComment(string $comment);
 
     /**
      * Get email of contact
      *
      * @return string
      */
-    public function getEmail();
+    public function getEmail(): string;
 
     /**
      * Set contact email
      *
      * @param string $email
-     * @return mixed
+     * @return $this
      */
     public function setEmail(string $email);
 }

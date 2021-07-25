@@ -9,5 +9,11 @@ namespace Study\ImprovedContact\Api;
  */
 interface ValidatorInterface
 {
-    const REQUIRED_FIELDS = ['contact_id', 'name', 'email', 'telephone', 'comment'];
+
+    /**
+     * Check entering data
+     *
+     * @param array $data
+     */
+    public function validate(array $data);
 }

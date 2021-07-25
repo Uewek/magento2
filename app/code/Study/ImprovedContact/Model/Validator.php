@@ -11,6 +11,8 @@ use Study\ImprovedContact\Api\ValidatorInterface;
  */
 class Validator implements ValidatorInterface
 {
+    private const REQUIRED_FIELDS = ['contact_id', 'name', 'email', 'telephone', 'comment'];
+
     /**
      * Prepare data for saving
      *
@@ -36,9 +38,9 @@ class Validator implements ValidatorInterface
      * @return $this
      * @throws LocalizedException
      */
-    public function validateData(array $data)
+    public function validate(array $data)
     {
-        $errorMessage = "Required parameter ' %1 ' missed or absent. Please try again";
+        $errorMessage = "Required parameter '%1' missed or absent. Please try again";
         foreach ($this::REQUIRED_FIELDS as $requiredField) {
             if (!isset($data[$requiredField]) || trim($data[$requiredField])=='') {
                 throw new LocalizedException(__($errorMessage, $requiredField));

@@ -52,14 +52,14 @@ class Save extends Action implements HttpPostActionInterface
         $resultRedirect->setPath('improvedcontact/');
         $data = $this->getRequest()->getParams();
         try {
-            $arguments=$this->validator->validateData($data)->prepareData($data);
+            $arguments = $this->validator->validate($data)->prepareData($data);
             $contact = $this->repository->getById((int)$arguments['contact_id']);
             $contact->setTelephone($arguments['telephone'])
                 ->setName($arguments['name'])
                 ->setComment($arguments['comment'])
                 ->setEmail($arguments['email']);
             $this->repository->save($contact);
-            $this->messageManager->addSuccessMessage('Contact saved successfully !');
+            $this->messageManager->addSuccessMessage(__('Contact saved successfully !'));
 
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage(__($e->getMessage()));

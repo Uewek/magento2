@@ -23,9 +23,9 @@ class ContactorInfo extends AbstractModel implements ContactInterface
     /**
      * Get contacts name
      *
-     * @return array|mixed|string|null
+     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->getData(ContactInterface::NAME);
     }
@@ -34,9 +34,9 @@ class ContactorInfo extends AbstractModel implements ContactInterface
      * Set new name
      *
      * @param string $name
-     * @return $this|ContactorInfo
+     * @return $this
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->setData(ContactInterface::NAME, $name);
 
@@ -47,9 +47,9 @@ class ContactorInfo extends AbstractModel implements ContactInterface
      * Set new telephone
      *
      * @param string $telephone
-     * @return $this|ContactorInfo
+     * @return $this
      */
-    public function setTelephone($telephone)
+    public function setTelephone(string $telephone)
     {
         $this->setData(ContactInterface::TELEPHONE, $telephone);
 
@@ -59,9 +59,9 @@ class ContactorInfo extends AbstractModel implements ContactInterface
     /**
      * Get contact telephone
      *
-     * @return array|mixed|string|null
+     * @return string
      */
-    public function getTelephone()
+    public function getTelephone(): string
     {
         return $this->getData(ContactInterface::TELEPHONE);
     }
@@ -69,9 +69,9 @@ class ContactorInfo extends AbstractModel implements ContactInterface
     /**
      * Get contact comment
      *
-     * @return array|mixed|string|null
+     * @return string
      */
-    public function getComment()
+    public function getComment(): string
     {
         return $this->getData(ContactInterface::COMMENT);
     }
@@ -80,9 +80,9 @@ class ContactorInfo extends AbstractModel implements ContactInterface
      * Set new comment
      *
      * @param string $comment
-     * @return $this|ContactorInfo
+     * @return $this
      */
-    public function setComment($comment)
+    public function setComment(string $comment)
     {
         $this->setData(ContactInterface::COMMENT, $comment);
 
@@ -92,9 +92,9 @@ class ContactorInfo extends AbstractModel implements ContactInterface
     /**
      * Get contacts email
      *
-     * @return array|mixed|string|null
+     * @return string
      */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->getData(ContactInterface::EMAIL);
     }
@@ -103,7 +103,7 @@ class ContactorInfo extends AbstractModel implements ContactInterface
      * Set new contacts email
      *
      * @param string $email
-     * @return $this|mixed
+     * @return $this
      */
     public function setEmail(string $email)
     {

@@ -26,7 +26,6 @@ class Save extends Template implements ButtonProviderInterface
                 'form-role' => 'save',
             ],
             'sort_order' => 20,
-            'on_click' => ''
         ];
     }
 

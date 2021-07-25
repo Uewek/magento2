@@ -5,19 +5,13 @@ namespace Study\ImprovedContact\Block\Adminhtml\Edit;
 
 use Magento\Backend\Block\Widget\Context;
 use Magento\Framework\Registry;
+use Magento\Framework\UrlInterface;
 
 /**
  * Class GenericButton - base class for all buttons on the contact edit page
  */
 class GenericButton
 {
-    /**
-     * Url Builder
-     *
-     * @var \Magento\Framework\UrlInterface
-     */
-    protected $urlBuilder;
-
     /**
      * Registry
      *
@@ -26,16 +20,23 @@ class GenericButton
     protected $registry;
 
     /**
-     * Constructor
+     * Url Builder
      *
-     * @param Context $context
+     * @var UrlInterface
+     */
+    private $urlBuilder;
+
+    /**
+     * GenericButton constructor.
+     *
+     * @param UrlInterface $urlBuilder
      * @param Registry $registry
      */
     public function __construct(
-        Context $context,
+        UrlInterface $urlBuilder,
         Registry $registry
     ) {
-        $this->urlBuilder = $context->getUrlBuilder();
+        $this->urlBuilder = $urlBuilder;
         $this->registry = $registry;
     }
 
@@ -47,7 +48,8 @@ class GenericButton
     public function getId()
     {
         $contact = $this->registry->registry('contact');
-        return $contact ? $contact->getId() : null;
+
+        return $contact ;
     }
 
     /**
@@ -57,7 +59,7 @@ class GenericButton
      * @param   array $params
      * @return  string
      */
-    public function getUrl($route = '', $params = [])
+    public function getUrl($route, $params)
     {
         return $this->urlBuilder->getUrl($route, $params);
     }

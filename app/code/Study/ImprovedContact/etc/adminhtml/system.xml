@@ -3,6 +3,7 @@
     <system>
         <section id="reports" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
             <tab>general</tab>
+            <resource>Study_ImprovedContact::config</resource>
             <group id="options" translate="label" type="text" sortOrder="1" showInDefault="1">
                 <field id="advanced_contacts_enabled" translate="label comment" type="select" sortOrder="1"
                        showInDefault="1" canRestore="1">
