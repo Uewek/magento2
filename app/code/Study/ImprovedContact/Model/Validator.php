@@ -22,11 +22,11 @@ class Validator implements ValidatorInterface
     public function prepareData(array $enteringData): array
     {
         $result = [];
-        $result['contact_id']=$enteringData['contact_id'];
-        $result['name']=$enteringData['name'];
-        $result['telephone']=$enteringData['telephone'];
-        $result['comment']=$enteringData['comment'];
-        $result['email']=$enteringData['email'];
+        $result['contact_id'] = $enteringData['contact_id'];
+        $result['name'] = $enteringData['name'];
+        $result['telephone'] = $enteringData['telephone'];
+        $result['comment'] = $enteringData['comment'];
+        $result['email'] = $enteringData['email'];
 
         return $result;
     }
@@ -35,17 +35,15 @@ class Validator implements ValidatorInterface
      * Check incoming data array
      *
      * @param array $data
-     * @return $this
      * @throws LocalizedException
      */
-    public function validate(array $data)
+    public function validate(array $data): void
     {
         $errorMessage = "Required parameter '%1' missed or absent. Please try again";
         foreach ($this::REQUIRED_FIELDS as $requiredField) {
-            if (!isset($data[$requiredField]) || trim($data[$requiredField])=='') {
+            if (!isset($data[$requiredField]) || trim($data[$requiredField]) == '') {
                 throw new LocalizedException(__($errorMessage, $requiredField));
             }
         }
-        return $this;
     }
 }

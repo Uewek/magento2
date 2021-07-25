@@ -15,5 +15,5 @@ interface ValidatorInterface
      *
      * @param array $data
      */
-    public function validate(array $data);
+    public function validate(array $data): void;
 }
