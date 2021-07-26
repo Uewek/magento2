@@ -1,0 +1,41 @@
+<?php
+declare(strict_types=1);
+
+namespace Study\ImprovedContact\Model;
+
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+use Study\ImprovedContact\Api\ConfigInterface;
+
+/**
+ * Class Config - get configration from magento backend
+ * get system config from adminpage
+ */
+class Config implements ConfigInterface
+{
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     */
+    public function __construct(ScopeConfigInterface $scopeConfig)
+    {
+        $this->scopeConfig = $scopeConfig;
+    }
+
+    /**
+     * Return config enabled/disabled
+     *
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_IMPROVEDCONTACTS_ENABLED,
+            ScopeInterface::SCOPE_STORE
+        );
+    }
+}
