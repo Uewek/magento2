@@ -51,16 +51,4 @@ class GenericButton
 
         return $contact ;
     }
-
-    /**
-     * Generate url by route and parameters
-     *
-     * @param   string $route
-     * @param   array $params
-     * @return  string
-     */
-    public function getUrl($route, $params): string
-    {
-        return $this->urlBuilder->getUrl($route, $params);
-    }
 }

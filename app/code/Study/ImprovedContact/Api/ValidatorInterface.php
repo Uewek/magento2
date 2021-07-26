@@ -9,7 +9,6 @@ namespace Study\ImprovedContact\Api;
  */
 interface ValidatorInterface
 {
-
     /**
      * Check entering data
      *
