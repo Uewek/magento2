@@ -1,0 +1,31 @@
+<?php
+/** @var $block \Study\ProductLikes\Block\Product\LikeButton
+ *
+ */
+if($block->isLogged()){
+    $customerId = $block->getCustomerId();
+    $productId = $block->getProductId();
+}
+?>
+
+<?php if($block->isLogged()): ?>
+    <script type="text/javascript">
+        require(["jquery",'mage/url'], function($, url){
+            "use strict";
+            $(document).on('click','.like',function(){
+                jQuery.ajax({
+                    url: '/likes/index/likeproduct',
+                    type: "POST",
+                    data: {
+                        productId:<?=$productId?>,
+                        customerId:<?=$customerId?>
+                    }
+                });
+            });
+        });
+    </script>
+<div class="actions">
+    <button type="button" title="<?php echo $block::TITLE_ENABLED ?>" class="action primary like" id="like" >
+        <span><span><i class="like-span"></i><?php echo $block::TITLE_ENABLED ?></span></span></button>
+</div>
+<?php endif; ?>

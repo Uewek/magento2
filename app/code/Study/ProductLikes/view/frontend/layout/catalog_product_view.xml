@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<body>
+    <referenceContainer name="product.info.form.content">
+        <block class="Study\ProductLikes\Block\Product\LikeButton"
+               name="product.info.likes"
+               template="Study_ProductLikes::product/button.phtml"
+               cacheable="true">
+        </block>
+    </referenceContainer>
+</body>
