@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Study_ProductLikes::productlikes_admin" title="ProductLikes Ui Grid"
+             translate="title" module="Study_ProductLikes" parent="Magento_Reports::report_marketing"
+             sortOrder="70" action="likes" resource="Study_ImprovedContact::list"/>
+    </menu>
+</config>

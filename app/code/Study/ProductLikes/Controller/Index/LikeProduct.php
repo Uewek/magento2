@@ -59,11 +59,12 @@ class LikeProduct extends Action implements HttpPostActionInterface
     public function execute(): void
     {
         $data = $this->request->getParams();
-        $newLike = $this->likesModelFactory->create()
-            ->setProduct((int)$data['productId'])
-            ->setCustomer((int)$data['customerId']);
-        $this->likesRepository->save($newLike);
-//        $page=$this->resultFactory->create(ResultFactory::TYPE_PAGE);
-//        return $page;
+        if($data){
+            $newLike = $this->likesModelFactory->create()
+                ->setProduct((int)$data['productId'])
+                ->setCustomer((int)$data['customerId']);
+            $this->likesRepository->save($newLike);
+            $this->messageManager->addSuccessMessage(__('Product liked!'));
+        }
     }
 }
