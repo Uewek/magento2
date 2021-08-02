@@ -6,9 +6,7 @@ namespace Study\ProductLikes\Controller\Index;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Action\Action;
-use Study\ProductLikes\Model\LikesModel;
 use Study\ProductLikes\Model\LikesModelFactory;
 use Study\ProductLikes\Model\LikesRepository;
 
@@ -59,12 +57,17 @@ class LikeProduct extends Action implements HttpPostActionInterface
     public function execute(): void
     {
         $data = $this->request->getParams();
+        $isLiked = $this->likesRepository->checkIsProductLikedByThisCustomer((int)$data['productId'],(int)$data['customerId']);
         if($data){
-            $newLike = $this->likesModelFactory->create()
-                ->setProduct((int)$data['productId'])
-                ->setCustomer((int)$data['customerId']);
-            $this->likesRepository->save($newLike);
-            $this->messageManager->addSuccessMessage(__('Product liked!'));
+            if(empty($isLiked)){
+                $newLike = $this->likesModelFactory->create()
+                    ->setProduct((int)$data['productId'])
+                    ->setCustomer((int)$data['customerId']);
+                $this->likesRepository->save($newLike);
+                $this->messageManager->addSuccessMessage(__('Product liked!'));
+            } else {
+                $this->messageManager->addWarningMessage(__('You already liked this product!'));
+            }
         }
     }
 }

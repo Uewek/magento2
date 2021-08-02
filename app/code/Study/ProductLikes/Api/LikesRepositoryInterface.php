@@ -22,4 +22,21 @@ interface LikesRepositoryInterface
      * @return LikesModelInterface
      */
     public function getById(int $id): LikesModelInterface;
+
+    /**
+     * Check is this product liked by this customer
+     *
+     * @param $productId
+     * @param $customerId
+     * @return DataObject[]
+     */
+    public function checkIsProductLikedByThisCustomer(int $productId, int $customerId): array;
+
+    /**
+     * Delete like
+     *
+     * @param int $likeId
+     * @throws \Exception
+     */
+    public function deleteLikeById(int $likeId): void;
 }

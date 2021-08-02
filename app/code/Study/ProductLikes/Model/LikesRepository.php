@@ -3,15 +3,16 @@ declare(strict_types=1);
 
 namespace Study\ProductLikes\Model;
 
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessor;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Study\ProductLikes\Model\ResourceModel\ProductLikes\CollectionFactory;
-use Study\ProductLikes\Model\LikesModel;
 use Study\ProductLikes\Model\ResourceModel\LikesResource;
 use Study\ProductLikes\Api\Data\LikesModelInterface;
 use Study\ProductLikes\Api\LikesRepositoryInterface;
 
+/**
+ * This repository managing likes
+ */
 class LikesRepository implements LikesRepositoryInterface
 {
     /**
@@ -69,5 +70,31 @@ class LikesRepository implements LikesRepositoryInterface
     public function save(LikesModelInterface $like): void
     {
         $this->likesResource->save($like);
+    }
+
+    /**
+     * Check is this product liked by this customer
+     *
+     * @param $productId
+     * @param $customerId
+     * @return DataObject[]
+     */
+    public function checkIsProductLikedByThisCustomer(int $productId, int $customerId): array
+    {
+        $collection = $this->collectionFactory->create();
+        $collection->addFilter('product_id',$productId)->addFilter('customer_id', $customerId);
+        $result = $collection->getItems();
+        return $result;
+    }
+
+    /**
+     * Delete like
+     *
+     * @param int $likeId
+     * @throws \Exception
+     */
+    public function deleteLikeById(int $likeId): void
+    {
+        $this->likesResource->delete($this->getById($likeId));
     }
 }

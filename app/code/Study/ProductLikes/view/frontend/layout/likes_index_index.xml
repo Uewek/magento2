@@ -3,11 +3,12 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="styles"/>
     <head>
-        <title>Product Likes Grid</title>
+        <title>Product Likes Grid Frontend</title>
+        <css src="Study_ProductLikes::css/backend.css" />
     </head>
     <body>
         <referenceContainer name="content">
-            <uiComponent name="product_likes_listing"/>
+            <uiComponent name="customer_likes_listing"/>
         </referenceContainer>
     </body>
 </page>

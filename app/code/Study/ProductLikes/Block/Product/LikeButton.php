@@ -3,22 +3,19 @@ declare(strict_types=1);
 
 namespace Study\ProductLikes\Block\Product;
 
-use Magento\Customer\Model\Session;
 use Magento\Customer\Model\SessionFactory;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Catalog\Helper\Data;
-
-
-
+use Study\ProductLikes\Model\LikesRepository;
 
 /**
  * Class LikeButton contain 'like' button logic
  */
 class LikeButton extends Template
 {
-    public const TITLE_ENABLED = "Like this";
-    public const TITLE_Disabled = "Already liked";
+    public const TITLE_ENABLED = "I like this product";
+    public const TITLE_DISABLED = "Already liked";
 
     /**
      * @var Data
@@ -26,19 +23,22 @@ class LikeButton extends Template
     private $dataHelper;
 
     /**
-     * @var Session
+     * @var LikesRepository
      */
-    private $customerSession;
+    private $likesrepository;
 
+    /**
+     * @var SessionFactory
+     */
     private $customerSessionFactory;
 
     public function __construct(
         Context $context,
-        Session $customerSession,
         Data $catalogData,
+        LikesRepository $likesRepository,
         SessionFactory $customerSessionFactory
-
     ) {
+        $this->likesrepository = $likesRepository;
         $this->dataHelper = $catalogData;
         $this->customerSession = $customerSessionFactory->create();
         $this->customerSessionFactory = $customerSessionFactory;
@@ -46,16 +46,12 @@ class LikeButton extends Template
         parent::__construct($context);
     }
 
-    public function getConst(){
-        return $this::TITLE_ENABLED;
-    }
-
     /**
      * Get product id on product page
      *
-     *
+     * @return int
      */
-    public function getProductId()
+    public function getProductId(): int
     {
         $a = (int) $this->dataHelper->getProduct()->getId();
         return  $a;
@@ -84,4 +80,20 @@ class LikeButton extends Template
         return $customerSession->isLoggedIn();
     }
 
+    /**
+     * Check is this product liked
+     *
+     * @param $productId
+     * @param $customerId
+     * @return bool
+     */
+    public function isThisProductLiked($productId, $customerId)
+    {
+        $result = true;
+        $likes = $this->likesrepository->checkIsProductLikedByThisCustomer($productId, $customerId);
+        if(empty($likes)){
+            $result = false;
+        }
+        return $result;
+    }
 }

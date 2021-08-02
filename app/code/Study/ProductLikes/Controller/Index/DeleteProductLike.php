@@ -5,16 +5,16 @@ namespace Study\ProductLikes\Controller\Index;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\View\Result\Page;
 use Magento\Customer\Model\SessionFactory;
 use Magento\Framework\Controller\Result\Redirect;
+use Study\ProductLikes\Model\LikesRepository;
 
 /**
- * Customer likesgrid page controller
+ * Delete like controller
  */
-class Index extends Action implements HttpGetActionInterface
+class DeleteProductLike extends Action implements HttpGetActionInterface
 {
     /**
      * @var SessionFactory
@@ -22,19 +22,29 @@ class Index extends Action implements HttpGetActionInterface
     private $customerSessionFactory;
 
     /**
-     * Index constructor.
+     * @var LikesRepository
+     */
+    private $likesRepository;
+
+    /**
+     * Constructor
+     *
      * @param Context $context
+     * @param LikesRepository $likesRepository
      * @param SessionFactory $customerSessionFactory
      */
     public function __construct(
         Context $context,
+        LikesRepository $likesRepository,
         SessionFactory $customerSessionFactory
     ) {
         $this->customerSessionFactory = $customerSessionFactory;
+        $this->likesRepository = $likesRepository;
+
         parent::__construct($context);
     }
     /**
-     * Return page or redirect to login page
+     * Return page
      *
      * @return Page|Redirect
      */
@@ -47,6 +57,11 @@ class Index extends Action implements HttpGetActionInterface
 
             return $redirect;
         }
-        return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $getData = (int) $this->getRequest()->getParams()['like_id'];
+        $this->likesRepository->deleteLikeById($getData);
+        $redirect = $this->resultRedirectFactory->create()->setPath('likes');
+        $this->messageManager->addWarningMessage(__("Like with id $getData delete successfully"));
+
+        return $redirect;
     }
 }

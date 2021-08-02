@@ -21,6 +21,9 @@ class ProductColumn extends Column
      */
     protected $urlBuilder;
 
+    /**
+     * @var ProductRepository
+     */
     private $productRepository;
 
     /**
@@ -58,6 +61,7 @@ class ProductColumn extends Column
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$like) {
                 $like['productName'] = $this->getProductById((int)$like['product_id'])->getName();
+                $like['product_url'] = html_entity_decode('<a href="'.$this->urlBuilder->getUrl('catalog/product/edit/', ['id' => $like['product_id']]).'">'.$like['productName'].'</a>');
             }
         }
         return $dataSource;
