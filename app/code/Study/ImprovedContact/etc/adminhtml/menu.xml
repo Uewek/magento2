@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Study_ImprovedContact::advancedcontacts_admin" title="Marketing Contact us Requests"
+             translate="title" module="Study_ImprovedContact" parent="Magento_Reports::report_marketing"
+             sortOrder="70" action="improvedcontact" resource="Study_ImprovedContact::list"/>
+    </menu>
+</config>
