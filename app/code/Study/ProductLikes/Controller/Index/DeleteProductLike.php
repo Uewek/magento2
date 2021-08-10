@@ -44,11 +44,11 @@ class DeleteProductLike extends Action implements HttpGetActionInterface
         parent::__construct($context);
     }
     /**
-     * Return page
+     * Delete like return redirect
      *
-     * @return Page|Redirect
+     * @return Redirect
      */
-    public function execute(): Page|Redirect
+    public function execute(): Redirect
     {
         $isLogged = $this->customerSessionFactory->create()->isLoggedIn();
         if(!$isLogged){

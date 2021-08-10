@@ -8,6 +8,11 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Catalog\Helper\Data;
 use Study\ProductLikes\Model\LikesRepository;
+use Study\ProductLikes\Model\CookieModel;
+use Study\ProductLikes\Model\Cookie;
+use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\App\ObjectManager;
+
 
 /**
  * Class LikeButton contain 'like' button logic
@@ -32,12 +37,22 @@ class LikeButton extends Template
      */
     private $customerSessionFactory;
 
+    private $formKey;
+
+    /**
+     * @param Context $context
+     * @param Data $catalogData
+     * @param LikesRepository $likesRepository
+     * @param SessionFactory $customerSessionFactory
+     */
     public function __construct(
         Context $context,
         Data $catalogData,
         LikesRepository $likesRepository,
-        SessionFactory $customerSessionFactory
+        SessionFactory $customerSessionFactory,
+        FormKey $formKey
     ) {
+        $this->formKey = $formKey;
         $this->likesrepository = $likesRepository;
         $this->dataHelper = $catalogData;
         $this->customerSession = $customerSessionFactory->create();
@@ -90,10 +105,22 @@ class LikeButton extends Template
     public function isThisProductLiked($productId, $customerId)
     {
         $result = true;
-        $likes = $this->likesrepository->checkIsProductLikedByThisCustomer($productId, $customerId);
+        $likes = $this->likesrepository->checkIsProductLikedByThisCustomer((int)$productId, (int)$customerId);
         if(empty($likes)){
             $result = false;
         }
         return $result;
     }
+
+
+    /**
+     * Get form key
+     *
+     * @return string
+     */
+    public function getFormKey()
+    {
+        return $this->formKey->getFormKey();
+    }
+
 }

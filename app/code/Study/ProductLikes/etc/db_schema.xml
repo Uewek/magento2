@@ -3,8 +3,9 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="study_product_likes" resource="default" engine="innodb" comment="Advanced contacts">
         <column xsi:type="int" name="like_id" nullable="false" padding="15" identity="true" comment="Like ID"/>
-        <column xsi:type="int" name="customer_id" nullable="false"  comment="Customer"/>
+        <column xsi:type="int" name="customer_id" nullable="true"  comment="Customer"/>
         <column xsi:type="int" name="product_id" nullable="false"  comment="Product"/>
+        <column xsi:type="varchar" name="cookie_guest_key" nullable="true"  comment="Guest key"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="like_id"/>
         </constraint>

@@ -9,22 +9,15 @@ if($block->isLogged()){
 }
 ?>
 
+<script type="text/x-magento-init">
+    {
+        "#like": {
+            "transferDataToController": {}
+        }
+    }
+</script>
 <?php if($block->isLogged()): ?>
-    <script type="text/javascript">
-        require(["jquery",'mage/url'], function($, url){
-            "use strict";
-            $(document).on('click','.like',function(){
-                jQuery.ajax({
-                    url: '/likes/index/likeproduct',
-                    type: "POST",
-                    data: {
-                        productId:<?=$productId?>,
-                        customerId:<?=$customerId?>
-                    }
-                });
-            });
-        });
-    </script>
+
 <?php if(!$isLiked): ?>
         <div class="actions">
             <button type="button" title="<?php echo $block::TITLE_ENABLED ?>" class="action primary like" id="like"

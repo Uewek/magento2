@@ -38,7 +38,7 @@ class Index extends Action implements HttpGetActionInterface
      *
      * @return Page|Redirect
      */
-    public function execute(): Page|Redirect
+    public function execute()
     {
         $isLogged = $this->customerSessionFactory->create()->isLoggedIn();
         if(!$isLogged){

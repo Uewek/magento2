@@ -87,6 +87,14 @@ class LikesRepository implements LikesRepositoryInterface
         return $result;
     }
 
+    public function checkIsProductLikedByThisGuest(int $productId, int $guestCookieKey): array
+    {
+        $collection = $this->collectionFactory->create();
+        $collection->addFilter('product_id',$productId)->addFilter('cookie_guest_key', $guestCookieKey);
+        $result = $collection->getItems();
+        return $result;
+    }
+
     /**
      * Delete like
      *

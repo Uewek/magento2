@@ -40,4 +40,16 @@ class LikesModel extends AbstractModel implements LikesModelInterface
 
         return $this;
     }
+
+    /**
+     * Set cookie_guest_key for guest customers
+     *
+     * @param string $cookieGuestKey
+     */
+    public function setCookieGuestKey(string $cookieGuestKey): LikesModelInterface
+    {
+        $this->setData("cookie_guest_key", $cookieGuestKey);
+
+        return $this;
+    }
 }
