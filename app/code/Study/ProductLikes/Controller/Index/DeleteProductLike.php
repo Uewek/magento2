@@ -57,7 +57,14 @@ class DeleteProductLike extends Action implements HttpGetActionInterface
 
             return $redirect;
         }
-        $getData = (int) $this->getRequest()->getParams()['like_id'];
+        try {
+            $getData = (int) $this->getRequest()->getParams()['like_id'];
+        } catch (\Exception $e){
+            $redirect = $this->resultRedirectFactory->create()->setPath('likes');
+            $this->messageManager->addErrorMessage(__("Something went wrong!!"));
+
+            return $redirect;
+        }
         $this->likesRepository->deleteLikeById($getData);
         $redirect = $this->resultRedirectFactory->create()->setPath('likes');
         $this->messageManager->addWarningMessage(__("Like with id $getData delete successfully"));

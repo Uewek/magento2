@@ -65,20 +65,32 @@ class LikeProduct extends Action implements HttpPostActionInterface
      */
     public function execute(): void
     {
+        $customerLogged = $this->customerSessionFactory->create()->isLoggedIn();
         $data = $this->request->getParams();
-       if($data['cookie_guest_key']){
+       if(!$customerLogged){
            $this->addGuestLike($data);
        }
-       if(!$data['cookie_guest_key']){
+       if($customerLogged){
            $this->addCustomerLike($data);
        }
     }
 
+    /**
+     * Get customer id
+     *
+     * @return int
+     */
     private function getCustomerIdFromCurrentSession(): int
     {
-        return $this->customerSessionFactory->create()->getCustomerId();
+        return (int) $this->customerSessionFactory->create()->getCustomerId();
     }
 
+    /**
+     * Add like for unsigned customer
+     *
+     * @param array $data
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     */
     private function addGuestLike(array $data): void
     {
         $isLiked = $this->likesRepository->
@@ -96,6 +108,12 @@ class LikeProduct extends Action implements HttpPostActionInterface
         }
     }
 
+    /**
+     * Add like for registred and signed customer
+     *
+     * @param array $data
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     */
     private function addCustomerLike(array $data): void
     {
         $customerId = $this->getCustomerIdFromCurrentSession();
@@ -113,5 +131,4 @@ class LikeProduct extends Action implements HttpPostActionInterface
             }
         }
     }
-
 }

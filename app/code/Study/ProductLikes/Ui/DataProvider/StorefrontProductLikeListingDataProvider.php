@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Study\ProductLikes\Ui\DataProvider;
 
 use Magento\Ui\DataProvider\AbstractDataProvider;
-use phpDocumentor\Reflection\File;
 use Study\ProductLikes\Model\ResourceModel\ProductLikes\Collection;
 use Study\ProductLikes\Model\ResourceModel\ProductLikes\CollectionFactory;
 use Magento\Customer\Model\SessionFactory;

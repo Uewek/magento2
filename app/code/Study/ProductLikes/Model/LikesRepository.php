@@ -40,7 +40,6 @@ class LikesRepository implements LikesRepositoryInterface
         CollectionFactory $collectionFactory,
         LikesResource $likesResource,
         LikesModelFactory $likesModelFactory
-
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->likesModelFactory = $likesModelFactory;
@@ -82,17 +81,26 @@ class LikesRepository implements LikesRepositoryInterface
     public function checkIsProductLikedByThisCustomer(int $productId, int $customerId): array
     {
         $collection = $this->collectionFactory->create();
-        $collection->addFilter('product_id',$productId)->addFilter('customer_id', $customerId);
-        $result = $collection->getItems();
-        return $result;
+        $collection->addFilter('product_id',$productId)
+            ->addFilter('customer_id', $customerId);
+
+        return $collection->getItems();
     }
 
-    public function checkIsProductLikedByThisGuest(int $productId, int $guestCookieKey): array
+    /**
+     * Check is that product liked by current guest
+     *
+     * @param int $productId
+     * @param $guestCookieKey
+     * @return array
+     */
+    public function checkIsProductLikedByThisGuest(int $productId,  $guestCookieKey): array
     {
         $collection = $this->collectionFactory->create();
-        $collection->addFilter('product_id',$productId)->addFilter('cookie_guest_key', $guestCookieKey);
-        $result = $collection->getItems();
-        return $result;
+        $collection->addFilter('product_id',$productId)
+            ->addFilter('cookie_guest_key', $guestCookieKey);
+
+        return  $collection->getItems();
     }
 
     /**

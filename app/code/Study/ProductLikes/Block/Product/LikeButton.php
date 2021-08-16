@@ -8,10 +8,7 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Catalog\Helper\Data;
 use Study\ProductLikes\Model\LikesRepository;
-use Study\ProductLikes\Model\CookieModel;
-use Study\ProductLikes\Model\Cookie;
-use Magento\Framework\Data\Form\FormKey;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 
 
 /**
@@ -21,6 +18,11 @@ class LikeButton extends Template
 {
     public const TITLE_ENABLED = "I like this product";
     public const TITLE_DISABLED = "Already liked";
+
+    /**
+     * @var CookieManagerInterface
+     */
+    private $cookieManager;
 
     /**
      * @var Data
@@ -37,9 +39,10 @@ class LikeButton extends Template
      */
     private $customerSessionFactory;
 
-    private $formKey;
 
     /**
+     * Block constructor
+     *
      * @param Context $context
      * @param Data $catalogData
      * @param LikesRepository $likesRepository
@@ -48,11 +51,11 @@ class LikeButton extends Template
     public function __construct(
         Context $context,
         Data $catalogData,
+        CookieManagerInterface $cookieManager,
         LikesRepository $likesRepository,
-        SessionFactory $customerSessionFactory,
-        FormKey $formKey
+        SessionFactory $customerSessionFactory
     ) {
-        $this->formKey = $formKey;
+        $this->cookieManager = $cookieManager;
         $this->likesrepository = $likesRepository;
         $this->dataHelper = $catalogData;
         $this->customerSession = $customerSessionFactory->create();
@@ -68,8 +71,7 @@ class LikeButton extends Template
      */
     public function getProductId(): int
     {
-        $a = (int) $this->dataHelper->getProduct()->getId();
-        return  $a;
+      return (int) $this->dataHelper->getProduct()->getId();
     }
 
     /**
@@ -81,6 +83,7 @@ class LikeButton extends Template
     {
         $customerSession = $this->customerSessionFactory->create();
         $customerId = $customerSession->getCustomer()->getId();
+
         return $customerId;
     }
 
@@ -89,38 +92,45 @@ class LikeButton extends Template
      *
      * @return bool
      */
-    public function isLogged()
+    public function isLogged(): bool
     {
         $customerSession = $this->customerSessionFactory->create();
+
         return $customerSession->isLoggedIn();
     }
 
     /**
      * Check is this product liked
      *
-     * @param $productId
-     * @param $customerId
      * @return bool
      */
-    public function isThisProductLiked($productId, $customerId)
+    public function isThisProductLikedByCustomer(): bool
     {
+        $customerId = $this->getCustomerId();
+        $productId= $this->getProductId();
         $result = true;
-        $likes = $this->likesrepository->checkIsProductLikedByThisCustomer((int)$productId, (int)$customerId);
+        $likes = $this->likesrepository->checkIsProductLikedByThisCustomer($productId, (int)$customerId);
         if(empty($likes)){
             $result = false;
         }
         return $result;
     }
 
-
     /**
-     * Get form key
+     * Check is that product is liked by current guest
      *
-     * @return string
+     * @param $productId
+     * @return bool
      */
-    public function getFormKey()
+    public function isThisProductLikedByThisGuest(): bool
     {
-        return $this->formKey->getFormKey();
+        $productId = $this->getProductId();
+        $cookieGuestKey = $this->cookieManager->getCookie('cookie_guest_key');
+        $result = true;
+        $likes = $this->likesrepository->checkIsProductLikedByThisGuest($productId, $cookieGuestKey);
+        if(empty($likes)){
+            $result = false;
+        }
+        return $result;
     }
-
 }

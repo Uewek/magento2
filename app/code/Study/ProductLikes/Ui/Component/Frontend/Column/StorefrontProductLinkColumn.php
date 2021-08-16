@@ -47,7 +47,7 @@ class StorefrontProductLinkColumn extends Column
     }
 
     /**
-     * Prepare Data Source for products column
+     * Prepare Data Source for product link column
      *
      * @param array $dataSource
      * @return array

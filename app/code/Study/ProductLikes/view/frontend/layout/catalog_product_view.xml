@@ -1,10 +1,19 @@
 <?xml version="1.0"?>
 <body>
-    <referenceContainer name="product.info.form.content">
+    <referenceBlock name="product.info.addtocart">
         <block class="Study\ProductLikes\Block\Product\LikeButton"
-               name="product.info.likes"
+               name="product.likes"
                template="Study_ProductLikes::product/button.phtml"
-               cacheable="true">
+               before="-"
+               cacheable="false">
         </block>
-    </referenceContainer>
+    </referenceBlock>
+    <referenceBlock name="product.info.addtocart.additional">
+        <block class="Study\ProductLikes\Block\Product\LikeButton"
+               name="product.likes.additional"
+               template="Study_ProductLikes::product/button.phtml"
+               before="-"
+               cacheable="false">
+        </block>
+    </referenceBlock>
 </body>

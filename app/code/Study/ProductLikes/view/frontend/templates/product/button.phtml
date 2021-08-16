@@ -2,13 +2,9 @@
 /** @var $block \Study\ProductLikes\Block\Product\LikeButton
  *
  */
-if($block->isLogged()){
-    $customerId = $block->getCustomerId();
-    $productId = $block->getProductId();
-    $isLiked = $block->isThisProductLiked($productId, $customerId);
-}
+$isLikedByCustomer = $block->isThisProductLikedByCustomer();
+$isLikedByGuest = $block->isThisProductLikedByThisGuest();
 ?>
-
 <script type="text/x-magento-init">
     {
         "#like": {
@@ -16,21 +12,16 @@ if($block->isLogged()){
         }
     }
 </script>
-<?php if($block->isLogged()): ?>
-
-<?php if(!$isLiked): ?>
+<?php if(!$isLikedByGuest && !$isLikedByCustomer): ?>
         <div class="actions">
-            <button type="button" title="<?php echo $block::TITLE_ENABLED ?>" class="action primary like" id="like"
-                    onClick="window.location.reload();">
+            <button type="button" title="<?php echo $block::TITLE_ENABLED ?>" class="action primary like" id="like">
                 <span><span><i class="like-span"></i><?php echo $block::TITLE_ENABLED ?></span></span></button>
         </div>
 <?php endif; ?>
-<?php if($isLiked): ?>
+<?php if(($block->isLogged() && $isLikedByCustomer ) || $isLikedByGuest): ?>
         <div class="actions">
             <button type="button" title="<?php echo $block::TITLE_DISABLED ?>"
                     class="action primary like" id="like" disabled="disabled">
                 <span><span><i class="like-span"></i><?php echo $block::TITLE_DISABLED ?></span></span></button>
         </div>
-<?php endif; ?>
-
 <?php endif; ?>
