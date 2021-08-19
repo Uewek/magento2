@@ -14,14 +14,14 @@ $isLikedByGuest = $block->isThisProductLikedByThisGuest();
 </script>
 <?php if(!$isLikedByGuest && !$isLikedByCustomer): ?>
         <div class="actions">
-            <button type="button" title="<?php echo $block::TITLE_ENABLED ?>" class="action primary like" id="like">
-                <span><span><i class="like-span"></i><?php echo $block::TITLE_ENABLED ?></span></span></button>
+            <button type="button" title="<?php echo "I like this product" ?>" class="action primary like" id="like">
+                <span><span><i class="like-span"></i><?php echo "I like this product" ?></span></span></button>
         </div>
 <?php endif; ?>
 <?php if(($block->isLogged() && $isLikedByCustomer ) || $isLikedByGuest): ?>
         <div class="actions">
-            <button type="button" title="<?php echo $block::TITLE_DISABLED ?>"
+            <button type="button" title="<?php echo "Already liked" ?>"
                     class="action primary like" id="like" disabled="disabled">
-                <span><span><i class="like-span"></i><?php echo $block::TITLE_DISABLED ?></span></span></button>
+                <span><span><i class="like-span"></i><?php echo "Already liked" ?></span></span></button>
         </div>
 <?php endif; ?>

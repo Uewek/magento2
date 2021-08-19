@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="customer_login">
-        <observer name="customer_login" instance="Study\ProductLikes\Observer\LoginObserver" shared="true" />
+        <observer name="customer_login" instance="Study\ProductLikes\Observer\LoginObserver" />
     </event>
 </config>

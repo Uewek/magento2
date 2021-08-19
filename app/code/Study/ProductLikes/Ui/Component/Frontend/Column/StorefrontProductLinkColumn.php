@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace Study\ProductLikes\Ui\Component\Frontend\Column;
 
-use Magento\Catalog\Model\ProductRepository;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -21,7 +20,7 @@ class StorefrontProductLinkColumn extends Column
     protected $urlBuilder;
 
     /**
-     * @var ProductRepository
+     * @var ProductRepositoryInterface
      */
     private $productRepository;
 
@@ -37,7 +36,7 @@ class StorefrontProductLinkColumn extends Column
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         UrlInterface $urlBuilder,
-        ProductRepository $productRepository,
+        ProductRepositoryInterface $productRepository,
         array $components = [],
         array $data = []
     ) {
@@ -58,44 +57,13 @@ class StorefrontProductLinkColumn extends Column
             foreach ($dataSource['data']['items'] as &$like){
                 $like['product_sku'] = $this->productRepository->getById((int) $like['product_id'])->getSku();
                 $id = $like['like_id'];
-                $baseUrl = $this->urlBuilder->getBaseUrl();
-                $url = $this->prepareProductLink((int) $like['product_id']);
-                $productName = $this->prepareProductName((int) $like['product_id']);
+                $buttonActionUrl = $this->urlBuilder->getUrl("likes\index\deleteproductlike?like_id=$id");
+                $url = $this->productRepository->getById((int) $like['product_id'])->getProductUrl();
+                $productName = $this->productRepository->getById((int) $like['product_id'])->getName();
                 $like['storefront_url'] = html_entity_decode('<a href="'.$url.'">'.$productName.'</a>');
-                $like['delete'] = "<a href=\"$baseUrl.\likes\index\deleteproductlike?like_id=$id\">
-                                   <button >Unlike</button></a>";
+                $like['delete'] = html_entity_decode("<a href=\"$buttonActionUrl\"><button >Unlike</button></a>");
             }
         }
         return $dataSource;
-    }
-
-    /**
-     * Create storefront product url by product id
-     *
-     * @param $productId
-     * @return string
-     * @throws NoSuchEntityException
-     */
-    private function prepareProductLink(int $productId): string
-    {
-        $productSku = $this->productRepository->getById($productId)->getSku();
-        $productUrl = $this->productRepository->get($productSku)->getProductUrl();
-
-        return $productUrl;
-    }
-
-    /**
-     * Get product name by id
-     *
-     * @param $productId
-     * @return string
-     * @throws NoSuchEntityException
-     */
-    private function prepareProductName(int $productId): string
-    {
-        $productSku = $this->productRepository->getById($productId)->getSku();
-        $productName = $this->productRepository->get($productSku)->getName();
-
-        return $productName;
     }
 }

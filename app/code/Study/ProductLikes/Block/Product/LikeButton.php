@@ -10,14 +10,11 @@ use Magento\Catalog\Helper\Data;
 use Study\ProductLikes\Model\LikesRepository;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 
-
 /**
  * Class LikeButton contain 'like' button logic
  */
 class LikeButton extends Template
 {
-    public const TITLE_ENABLED = "I like this product";
-    public const TITLE_DISABLED = "Already liked";
 
     /**
      * @var CookieManagerInterface
@@ -35,12 +32,6 @@ class LikeButton extends Template
     private $likesrepository;
 
     /**
-     * @var SessionFactory
-     */
-    private $customerSessionFactory;
-
-
-    /**
      * Block constructor
      *
      * @param Context $context
@@ -48,18 +39,18 @@ class LikeButton extends Template
      * @param LikesRepository $likesRepository
      * @param SessionFactory $customerSessionFactory
      */
-    public function __construct(
-        Context $context,
-        Data $catalogData,
+    public function __construct
+    (
+        Context                $context,
+        Data                   $catalogData,
         CookieManagerInterface $cookieManager,
-        LikesRepository $likesRepository,
-        SessionFactory $customerSessionFactory
+        LikesRepository        $likesRepository,
+        SessionFactory         $customerSessionFactory
     ) {
         $this->cookieManager = $cookieManager;
         $this->likesrepository = $likesRepository;
         $this->dataHelper = $catalogData;
         $this->customerSession = $customerSessionFactory->create();
-        $this->customerSessionFactory = $customerSessionFactory;
 
         parent::__construct($context);
     }
@@ -71,7 +62,7 @@ class LikeButton extends Template
      */
     public function getProductId(): int
     {
-      return (int) $this->dataHelper->getProduct()->getId();
+        return (int)$this->dataHelper->getProduct()->getId();
     }
 
     /**
@@ -79,12 +70,9 @@ class LikeButton extends Template
      *
      * @return int|null
      */
-    public function getCustomerId()
+    public function getCustomerId(): int
     {
-        $customerSession = $this->customerSessionFactory->create();
-        $customerId = $customerSession->getCustomer()->getId();
-
-        return $customerId;
+        return (int)$this->customerSession->getCustomer()->getId();
     }
 
     /**
@@ -94,9 +82,7 @@ class LikeButton extends Template
      */
     public function isLogged(): bool
     {
-        $customerSession = $this->customerSessionFactory->create();
-
-        return $customerSession->isLoggedIn();
+        return $this->customerSession->isLoggedIn();
     }
 
     /**
@@ -107,30 +93,31 @@ class LikeButton extends Template
     public function isThisProductLikedByCustomer(): bool
     {
         $customerId = $this->getCustomerId();
-        $productId= $this->getProductId();
-        $result = true;
-        $likes = $this->likesrepository->checkIsProductLikedByThisCustomer($productId, (int)$customerId);
-        if(empty($likes)){
-            $result = false;
-        }
+        $productId = $this->getProductId();
+        $result = $this->likesrepository->checkIsProductLikedByThisCustomer($productId, (int)$customerId);
+
         return $result;
     }
 
     /**
      * Check is that product is liked by current guest
      *
-     * @param $productId
      * @return bool
      */
     public function isThisProductLikedByThisGuest(): bool
     {
-        $productId = $this->getProductId();
-        $cookieGuestKey = $this->cookieManager->getCookie('cookie_guest_key');
-        $result = true;
-        $likes = $this->likesrepository->checkIsProductLikedByThisGuest($productId, $cookieGuestKey);
-        if(empty($likes)){
-            $result = false;
+        if (!$this->customerSession->isLoggedIn()) {
+            $productId = $this->getProductId();
+            $cookieGuestKey = $this->cookieManager->getCookie('cookie_guest_key');
+            if($cookieGuestKey == null){
+
+                return false;
+            }
+            $result = $this->likesrepository->checkIsProductLikedByThisGuest($productId, $cookieGuestKey);
+
+            return $result;
         }
-        return $result;
+
+        return false;
     }
 }

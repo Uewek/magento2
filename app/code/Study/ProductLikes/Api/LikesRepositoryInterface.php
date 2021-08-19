@@ -11,9 +11,9 @@ interface LikesRepositoryInterface
      * Save like in the database
      *
      * @param LikesModelInterface $likesModel
-     * @return void
+     * @return LikesModelInterface
      */
-    public function save(LikesModelInterface $likesModel): void;
+    public function save(LikesModelInterface $likesModel): LikesModelInterface;
 
     /**
      * Get entity by id
@@ -24,19 +24,18 @@ interface LikesRepositoryInterface
     public function getById(int $id): LikesModelInterface;
 
     /**
-     * Check is this product liked by this customer
-     *
-     * @param $productId
-     * @param $customerId
-     * @return DataObject[]
-     */
-    public function checkIsProductLikedByThisCustomer(int $productId, int $customerId): array;
-
-    /**
      * Delete like
      *
      * @param int $likeId
      * @throws \Exception
      */
-    public function deleteLikeById(int $likeId): void;
+    public function deleteById(int $likeId): void;
+
+    /**
+     * Delete like
+     *
+     * @param LikesModelInterface $likesModel
+     */
+    public function delete(LikesModelInterface $likesModel): void;
+
 }

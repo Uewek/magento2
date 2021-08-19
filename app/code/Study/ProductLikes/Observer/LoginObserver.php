@@ -77,7 +77,6 @@ class LoginObserver implements ObserverInterface
      * Set customer likes and deleting guest likes of signing in/creating new customer
      *
      * @param Observer $observer
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function execute(Observer $observer): void
     {
@@ -92,9 +91,19 @@ class LoginObserver implements ObserverInterface
                     ->setProduct((int) $like['product_id'])
                     ->setCustomer((int) $customerId);
                 $this->likesRepository->save($newLike);
-                $this->likesRepository->deleteLikeById((int) $like['like_id']);
+                $this->likesRepository->deleteById((int) $like['like_id']);
             }
         }
+        $this->deleteCookieGuestKey();
+    }
+
+    /**
+     * Delete cookie guest key for logined customer
+     *
+     * @return void
+     */
+    private function deleteCookieGuestKey(): void
+    {
         $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata()->setPath('/');
         $this->cookieManager->deleteCookie('cookie_guest_key', $metadata);
     }

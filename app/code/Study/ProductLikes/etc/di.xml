@@ -13,7 +13,10 @@
                  type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <arguments>
             <argument name="mainTable" xsi:type="string">study_contactors_info</argument>
-            <argument name="resourceModel" xsi:type="string">Study\ProductLikes\Model\ResourceModel\LikesResource</argument>
+            <argument name="resourceModel"
+                      xsi:type="string">Study\ProductLikes\Model\ResourceModel\LikesResource</argument>
         </arguments>
     </virtualType>
+    <preference for="Study\ProductLikes\Api\LikesValidatorInterface" type="Study\ProductLikes\Model\LikesValidator" />
+    <preference for="Study\ProductLikes\Api\LikesRepositoryInterface" type="Study\ProductLikes\Model\LikesRepository" />
 </config>

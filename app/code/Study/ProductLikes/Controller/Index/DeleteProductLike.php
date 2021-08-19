@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace Study\ProductLikes\Controller\Index;
 
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\Action;
-use Magento\Framework\View\Result\Page;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Model\SessionFactory;
 use Magento\Framework\Controller\Result\Redirect;
-use Study\ProductLikes\Model\LikesRepository;
+use Study\ProductLikes\Api\LikesRepositoryInterface;
 
 /**
  * Delete like controller
@@ -17,12 +18,12 @@ use Study\ProductLikes\Model\LikesRepository;
 class DeleteProductLike extends Action implements HttpGetActionInterface
 {
     /**
-     * @var SessionFactory
+     * @var Session
      */
-    private $customerSessionFactory;
+    private $customerSession;
 
     /**
-     * @var LikesRepository
+     * @var LikesRepositoryInterface
      */
     private $likesRepository;
 
@@ -30,19 +31,22 @@ class DeleteProductLike extends Action implements HttpGetActionInterface
      * Constructor
      *
      * @param Context $context
-     * @param LikesRepository $likesRepository
+     * @param LikesRepositoryInterface $likesRepository
      * @param SessionFactory $customerSessionFactory
      */
-    public function __construct(
-        Context $context,
-        LikesRepository $likesRepository,
-        SessionFactory $customerSessionFactory
+    public function __construct
+    (
+        Context                  $context,
+        LikesRepositoryInterface $likesRepository,
+        SessionFactory           $customerSessionFactory
     ) {
         $this->customerSessionFactory = $customerSessionFactory;
         $this->likesRepository = $likesRepository;
+        $this->customerSession = $customerSessionFactory->create();
 
         parent::__construct($context);
     }
+
     /**
      * Delete like return redirect
      *
@@ -50,24 +54,38 @@ class DeleteProductLike extends Action implements HttpGetActionInterface
      */
     public function execute(): Redirect
     {
-        $isLogged = $this->customerSessionFactory->create()->isLoggedIn();
-        if(!$isLogged){
+        $isLogged = $this->customerSession->isLoggedIn();
+        if (!$isLogged) {
             $redirect = $this->resultRedirectFactory->create()->setPath('customer/account/login');
             $this->messageManager->addWarningMessage(__('Please login!'));
 
             return $redirect;
         }
         try {
-            $getData = (int) $this->getRequest()->getParams()['like_id'];
-        } catch (\Exception $e){
-            $redirect = $this->resultRedirectFactory->create()->setPath('likes');
-            $this->messageManager->addErrorMessage(__("Something went wrong!!"));
-
-            return $redirect;
+            $getData = (int)$this->getRequest()->getParams()['like_id'];
+        } catch (\Exception $e) {
+            $this->errorRedirect();
         }
-        $this->likesRepository->deleteLikeById($getData);
+        try {
+            $this->likesRepository->deleteById($getData);
+            $redirect = $this->resultRedirectFactory->create()->setPath('likes');
+            $this->messageManager->addWarningMessage(__("Like with id $getData delete successfully"));
+        } catch (NoSuchEntityException $entityException) {
+            $this->errorRedirect();
+        }
+
+        return $redirect;
+    }
+
+    /**
+     * Redirect to previous page when error happened
+     *
+     * @return Redirect
+     */
+    private function errorRedirect(): Redirect
+    {
         $redirect = $this->resultRedirectFactory->create()->setPath('likes');
-        $this->messageManager->addWarningMessage(__("Like with id $getData delete successfully"));
+        $this->messageManager->addErrorMessage(__("Something went wrong!!"));
 
         return $redirect;
     }

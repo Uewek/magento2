@@ -33,16 +33,18 @@ class StorefrontProductLikeListingDataProvider extends AbstractDataProvider
      * @param array $meta
      * @param array $data
      */
-    public function __construct(
-        string $name,
-        string $primaryFieldName,
-        string $requestFieldName,
-        SessionFactory $customerSessionFactory,
+    public function __construct
+    (
+        string            $name,
+        string            $primaryFieldName,
+        string            $requestFieldName,
+        SessionFactory    $customerSessionFactory,
         CollectionFactory $collectionFactory,
-        array $meta = [],
-        array $data = []
+        array             $meta = [],
+        array             $data = []
     ) {
-        parent::__construct(
+        parent::__construct
+        (
             $name,
             $primaryFieldName,
             $requestFieldName,
