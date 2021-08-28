@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Study\Ptomotions\Ui\Component\Listing;
+namespace Study\Promotions\Ui\Component\Listing;
 
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -38,7 +38,7 @@ class Edit extends Column
     }
 
     /**
-     * Prepare Data Source for contact edit ui form
+     * Prepare Data Source for promotion edit ui form
      *
      * @param array $dataSource
      * @return array
@@ -46,11 +46,11 @@ class Edit extends Column
     public function prepareDataSource(array $dataSource): array
     {
         if (isset($dataSource['data']['items'])) {
-            foreach ($dataSource['data']['items'] as &$contact) {
-                $contact[$this->getData('name')]['edit'] = [
+            foreach ($dataSource['data']['items'] as &$promotion) {
+                $promotion[$this->getData('name')]['edit'] = [
                     'href' => $this->urlBuilder->getUrl(
                         'promotions/edit/index',
-                        ['id' => $contact['contact_id']]
+                        ['id' => $promotion['promotion_id']]
                     ),
                     'label' => __('Edit promotion'),
                     'hidden' => false,

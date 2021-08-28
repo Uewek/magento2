@@ -15,10 +15,8 @@ use Magento\Framework\Controller\ResultInterface;
 class Index extends Action implements HttpGetActionInterface
 {
 
-    /**
-     * @return ResultInterface
-     */
-    public function execute(): ResultFactory
+
+    public function execute()
     {
         return  $this->resultFactory->create(ResultFactory::TYPE_PAGE);
     }

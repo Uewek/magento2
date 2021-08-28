@@ -42,8 +42,24 @@ class PromotionsInfo extends AbstractModel implements PromotionsInfoInterface
     }
 
 
-    public function setStartTime($timestamp): PromotionsInfoInterface
+    public function setStartTime(string $time): PromotionsInfoInterface
     {
+        $this->setData('start_time', $time);
+
+        return $this;
+    }
+
+    public function setStatus(bool $status): PromotionsInfoInterface
+    {
+        $this->setData('promotion_enabled', $status);
+
+        return $this;
+    }
+
+    public function setDescription(string $description): PromotionsInfoInterface
+    {
+        $this->setData('promotion_description', $description);
+
         return $this;
     }
 
@@ -52,7 +68,7 @@ class PromotionsInfo extends AbstractModel implements PromotionsInfoInterface
         return $this->getData('start_time');
     }
 
-    public function getFinish()
+    public function getFinishTime()
     {
         return $this->getData('finish_time');
     }

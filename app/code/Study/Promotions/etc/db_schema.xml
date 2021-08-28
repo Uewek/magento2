@@ -7,6 +7,7 @@
         <column xsi:type="datetime" name="finish_time" nullable="true"  comment="Promotion finish"/>
         <column xsi:type="varchar" name="promotion_name" default="New promotion"  comment="Promotion name"/>
         <column xsi:type="text" name="promotion_description" nullable="true"  comment="Promotion description"/>
+        <column xsi:type="boolean" name="promotion_enabled" nullable="false" default="true"  comment="Promotion enabled/disabled"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="promotion_id"/>
         </constraint>

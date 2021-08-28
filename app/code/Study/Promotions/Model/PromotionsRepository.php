@@ -12,28 +12,54 @@ use Study\Promotions\Model\ResourceModel\PromotionsLinkResource;
 use Study\Promotions\Model\ResourceModel\PromotionsInfo\CollectionFactory as PromotionsInfoCollection;
 use Study\Promotions\Model\ResourceModel\PromotionsLinks\CollectionFactory as PromotionsLinksCollection;
 
-
 class PromotionsRepository implements PromotionRepositoryInterface
 {
+    /**
+     * @var PromotionsInfoCollection
+     */
     private $promotionsInfoCollectionFactory;
 
+    /**
+     * @var PromotionsLinksCollection
+     */
     private $promotionsLinksCollectionFactory;
 
+    /**
+     * @var PromotionsInfoFactory
+     */
     private $promotionsInfoFactory;
 
+    /**
+     * @var PromotedProductsFactory
+     */
     private $promotedProductsFactory;
 
+    /**
+     * @var PromotionsInfoResource
+     */
     private $promotionsInfoResource;
 
+    /**
+     * @var PromotionsLinkResource
+     */
     private $promotionsLinkResource;
 
+    /**
+     * Repository constructor
+     * @param PromotionsInfoResource $promotionsInfoResource
+     * @param PromotionsLinkResource $promotionsLinkResource
+     * @param PromotionsInfoCollection $promotionsInfoCollectionFactory
+     * @param PromotionsLinksCollection $promotionsLinksCollectionFactory
+     * @param PromotionsInfoFactory $promotionsInfoFactory
+     * @param PromotedProductsFactory $promotedProductsFactory
+     */
     public function __construct(
-        PromotionsInfoResource $promotionsInfoResource,
-        PromotionsLinkResource $promotionsLinkResource,
-        PromotionsInfoCollection $promotionsInfoCollectionFactory,
+        PromotionsInfoResource    $promotionsInfoResource,
+        PromotionsLinkResource    $promotionsLinkResource,
+        PromotionsInfoCollection  $promotionsInfoCollectionFactory,
         PromotionsLinksCollection $promotionsLinksCollectionFactory,
-        PromotionsInfoFactory $promotionsInfoFactory,
-        PromotedProductsFactory $promotedProductsFactory
+        PromotionsInfoFactory     $promotionsInfoFactory,
+        PromotedProductsFactory   $promotedProductsFactory
     ) {
         $this->promotedProductsFactory = $promotedProductsFactory;
         $this->promotionsInfoFactory = $promotionsInfoFactory;
@@ -65,13 +91,26 @@ class PromotionsRepository implements PromotionRepositoryInterface
      * Save nev promotion
      *
      * @param PromotionsInfoInterface $promotion
-     * @return PromotionsInfoInterface
+     * @return
      */
-    public function save(PromotionsInfoInterface $promotion): PromotionsInfoInterface
+    public function savePromotion(PromotionsInfoInterface $promotion): PromotionRepositoryInterface
     {
         $this->promotionsInfoResource->save($promotion);
 
-        return $promotion;
+        return $this;
+    }
+
+    /**
+     * Save promoted product
+     *
+     * @param PromotedProductsInterface $product
+     * @return PromotionRepositoryInterface
+     */
+    public function savePromotedProduct(PromotedProductsInterface $product): PromotionRepositoryInterface
+    {
+        $this->promotionsLinkResource->save($product);
+
+        return $this;
     }
 
 }
