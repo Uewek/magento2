@@ -15,12 +15,6 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
  */
 class LikeButton extends Template
 {
-
-    /**
-     * @var CookieManagerInterface
-     */
-    private $cookieManager;
-
     /**
      * @var Data
      */
@@ -30,6 +24,16 @@ class LikeButton extends Template
      * @var LikesRepository
      */
     private $likesrepository;
+
+    /**
+     * @var SessionFactory
+     */
+    private $customerSessionFactory;
+
+    /**
+     * @var CookieManagerInterface
+     */
+    private $cookieManager;
 
     /**
      * Block constructor
@@ -47,10 +51,11 @@ class LikeButton extends Template
         LikesRepository        $likesRepository,
         SessionFactory         $customerSessionFactory
     ) {
-        $this->cookieManager = $cookieManager;
         $this->likesrepository = $likesRepository;
         $this->dataHelper = $catalogData;
-        $this->customerSession = $customerSessionFactory->create();
+        $this->cookieManager = $cookieManager;
+
+        $this->customerSessionFactory = $customerSessionFactory;
 
         parent::__construct($context);
     }
@@ -72,7 +77,7 @@ class LikeButton extends Template
      */
     public function getCustomerId(): int
     {
-        return (int)$this->customerSession->getCustomer()->getId();
+        return (int)$this->customerSessionFactory->create()->getId();
     }
 
     /**
@@ -82,7 +87,7 @@ class LikeButton extends Template
      */
     public function isLogged(): bool
     {
-        return $this->customerSession->isLoggedIn();
+        return $this->customerSessionFactory->create()->isLoggedIn();
     }
 
     /**
@@ -94,7 +99,7 @@ class LikeButton extends Template
     {
         $customerId = $this->getCustomerId();
         $productId = $this->getProductId();
-        $result = $this->likesrepository->checkIsProductLikedByThisCustomer($productId, (int)$customerId);
+        $result = $this->likesrepository->isProductLikedByCustomer($productId, (int)$customerId);
 
         return $result;
     }
@@ -104,16 +109,18 @@ class LikeButton extends Template
      *
      * @return bool
      */
-    public function isThisProductLikedByThisGuest(): bool
+    public function isThisProductLikedByGuest(): bool
     {
-        if (!$this->customerSession->isLoggedIn()) {
+        if (!$this->isLogged()) {
             $productId = $this->getProductId();
             $cookieGuestKey = $this->cookieManager->getCookie('cookie_guest_key');
-            if($cookieGuestKey == null){
+
+            if ($cookieGuestKey == null) {
 
                 return false;
             }
-            $result = $this->likesrepository->checkIsProductLikedByThisGuest($productId, $cookieGuestKey);
+
+            $result = $this->likesrepository->isProductLikedByGuest($productId, $cookieGuestKey);
 
             return $result;
         }

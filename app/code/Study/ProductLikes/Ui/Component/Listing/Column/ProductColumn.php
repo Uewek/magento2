@@ -57,6 +57,7 @@ class ProductColumn extends Column
         if (isset($dataSource['data']['items']) && !isset($dataSource['data']['items']['0']['numberOfLikes'])) {
             $dataSource['data']['items'] = $this->linkLikesToProduct($dataSource)['data']['items'];
         }
+
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$like) {
                 $like['productName'] = $this->productRepository->getById((int)$like['product_id'])->getName();

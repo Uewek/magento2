@@ -12,17 +12,12 @@ use Magento\Ui\Component\Listing\Columns\Column;
 /**
  * Prepare columns for storefront grid
  */
-class StorefrontProductLinkColumn extends Column
+class StorefrontDeleteLikeColumn extends Column
 {
     /**
      * @var UrlInterface
      */
     protected $urlBuilder;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
 
     /**
      * Product name/link constructor.
@@ -35,18 +30,14 @@ class StorefrontProductLinkColumn extends Column
     public function __construct(
         ContextInterface           $context,
         UiComponentFactory         $uiComponentFactory,
-        UrlInterface               $urlBuilder,
-        ProductRepositoryInterface $productRepository,
         array                      $components = [],
         array                      $data = []
     ) {
-        $this->urlBuilder = $urlBuilder;
-        $this->productRepository = $productRepository;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
     /**
-     * Prepare Data Source for product link column
+     * Prepare Data Source for unlike column
      *
      * @param array $dataSource
      * @return array
@@ -55,13 +46,12 @@ class StorefrontProductLinkColumn extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$like) {
-                $like['product_sku'] = $this->productRepository->getById((int)$like['product_id'])->getSku();
-                $url = $this->productRepository->getById((int)$like['product_id'])->getProductUrl();
-                $productName = $this->productRepository->getById((int)$like['product_id'])->getName();
+                $id = $like['like_id'];
+
                 $like[$this->getData('name')] = [
-                    'link' => [
-                        'href' => $url,
-                        'label' => $productName
+                    'delete' => [
+                        'href' => "\likes\index\deleteproductlike?like_id=$id",
+                        'label' => __('Unlike')
                     ]
                 ];
             }
@@ -70,3 +60,5 @@ class StorefrontProductLinkColumn extends Column
         return $dataSource;
     }
 }
+
+

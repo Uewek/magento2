@@ -10,12 +10,12 @@ interface LikesModelInterface
      *
      * @param int $productId
      */
-    public function setProduct(int $productId): LikesModelInterface;
+    public function setProductId(int $productId): LikesModelInterface;
 
     /**
      * Set customer in like
      *
      * @param int $customerId
      */
-    public function setCustomer(int $customerId): LikesModelInterface;
+    public function setCustomerId(int $customerId): LikesModelInterface;
 }

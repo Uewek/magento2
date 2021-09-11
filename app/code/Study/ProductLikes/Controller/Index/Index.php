@@ -21,6 +21,8 @@ class Index extends Action implements HttpGetActionInterface
      */
     private $customerSessionFactory;
 
+    private $customerSession;
+
     /**
      * Index constructor.
      * @param Context $context
@@ -31,6 +33,7 @@ class Index extends Action implements HttpGetActionInterface
         SessionFactory $customerSessionFactory
     ) {
         $this->customerSessionFactory = $customerSessionFactory;
+        $this->customerSession = $customerSessionFactory->create();
         parent::__construct($context);
     }
     /**
@@ -40,13 +43,16 @@ class Index extends Action implements HttpGetActionInterface
      */
     public function execute()
     {
-        $isLogged = $this->customerSessionFactory->create()->isLoggedIn();
+//        $isLogged = $this->customerSessionFactory->create()->isLoggedIn();
+        $isLogged = $this->customerSession->isLoggedIn();
+
         if(!$isLogged){
             $redirect = $this->resultRedirectFactory->create()->setPath('customer/account/login');
             $this->messageManager->addWarningMessage(__('Please login!'));
 
             return $redirect;
         }
+
         return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
     }
 }

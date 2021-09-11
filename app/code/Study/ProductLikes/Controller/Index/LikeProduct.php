@@ -11,6 +11,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\Action;
 use Study\ProductLikes\Model\LikesModelFactory;
 use Study\ProductLikes\Model\LikesRepository;
+use Study\ProductLikes\Logger\Logger;
 
 /**
  * Class LikeProduct - in this controller creating new like
@@ -38,6 +39,11 @@ class LikeProduct extends Action implements HttpPostActionInterface
     private $customerSession;
 
     /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
      * LikeProduct constructor.
      * @param Context $context
      * @param Http $request
@@ -50,6 +56,7 @@ class LikeProduct extends Action implements HttpPostActionInterface
         Http              $request,
         LikesModelFactory $likesModelFactory,
         SessionFactory    $customerSessionFactory,
+        Logger            $logger,
         LikesRepository   $likesRepository
     ) {
         $this->customerSession = $customerSessionFactory->create();
@@ -58,6 +65,8 @@ class LikeProduct extends Action implements HttpPostActionInterface
         $this->likesRepository = $likesRepository;
 
         parent::__construct($context);
+
+        $this->logger = $logger;
     }
 
     /**
@@ -68,28 +77,38 @@ class LikeProduct extends Action implements HttpPostActionInterface
     public function execute(): void
     {
         $customerLogged = $this->customerSession->isLoggedIn();
-        $data = $this->request->getParams();
+        $productId = $this->request->getParam('productId');
+        $guestKey = $this->request->getParam('cookie_guest_key');
+
         if (!$customerLogged) {
-            $this->addGuestLike($data);
+            $this->addGuestLike((int)$productId, $guestKey);
         }
+
         if ($customerLogged) {
-            $this->addCustomerLike($data);
+            $this->addCustomerLike((int)$productId);
         }
     }
 
     /**
      * Add like for unsigned customer
      *
-     * @param array $data
+     * @param int $productId
+     * @param string $cookieKey
+     * @return void
      */
-    private function addGuestLike(array $data): void
+    private function addGuestLike(int $productId, string $cookieKey): void
     {
         $isLiked = $this->likesRepository->
-        checkIsProductLikedByThisGuest((int)$data['productId'], $data['cookie_guest_key']);
-        if ($data && !$isLiked) {
+        isProductLikedByGuest($productId, $cookieKey);
+
+        if ($isLiked) {
+            $this->logger->emergency("Guest with guestKey $cookieKey try hack site!!!");
+        }
+
+        if (!$isLiked) {
             $newLike = $this->likesModelFactory->create()
-                ->setProduct((int)$data['productId'])
-                ->setCookieGuestKey($data['cookie_guest_key']);
+                ->setProductId($productId)
+                ->setCookieGuestKey($cookieKey);
             $this->likesRepository->save($newLike);
             $this->messageManager->addSuccessMessage(__('Product liked!'));
         }
@@ -100,15 +119,21 @@ class LikeProduct extends Action implements HttpPostActionInterface
      *
      * @param array $data
      */
-    private function addCustomerLike(array $data): void
+    private function addCustomerLike(int $productId): void
     {
         $customerId = $this->customerSession->getCustomerId();
         $isLiked = $this->likesRepository->
-        checkIsProductLikedByThisCustomer((int)$data['productId'], (int) $customerId);
-        if ($data && !$isLiked) {
+        isProductLikedByCustomer($productId, (int)$customerId);
+
+        if ($isLiked) {
+            $this->logger->emergency("Customer with customerId $customerId try hack site!!!");
+        }
+
+
+        if (!$isLiked) {
             $newLike = $this->likesModelFactory->create()
-                ->setProduct((int) $data['productId'])
-                ->setCustomer((int) $customerId);
+                ->setProductId($productId)
+                ->setCustomerId((int)$customerId);
             $this->likesRepository->save($newLike);
             $this->messageManager->addSuccessMessage(__('Product liked!'));
         }

@@ -6,11 +6,19 @@ namespace Study\ProductLikes\Model;
 use Study\ProductLikes\Api\LikesValidatorInterface;
 use Study\ProductLikes\Model\ResourceModel\ProductLikes\CollectionFactory;
 
-
+/**
+ * Check is that product already liked
+ */
 class LikesValidator implements LikesValidatorInterface
 {
+    /**
+     * @var CollectionFactory
+     */
     private $collectionFactory;
 
+    /**
+     * @param CollectionFactory $collectionFactory
+     */
     public function __construct
     (
         CollectionFactory $collectionFactory
@@ -52,6 +60,7 @@ class LikesValidator implements LikesValidatorInterface
         $collection = $this->collectionFactory->create();
         $collection->addFilter('product_id', $productId)
             ->addFilter('cookie_guest_key', $guestCookieKey);
+
         if (!empty($collection->getItems())) {
             $checkResult = true;
         }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Study\ProductLikes\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Study\ProductLikes\Model\ResourceModel\ProductLikes\CollectionFactory;
 use Study\ProductLikes\Model\ResourceModel\LikesResource;
 use Study\ProductLikes\Api\Data\LikesModelInterface;
 use Study\ProductLikes\Api\LikesRepositoryInterface;
@@ -15,13 +14,11 @@ use Study\ProductLikes\Api\LikesValidatorInterface;
  */
 class LikesRepository implements LikesRepositoryInterface
 {
-
+    /**
+     * @var LikesValidatorInterface
+     */
     private $likesValidator;
 
-    /**
-     * @var CollectionFactory
-     */
-    private $collectionFactory;
 
     /**
      * @var LikesModelFactory
@@ -35,18 +32,16 @@ class LikesRepository implements LikesRepositoryInterface
 
     /**
      * LikesRepository constructor.
-     * @param CollectionFactory $collectionFactory
      * @param LikesResource $likesResource
      * @param LikesModelFactory $likesModelFactory
+     * @param LikesValidator $likesValidator
      */
     public function __construct(
-        CollectionFactory $collectionFactory,
         LikesResource $likesResource,
         LikesValidatorInterface $likesValidator,
         LikesModelFactory $likesModelFactory
     ) {
         $this->likesValidator = $likesValidator;
-        $this->collectionFactory = $collectionFactory;
         $this->likesModelFactory = $likesModelFactory;
         $this->likesResource = $likesResource;
     }
@@ -60,10 +55,10 @@ class LikesRepository implements LikesRepositoryInterface
     public function getById(int $id): LikesModelInterface
     {
         $like= $this->likesModelFactory->create();
-        try {
-            $this->likesResource->load($like, $id);
-        } catch (NoSuchEntityException $noSuchEntityException) {
-            echo "No like with that id!";
+        $this->likesResource->load($like, $id);
+
+        if(null === $like->getId()) {
+            throw new NoSuchEntityException(__('Like with id %1 absent', $id));
         }
 
         return $like;
@@ -89,7 +84,7 @@ class LikesRepository implements LikesRepositoryInterface
      * @param $customerId
      * @return bool
      */
-    public function checkIsProductLikedByThisCustomer(int $productId, int $customerId): bool
+    public function isProductLikedByCustomer(int $productId, int $customerId): bool
     {
         return $this->likesValidator->productLikedByThisCustomer($productId, $customerId);
     }
@@ -101,7 +96,7 @@ class LikesRepository implements LikesRepositoryInterface
      * @param string $guestCookieKey
      * @return bool
      */
-    public function checkIsProductLikedByThisGuest(int $productId, string $guestCookieKey): bool
+    public function isProductLikedByGuest(int $productId, string $guestCookieKey): bool
     {
         return $this->likesValidator->productLikedByThisGuest($productId, $guestCookieKey);
     }
@@ -110,6 +105,7 @@ class LikesRepository implements LikesRepositoryInterface
      * Delete like
      *
      * @param int $likeId
+     * @return void
      */
     public function deleteById(int $likeId): void
     {
@@ -120,6 +116,7 @@ class LikesRepository implements LikesRepositoryInterface
      * Delete like
      *
      * @param LikesModelInterface $likesModel
+     * @return void
      */
     public function delete(LikesModelInterface $likesModel): void
     {

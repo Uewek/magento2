@@ -2,8 +2,10 @@
 /** @var $block \Study\ProductLikes\Block\Product\LikeButton
  *
  */
-$isLikedByCustomer = $block->isThisProductLikedByCustomer();
-$isLikedByGuest = $block->isThisProductLikedByThisGuest();
+$isLog=$block->isLogged();
+$isProductLiked = $block->isThisProductLikedByCustomer() || $block->isThisProductLikedByGuest();
+$label = $isProductLiked ? __('Already liked') : __('Like this product');
+
 ?>
 <script type="text/x-magento-init">
     {
@@ -12,16 +14,9 @@ $isLikedByGuest = $block->isThisProductLikedByThisGuest();
         }
     }
 </script>
-<?php if(!$isLikedByGuest && !$isLikedByCustomer): ?>
-        <div class="actions">
-            <button type="button" title="<?php echo "I like this product" ?>" class="action primary like" id="like">
-                <span><span><i class="like-span"></i><?php echo "I like this product" ?></span></span></button>
-        </div>
-<?php endif; ?>
-<?php if(($block->isLogged() && $isLikedByCustomer ) || $isLikedByGuest): ?>
-        <div class="actions">
-            <button type="button" title="<?php echo "Already liked" ?>"
-                    class="action primary like" id="like" disabled="disabled">
-                <span><span><i class="like-span"></i><?php echo "Already liked" ?></span></span></button>
-        </div>
-<?php endif; ?>
+
+<div class="actions">
+    <button type="button" title="<?php echo $label ?>"
+            class="action primary like" id="like" <?php if ($isProductLiked) : ?> disabled = "disabled" <?php endIf ?>">
+        <span><span><i class="like-span"></i><?php echo $label ?></span></span></button>
+</div>

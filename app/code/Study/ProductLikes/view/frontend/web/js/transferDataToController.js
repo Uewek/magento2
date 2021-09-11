@@ -9,10 +9,11 @@
                 data: {
                     productId: productId,
                     cookie_guest_key: presistentCookie
+                }, success: function(){
+                    document.getElementById("like").disabled = true;
+                    document.getElementById("like").innerHTML = "Already liked";
                 }
             });
-            document.getElementById("like").disabled = true;
-            document.getElementById("like").innerHTML = "Already liked";
         });
     });
 

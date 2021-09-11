@@ -28,6 +28,11 @@ class DeleteProductLike extends Action implements HttpGetActionInterface
     private $likesRepository;
 
     /**
+     * @var SessionFactory
+     */
+    private $customerSessionFactory;
+
+    /**
      * Constructor
      *
      * @param Context $context
@@ -55,23 +60,24 @@ class DeleteProductLike extends Action implements HttpGetActionInterface
     public function execute(): Redirect
     {
         $isLogged = $this->customerSession->isLoggedIn();
+
         if (!$isLogged) {
             $redirect = $this->resultRedirectFactory->create()->setPath('customer/account/login');
             $this->messageManager->addWarningMessage(__('Please login!'));
 
             return $redirect;
         }
-        try {
-            $getData = (int)$this->getRequest()->getParams()['like_id'];
-        } catch (\Exception $e) {
-            $this->errorRedirect();
-        }
-        try {
-            $this->likesRepository->deleteById($getData);
-            $redirect = $this->resultRedirectFactory->create()->setPath('likes');
-            $this->messageManager->addWarningMessage(__("Like with id $getData delete successfully"));
-        } catch (NoSuchEntityException $entityException) {
-            $this->errorRedirect();
+
+        $likeId = (int)$this->getRequest()->getParam('like_id');
+        $redirect = $this->resultRedirectFactory->create()->setPath('likes');
+
+        if (null !== $likeId) {
+            try {
+                $this->likesRepository->deleteById($likeId);
+                $this->messageManager->addSuccessMessage(__('Like deleted successfully'));
+            } catch (NoSuchEntityException $entityException) {
+                $this->errorRedirect();
+            }
         }
 
         return $redirect;

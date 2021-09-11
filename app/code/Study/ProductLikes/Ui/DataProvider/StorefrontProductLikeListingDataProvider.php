@@ -13,10 +13,7 @@ use Magento\Customer\Model\SessionFactory;
  */
 class StorefrontProductLikeListingDataProvider extends AbstractDataProvider
 {
-    /**
-     * @var SessionFactory
-     */
-    private $customerSessionFactory;
+
     /**
      * @var Collection
      */
@@ -51,7 +48,6 @@ class StorefrontProductLikeListingDataProvider extends AbstractDataProvider
             $meta,
             $data
         );
-        $this->customerSessionFactory = $customerSessionFactory;
         $customerId = $customerSessionFactory->create()->getCustomerId();
         $this->collection = $collectionFactory->create()->addFilter('customer_id', $customerId);
     }

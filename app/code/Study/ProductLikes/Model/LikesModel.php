@@ -21,8 +21,9 @@ class LikesModel extends AbstractModel implements LikesModelInterface
      * Set liked product
      *
      * @param int $productId
+     * @return LikesModelInterface
      */
-    public function setProduct(int $productId): LikesModelInterface
+    public function setProductId(int $productId): LikesModelInterface
     {
         $this->setData('product_id', $productId);
 
@@ -33,8 +34,9 @@ class LikesModel extends AbstractModel implements LikesModelInterface
      * Set customer who make like
      *
      * @param int $customerId
+     * @return LikesModelInterface
      */
-    public function setCustomer(int $customerId): LikesModelInterface
+    public function setCustomerId(int $customerId): LikesModelInterface
     {
         $this->setData('customer_id', $customerId);
 
@@ -45,6 +47,7 @@ class LikesModel extends AbstractModel implements LikesModelInterface
      * Set cookie_guest_key for guest customers
      *
      * @param string $cookieGuestKey
+     * @return LikesModelInterface
      */
     public function setCookieGuestKey(string $cookieGuestKey): LikesModelInterface
     {

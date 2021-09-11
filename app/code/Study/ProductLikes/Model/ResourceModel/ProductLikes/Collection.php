@@ -13,13 +13,10 @@ use Study\ProductLikes\Model\LikesModel;
 class Collection extends AbstractCollection
 {
     /**
-     * Collection constructor
+     * @inheirtDoc
      */
     protected function _construct()
     {
-        $this->_init(
-            LikesModel::class,
-            LikesResource::class
-        );
+        $this->_init(LikesModel::class,LikesResource::class);
     }
 }

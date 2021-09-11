@@ -20,7 +20,7 @@ class Index extends Action implements HttpGetActionInterface
      *
      * @return Page
      */
-    public function execute()
+    public function execute(): Page
     {
         return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
     }

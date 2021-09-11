@@ -77,19 +77,20 @@ class LoginObserver implements ObserverInterface
      * Set customer likes and deleting guest likes of signing in/creating new customer
      *
      * @param Observer $observer
+     * @return void
      */
     public function execute(Observer $observer): void
     {
         $cookieGuestKey = $this->cookieManager->getCookie('cookie_guest_key');
         $customerId = $this->sessionFactory->create()->getCustomerId();
-        $collectionByFormKey = $this->collectionFactory->create()->
+        $collectionByGuestKey = $this->collectionFactory->create()->
         addFilter('cookie_guest_key', $cookieGuestKey)
         ->getItems();
-        if(!empty($collectionByFormKey)){
-            foreach ($collectionByFormKey as $like){
+        if(!empty($collectionByGuestKey)){
+            foreach ($collectionByGuestKey as $like){
                 $newLike = $this->likesModelFactory->create()
-                    ->setProduct((int) $like['product_id'])
-                    ->setCustomer((int) $customerId);
+                    ->setProductId((int) $like['product_id'])
+                    ->setCustomerId((int) $customerId);
                 $this->likesRepository->save($newLike);
                 $this->likesRepository->deleteById((int) $like['like_id']);
             }
