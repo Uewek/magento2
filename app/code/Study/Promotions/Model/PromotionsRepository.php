@@ -81,7 +81,7 @@ class PromotionsRepository implements PromotionRepositoryInterface
         try {
             $this->promotionsInfoResource->load($promotion, $id);
         } catch (NoSuchEntityException $noSuchEntityException) {
-            echo "No like with that id!";
+            echo "No promotion with that id!";
         }
 
         return $promotion;

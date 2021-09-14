@@ -61,6 +61,16 @@ class CreateNewPromotion extends Action implements HttpGetActionInterface, HttpP
                 ->setStartTime($data['start_time'])
                 ->setFinishTime($data['finish_time']);
             $this->promotionsRepository->savePromotion($promotion);
+
+            if ($data['promoted_products'] != "") {
+                $linkedData = [
+                    'productJson' => $data['promoted_products'],
+                    'promotion' => $promotion->getId(),
+                    'saveUpdate' => true
+                ];
+                $resultRedirect->setPath('promotions/index/addproductstopromotion',$linkedData);
+            }
+
         $this->messageManager->addSuccessMessage(__('Promotion created successfully !'));
         return $resultRedirect;
     }

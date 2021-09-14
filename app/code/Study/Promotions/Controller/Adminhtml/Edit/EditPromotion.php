@@ -45,9 +45,11 @@ class EditPromotion extends Action implements HttpGetActionInterface, HttpPostAc
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('promotions/');
         $data = $this->getRequest()->getParams();
+
         if (!$data['finish_time']) {
             $data['finish_time'] = null;
         }
+
         if (isset ($data['finish_time']) && (strtotime($data['start_time']) > strtotime($data['finish_time']))) {
             $this->messageManager->addErrorMessage(__('Finish date cannot be less than start date !'));
 
@@ -59,6 +61,15 @@ class EditPromotion extends Action implements HttpGetActionInterface, HttpPostAc
             ->setStatus($this->strToBool($data['promotion_enabled']))
             ->setStartTime($data['start_time'])
             ->setFinishTime($data['finish_time']);
+
+        if (isset($data['promoted_products'])) {
+            $linkedData = [
+                'productJson' => $data['promoted_products'],
+                'promotion' => $data['promotion_id'],
+                'saveUpdate' => true
+            ];
+            $resultRedirect->setPath('promotions/index/addproductstopromotion',$linkedData);
+        }
         $this->promotionsRepository->savePromotion($promotion);
         $this->messageManager->addSuccessMessage(__('Promotion data updated successfully !'));
         return $resultRedirect;

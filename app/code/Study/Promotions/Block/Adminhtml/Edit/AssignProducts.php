@@ -82,7 +82,7 @@ class AssignProducts extends Template
      *
      * @return string
      */
-    public function getGridHtml()
+    public function getGridHtml(): string
     {
         return $this->getBlockGrid()->toHtml();
     }
@@ -90,7 +90,7 @@ class AssignProducts extends Template
     /**
      * @return string
      */
-    public function getProductsJson()
+    public function getProductsJson(): string
     {
         $entity_id = $this->getRequest()->getParam('entity_id');
         $productFactory = $this->productFactory->create();
@@ -105,6 +105,7 @@ class AssignProducts extends Template
         }
         return '{}';
     }
+
 
 
     public function getItem()

@@ -8,6 +8,7 @@ define([
         $(document).on('click', '.promote_products', function () {
             var productsJson = document.querySelector('input[name=rh_products]').value
             var promotion = document.querySelector(' input[name=promotion_id]').value;
+            document.getElementsByClassName("checkbox admin__control-checkbox").checked = false
             jQuery.ajax({
                 url: '/admin/promotions/index/addproductstopromotion',
                 type: "POST",
@@ -16,22 +17,10 @@ define([
                     promotion: promotion
                 }
             });
-
+            document.getElementsByClassName("checkbox admin__control-checkbox").checked = false
         });
     });
 
-    // $(document).on('click', '#save', function () {
-    //     alert('fuhghfrdg');
-    //     var productsJson = document.querySelector('input[name=rh_products]').value
-    //     jQuery.ajax({
-    //         url: 'admin/promotions/index/createnewpromotion',
-    //         type: "POST",
-    //         data: {
-    //             productJson: productsJson,
-    //         }
-    //     });
-    //
-    // });
     return function (config) {
         var selectedProducts = config.selectedProducts,
             categoryProducts = $H(selectedProducts),
@@ -60,7 +49,13 @@ define([
                 }
                 categoryProducts.unset(element.value);
             }
-            $('rh_products').value = Object.toJSON(categoryProducts);
+            var productJson = Object.toJSON(categoryProducts);
+
+            if(document.querySelector(' input[name=promoted_products]')) {
+                require('uiRegistry').get('index  = promoted_products').value(productJson);
+            }
+
+            $('rh_products').value = productJson;
             grid.reloadParams = {
                 'selected_products[]': categoryProducts.keys()
             };

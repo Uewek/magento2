@@ -6,7 +6,6 @@ namespace Study\Promotions\Block\Product;
 use Magento\Eav\Model\Entity\Attribute\Backend\Datetime;
 use Study\Promotions\Model\PromotionsRepository;
 use Study\Promotions\Model\ResourceModel\PromotionsLinks\CollectionFactory;
-use Study\Promotions\Model\ResourceModel\PromotionsInfo\Collection as PromotionCollection;
 use Study\Promotions\Model\ResourceModel\PromotionsInfo\CollectionFactory as PromotionCollectionFactory;
 use Study\Promotions\Api\PromotionsInfoInterface;
 use Magento\Framework\View\Element\Template;
