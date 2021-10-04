@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Study\Promotions\Setup;
+namespace Study\Promotions\Setup\Patch\Data;
 
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Study\Promotions\Model\PromotionsInfoFactory;
@@ -23,14 +23,17 @@ class DataPatch implements DataPatchInterface
      */
     private $moduleDataSetup;
 
-
     /**
      * @var PromotionsRepository
      */
     private $promotionsRepository;
 
-    public function __construct
-    (
+    /**
+     * @param PromotionsInfoFactory $promotionsInfoFactory
+     * @param ModuleDataSetupInterface $moduleDataSetup
+     * @param PromotionsRepository $promotionsRepository
+     */
+    public function __construct(
         PromotionsInfoFactory $promotionsInfoFactory,
         ModuleDataSetupInterface $moduleDataSetup,
         PromotionsRepository $promotionsRepository
@@ -57,10 +60,11 @@ class DataPatch implements DataPatchInterface
                 ->setFinishTime('09/14/2022 3:44 AM');
             $this->promotionsRepository->savePromotion($promotion);
         }
-
     }
 
     /**
+     * Return dependencies
+     *
      * @inheirtDoc
      */
     public static function getDependencies(): array
@@ -69,6 +73,8 @@ class DataPatch implements DataPatchInterface
     }
 
     /**
+     * Return aliases
+     *
      * @inheirtDoc
      */
     public function getAliases(): array

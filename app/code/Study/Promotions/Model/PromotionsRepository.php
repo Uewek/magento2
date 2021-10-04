@@ -9,30 +9,16 @@ use Study\Promotions\Api\PromotedProductsInterface;
 use Study\Promotions\Api\PromotionsInfoInterface;
 use Study\Promotions\Model\ResourceModel\PromotionsInfoResource;
 use Study\Promotions\Model\ResourceModel\PromotionsLinkResource;
-use Study\Promotions\Model\ResourceModel\PromotionsInfo\CollectionFactory as PromotionsInfoCollection;
-use Study\Promotions\Model\ResourceModel\PromotionsLinks\CollectionFactory as PromotionsLinksCollection;
 
+/**
+ * That repository used to save promotions and promoted products
+ */
 class PromotionsRepository implements PromotionRepositoryInterface
 {
-    /**
-     * @var PromotionsInfoCollection
-     */
-    private $promotionsInfoCollectionFactory;
-
-    /**
-     * @var PromotionsLinksCollection
-     */
-    private $promotionsLinksCollectionFactory;
-
     /**
      * @var PromotionsInfoFactory
      */
     private $promotionsInfoFactory;
-
-    /**
-     * @var PromotedProductsFactory
-     */
-    private $promotedProductsFactory;
 
     /**
      * @var PromotionsInfoResource
@@ -40,33 +26,16 @@ class PromotionsRepository implements PromotionRepositoryInterface
     private $promotionsInfoResource;
 
     /**
-     * @var PromotionsLinkResource
-     */
-    private $promotionsLinkResource;
-
-    /**
      * Repository constructor
      * @param PromotionsInfoResource $promotionsInfoResource
-     * @param PromotionsLinkResource $promotionsLinkResource
-     * @param PromotionsInfoCollection $promotionsInfoCollectionFactory
-     * @param PromotionsLinksCollection $promotionsLinksCollectionFactory
      * @param PromotionsInfoFactory $promotionsInfoFactory
-     * @param PromotedProductsFactory $promotedProductsFactory
      */
     public function __construct(
         PromotionsInfoResource    $promotionsInfoResource,
-        PromotionsLinkResource    $promotionsLinkResource,
-        PromotionsInfoCollection  $promotionsInfoCollectionFactory,
-        PromotionsLinksCollection $promotionsLinksCollectionFactory,
-        PromotionsInfoFactory     $promotionsInfoFactory,
-        PromotedProductsFactory   $promotedProductsFactory
+        PromotionsInfoFactory     $promotionsInfoFactory
     ) {
-        $this->promotedProductsFactory = $promotedProductsFactory;
         $this->promotionsInfoFactory = $promotionsInfoFactory;
-        $this->promotionsInfoCollectionFactory = $promotionsInfoCollectionFactory;
-        $this->promotionsLinksCollectionFactory = $promotionsLinksCollectionFactory;
         $this->promotionsInfoResource = $promotionsInfoResource;
-        $this->promotionsLinkResource = $promotionsLinkResource;
     }
 
     /**
@@ -81,7 +50,9 @@ class PromotionsRepository implements PromotionRepositoryInterface
         try {
             $this->promotionsInfoResource->load($promotion, $id);
         } catch (NoSuchEntityException $noSuchEntityException) {
-            echo "No promotion with that id!";
+            throw new \InvalidArgumentException(
+                'No promotion with that id!"' . $noSuchEntityException->getMessage()
+            );
         }
 
         return $promotion;
@@ -99,18 +70,4 @@ class PromotionsRepository implements PromotionRepositoryInterface
 
         return $this;
     }
-
-    /**
-     * Save promoted product
-     *
-     * @param PromotedProductsInterface $product
-     * @return PromotionRepositoryInterface
-     */
-    public function savePromotedProduct(PromotedProductsInterface $product): PromotionRepositoryInterface
-    {
-        $this->promotionsLinkResource->save($product);
-
-        return $this;
-    }
-
 }

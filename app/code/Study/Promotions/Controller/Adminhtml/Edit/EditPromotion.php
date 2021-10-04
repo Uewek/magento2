@@ -7,10 +7,13 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\Action;
+use Magento\Framework\Controller\Result\Redirect;
 use Study\Promotions\Model\PromotionsRepository;
 use Study\Promotions\Model\PromotionsInfoFactory;
 
-
+/**
+ * Update promotion controller
+ */
 class EditPromotion extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
@@ -18,13 +21,14 @@ class EditPromotion extends Action implements HttpGetActionInterface, HttpPostAc
      */
     private $promotionsRepository;
 
-
     /**
      * @var PromotionsInfoFactory
      */
     private $promotionsInfoFactory;
 
     /**
+     * Class constructor
+     *
      * @param Context $context
      * @param PromotionsRepository $promotionsRepository
      * @param PromotionsInfoFactory $promotionsInfoFactory
@@ -40,38 +44,44 @@ class EditPromotion extends Action implements HttpGetActionInterface, HttpPostAc
         parent::__construct($context);
     }
 
-    public function execute()
+    /**
+     * Update promotion
+     *
+     * @return Redirect
+     */
+    public function execute(): Redirect
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('promotions/');
         $data = $this->getRequest()->getParams();
 
         if (!$data['finish_time']) {
-            $data['finish_time'] = null;
+            $data['finish_time'] =null;
         }
 
-        if (isset ($data['finish_time']) && (strtotime($data['start_time']) > strtotime($data['finish_time']))) {
+        if (isset($data['finish_time']) && (strtotime($data['start_time']) > strtotime($data['finish_time']))) {
             $this->messageManager->addErrorMessage(__('Finish date cannot be less than start date !'));
 
             return $resultRedirect;
         }
-        $promotion = $this->promotionsRepository->getPromotionById((int)$data['promotion_id'])
-            ->setDescription($data['promotion_description'])
+
+        if (!isset($data['promotion_id'])) {
+            $promotion = $this->promotionsInfoFactory->create();
+            $message = 'Promotion created successfully !';
+        }
+
+        if (isset($data['promotion_id'])) {
+            $promotion = $this->promotionsRepository->getPromotionById((int)$data['promotion_id']);
+            $message = 'Promotion data updated successfully !';
+        }
+            $promotion->setDescription($data['promotion_description'])
             ->setName($data['promotion_name'])
             ->setStatus($this->strToBool($data['promotion_enabled']))
             ->setStartTime($data['start_time'])
             ->setFinishTime($data['finish_time']);
 
-        if (isset($data['promoted_products'])) {
-            $linkedData = [
-                'productJson' => $data['promoted_products'],
-                'promotion' => $data['promotion_id'],
-                'saveUpdate' => true
-            ];
-            $resultRedirect->setPath('promotions/index/addproductstopromotion',$linkedData);
-        }
         $this->promotionsRepository->savePromotion($promotion);
-        $this->messageManager->addSuccessMessage(__('Promotion data updated successfully !'));
+        $this->messageManager->addSuccessMessage(__($message));
         return $resultRedirect;
     }
 

@@ -16,7 +16,13 @@
                 <item name="name" xsi:type="string">save</item>
                 <item name="label" xsi:type="string" translate="true">Save New Promotion</item>
                 <item name="class" xsi:type="string">primary</item>
-                <item name="url" xsi:type="string">*/*/createnewpromotion</item>
+                <item name="url" xsi:type="string">*/edit/editpromotion</item>
+            </item>
+            <item name="cancel" xsi:type="array">
+                <item name="text" translate="true" xsi:type="string">Cancel</item>
+                <item name="label" xsi:type="string" translate="true">Cancel</item>
+                <item name="class" xsi:type="string">reset</item>
+                <item name="url" xsi:type="string">*/</item>
             </item>
         </item>
     </argument>
@@ -30,7 +36,7 @@
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
-                <item name="submit_url" path="*/*/createnewpromotion" xsi:type="url" />
+                <item name="submit_url" path="*/edit/editpromotion" xsi:type="url" />
             </item>
         </argument>
     </dataSource>

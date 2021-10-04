@@ -3,7 +3,7 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="styles"/>
     <head>
-        <title>Promotions Grid</title>
+        <title>Promotions</title>
     </head>
     <body>
         <referenceContainer name="content">

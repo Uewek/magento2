@@ -1,7 +1,6 @@
 <?php
-/**
- * Created By : RH
- */
+declare(strict_types=1);
+
 namespace Study\Promotions\Controller\Adminhtml\Index;
 
 use Magento\Backend\App\Action;
@@ -10,6 +9,9 @@ use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\View\LayoutFactory;
 
+/**
+ * Products grid controller
+ */
 class Grids extends Action
 {
 
@@ -39,6 +41,8 @@ class Grids extends Action
     }
 
     /**
+     * Return products grid
+     *
      * @return Raw
      */
     public function execute()

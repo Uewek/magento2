@@ -7,7 +7,9 @@ use Magento\Ui\DataProvider\AbstractDataProvider;
 use Study\Promotions\Model\ResourceModel\PromotionsInfo\CollectionFactory;
 use Study\Promotions\Model\ResourceModel\PromotionsInfo\Collection;
 
-
+/**
+ * Prepare data for promotions grid
+ */
 class PromotionsGridDataProvider extends AbstractDataProvider
 {
     /**
@@ -18,9 +20,9 @@ class PromotionsGridDataProvider extends AbstractDataProvider
     /**
      * Constructor
      *
-     * @param $name
-     * @param $primaryFieldName
-     * @param $requestFieldName
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
      * @param array $meta
      * @param array $data
@@ -41,7 +43,5 @@ class PromotionsGridDataProvider extends AbstractDataProvider
             $data
         );
         $this->collection = $collectionFactory->create();
-//            ->setOrder('promotion_id', 'ASC');
-
     }
 }

@@ -5,7 +5,9 @@ namespace Study\Promotions\Ui\DataProvider;
 
 use Study\Promotions\Ui\DataProvider\PromotionsGridDataProvider;
 
-
+/**
+ * Prepare data for promotion form
+ */
 class PromotionsFormDataProvider extends PromotionsGridDataProvider
 {
     /**
@@ -24,8 +26,8 @@ class PromotionsFormDataProvider extends PromotionsGridDataProvider
             return $this->loadedData;
         }
         $items = $this->collection->getItems();
-        $contact = array_shift($items)->getData();
-        $this->loadedData[$contact[$this->primaryFieldName]] = $contact;
+        $promotion = array_shift($items)->getData();
+        $this->loadedData[$promotion[$this->primaryFieldName]] = $promotion;
 
         return $this->loadedData;
     }

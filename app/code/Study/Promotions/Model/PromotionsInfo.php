@@ -7,7 +7,9 @@ use Study\Promotions\Api\PromotionsInfoInterface;
 use Study\Promotions\Model\ResourceModel\PromotionsInfoResource;
 use Magento\Framework\Model\AbstractModel;
 
-
+/**
+ * Promotions model
+ */
 class PromotionsInfo extends AbstractModel implements PromotionsInfoInterface
 {
     /**
@@ -41,7 +43,12 @@ class PromotionsInfo extends AbstractModel implements PromotionsInfoInterface
         return $this;
     }
 
-
+    /**
+     * Set promotion start time
+     *
+     * @param string $time
+     * @return PromotionsInfoInterface
+     */
     public function setStartTime(string $time): PromotionsInfoInterface
     {
         $this->setData('start_time', $time);
@@ -49,6 +56,12 @@ class PromotionsInfo extends AbstractModel implements PromotionsInfoInterface
         return $this;
     }
 
+    /**
+     * Set promotion enabled/disabled status
+     *
+     * @param bool $status
+     * @return PromotionsInfoInterface
+     */
     public function setStatus(bool $status): PromotionsInfoInterface
     {
         $this->setData('promotion_enabled', $status);
@@ -56,6 +69,12 @@ class PromotionsInfo extends AbstractModel implements PromotionsInfoInterface
         return $this;
     }
 
+    /**
+     * Set promotion description
+     *
+     * @param string $description
+     * @return PromotionsInfoInterface
+     */
     public function setDescription(string $description): PromotionsInfoInterface
     {
         $this->setData('promotion_description', $description);
@@ -63,12 +82,22 @@ class PromotionsInfo extends AbstractModel implements PromotionsInfoInterface
         return $this;
     }
 
-    public function getStartTime()
+    /**
+     * Get promotion start time
+     *
+     * @return string
+     */
+    public function getStartTime(): string
     {
         return $this->getData('start_time');
     }
 
-    public function getFinishTime()
+    /**
+     * Get  promotion finish time
+     *
+     * @return string
+     */
+    public function getFinishTime(): string
     {
         return $this->getData('finish_time');
     }

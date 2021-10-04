@@ -7,7 +7,9 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Study\Promotions\Model\PromotedProducts;
 use Study\Promotions\Model\ResourceModel\PromotionsLinkResource;
 
-
+/**
+ * Promoted products collection
+ */
 class Collection extends AbstractCollection
 {
     /**

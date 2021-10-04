@@ -30,6 +30,7 @@ define([
          * Show selected product when edit form in associated product grid
          */
         $('rh_products').value = Object.toJSON(categoryProducts);
+
         /**
          * Register Category Product
          *

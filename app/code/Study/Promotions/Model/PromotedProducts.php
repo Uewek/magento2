@@ -50,7 +50,7 @@ class PromotedProducts extends AbstractModel implements PromotedProductsInterfac
      *
      * @return int
      */
-    public function getPromotedProduct(): int
+    public function getPromotedProductId(): int
     {
         return $this->getData('product_id');
     }
@@ -60,7 +60,7 @@ class PromotedProducts extends AbstractModel implements PromotedProductsInterfac
      *
      * @return int
      */
-    public function getPromotion(): int
+    public function getPromotionId(): int
     {
         return $this->getData('promotion_id');
     }

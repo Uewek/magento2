@@ -3,23 +3,17 @@ declare(strict_types=1);
 
 namespace Study\Promotions\Block\Product;
 
-use Magento\Eav\Model\Entity\Attribute\Backend\Datetime;
-use Study\Promotions\Model\PromotionsRepository;
 use Study\Promotions\Model\ResourceModel\PromotionsLinks\CollectionFactory;
 use Study\Promotions\Model\ResourceModel\PromotionsInfo\CollectionFactory as PromotionCollectionFactory;
-use Study\Promotions\Api\PromotionsInfoInterface;
 use Magento\Framework\View\Element\Template;
-
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Catalog\Helper\Data;
 
+/**
+ * Prepare promotions block on product page
+ */
 class Promotions extends Template
 {
-    /**
-     * @var PromotionsRepository
-     */
-    private $promotionsRepository;
-
     /**
      * @var CollectionFactory
      */
@@ -36,34 +30,22 @@ class Promotions extends Template
     private $dataHelper;
 
     /**
-     * @var PromotionsInfoInterface
-     */
-    private $promotionsModel;
-
-    /**
      * Promotions block constructor
      *
      * @param Context $context
-     * @param PromotionsRepository $promotionsRepository
      * @param Data $datahelper
-     * @param PromotionsInfoInterface $promotionsModel
      * @param PromotionCollectionFactory $promotionCollectionFactory
      * @param CollectionFactory $promotionLinksCollectionFactory
      */
     public function __construct(
-        Context $context,
-        PromotionsRepository $promotionsRepository,
-        Data $datahelper,
-        PromotionsInfoInterface $promotionsModel,
+        Context                    $context,
+        Data                       $datahelper,
         PromotionCollectionFactory $promotionCollectionFactory,
-        CollectionFactory $promotionLinksCollectionFactory
-
+        CollectionFactory          $promotionLinksCollectionFactory
     ) {
-        $this->promotionsModel = $promotionsModel;
-        $this->promotionCollectionFactory = $promotionCollectionFactory;
+        $this->promotionCollectionFactory = $promotionCollectionFactory      ;
         $this->dataHelper = $datahelper;
         $this->promotionLinksCollectionFactory = $promotionLinksCollectionFactory;
-        $this->promotionsRepository = $promotionsRepository;
 
         parent::__construct($context);
     }
@@ -73,7 +55,7 @@ class Promotions extends Template
      *
      * @return int
      */
-    public function getProductId(): int
+    private function getProductId(): int
     {
         return (int) $this->dataHelper->getProduct()->getId();
     }
@@ -85,13 +67,10 @@ class Promotions extends Template
      */
     public function getPromotionsAssignedToCurrentProduct(): array
     {
-        $collection = $this->promotionLinksCollectionFactory->create()
+        return $this->promotionLinksCollectionFactory->create()
             ->addFieldToFilter('product_id', $this->getProductId())
             ->addFieldToSelect('promotion_id')
             ->getItems();
-
-
-        return $collection;
     }
 
     /**
@@ -102,15 +81,17 @@ class Promotions extends Template
      */
     public function promotionIsEnabled(int $promotionId): bool
     {
-       $promotion = $this->promotionCollectionFactory->create()
-           ->addFieldToFilter('promotion_id', $promotionId)
-           ->addFieldToSelect('promotion_enabled',)
-           ->getItems();
-       foreach ($promotion as $item){
-           if ($item->getData('promotion_enabled') == 1) {
-               return true;
-           }
-       }
+        $promotion = $this->promotionCollectionFactory->create()
+            ->addFieldToFilter('promotion_id', $promotionId)
+            ->addFieldToSelect('promotion_enabled')
+            ->getItems();
+
+        foreach ($promotion as $item) {
+            if ($item->getData('promotion_enabled') == 1) {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -127,6 +108,7 @@ class Promotions extends Template
             ->addFieldToSelect('promotion_name')
             ->getItems();
         $nameString = '';
+
         foreach ($nameInCollection as $item) {
             $nameString = $item->getData('promotion_name');
         }
@@ -154,7 +136,7 @@ class Promotions extends Template
             if ($finishData) {
                 $finish = strtotime($finishData);
             }
-            if (! $finishData) {
+            if (!$finishData) {
                 $finish = null;
             }
         }
@@ -167,5 +149,4 @@ class Promotions extends Template
 
         return false;
     }
-
 }

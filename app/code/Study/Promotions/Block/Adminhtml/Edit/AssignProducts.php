@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Study\Promotions\Block\Adminhtml\Edit;
 
@@ -6,8 +7,6 @@ use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Adminhtml\Category\Tab\Product;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Json\EncoderInterface;
-use Magento\Framework\Registry;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
@@ -23,42 +22,8 @@ class AssignProducts extends Template
     /**
      * @var Product
      */
-    protected $blockGrid;
+    private $blockGrid;
 
-    /**
-     * @var Registry
-     */
-    protected $registry;
-
-    /**
-     * @var EncoderInterface
-     */
-    protected $jsonEncoder;
-
-    /**
-     * @var CollectionFactory
-     */
-    protected $productFactory;
-
-    /**
-     * @param Context $context
-     * @param Registry $registry
-     * @param EncoderInterface $jsonEncoder
-     * @param CollectionFactory $productFactory
-     * @param array $data
-     */
-    public function __construct(
-        Context           $context,
-        Registry          $registry,
-        EncoderInterface  $jsonEncoder,
-        CollectionFactory $productFactory,
-        array             $data = []
-    ) {
-        $this->registry = $registry;
-        $this->jsonEncoder = $jsonEncoder;
-        $this->productFactory = $productFactory;
-        parent::__construct($context, $data);
-    }
 
     /**
      * Retrieve instance of grid block
@@ -85,31 +50,5 @@ class AssignProducts extends Template
     public function getGridHtml(): string
     {
         return $this->getBlockGrid()->toHtml();
-    }
-
-    /**
-     * @return string
-     */
-    public function getProductsJson(): string
-    {
-        $entity_id = $this->getRequest()->getParam('entity_id');
-        $productFactory = $this->productFactory->create();
-        $productFactory->addFieldToSelect(['product_id', 'position']);
-        $productFactory->addFieldToFilter('entity_id', ['eq' => $entity_id]);
-        $result = [];
-        if (!empty($productFactory->getData())) {
-            foreach ($productFactory->getData() as $rhProducts) {
-                $result[$rhProducts['product_id']] = '';
-            }
-            return $this->jsonEncoder->encode($result);
-        }
-        return '{}';
-    }
-
-
-
-    public function getItem()
-    {
-        return $this->registry->registry('my_item');
     }
 }

@@ -7,7 +7,9 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Study\Promotions\Model\PromotionsInfo;
 use Study\Promotions\Model\ResourceModel\PromotionsInfoResource;
 
-
+/**
+ * Promotions collection
+ */
 class Collection extends AbstractCollection
 {
     /**
@@ -23,4 +25,3 @@ class Collection extends AbstractCollection
         );
     }
 }
-
