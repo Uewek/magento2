@@ -36,6 +36,9 @@ class Promotions extends Template
      */
     private $promotedProductsModel;
 
+    /**
+     * @var PromotionsRepository
+     */
     private $promotionsRepository;
 
     /**

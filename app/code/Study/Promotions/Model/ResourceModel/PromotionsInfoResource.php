@@ -82,7 +82,7 @@ class PromotionsInfoResource extends AbstractDb
                 $promotedProduct = $this->promotedProductsFactory->create()
                     ->setPromotedProduct((int)$promotedProductId)
                     ->setPromotion($promotionId);
-                $this->productLinksRepository->savePromotedProduct($promotedProduct);
+                $this->productLinksRepository->save($promotedProduct);
             }
         }
     }

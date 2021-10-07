@@ -2,7 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Study_Promotions::promotions_admin" title="Promotions Admin Ui Grid"
+        <add id="Study_Promotions::promotions_admin" title="Promotions"
              translate="title" module="Study_Promotions" parent="Magento_Reports::report_marketing"
              sortOrder="70" action="promotions" resource="Study_Promotions::list"/>
     </menu>

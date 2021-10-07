@@ -11,5 +11,5 @@ interface PromotedProductLinksRepositoryInterface
      * @param PromotedProductsInterface $product
      * @return PromotedProductLinksRepositoryInterface
      */
-    public function savePromotedProduct(PromotedProductsInterface $product);
+    public function save(PromotedProductsInterface $product);
 }
