@@ -4,10 +4,12 @@ declare(strict_types=1);
 namespace Study\Promotions\Block\Product;
 
 use Study\Promotions\Model\ResourceModel\PromotionsLinks\CollectionFactory;
-use Study\Promotions\Model\ResourceModel\PromotionsInfo\CollectionFactory as PromotionCollectionFactory;
+use Study\Promotions\Model\PromotedProducts;
+use Study\Promotions\Model\PromotionsRepository;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Catalog\Helper\Data;
+use Study\Promotions\Model\PromotionsValidator;
 
 /**
  * Prepare promotions block on product page
@@ -20,9 +22,9 @@ class Promotions extends Template
     private $promotionLinksCollectionFactory;
 
     /**
-     * @var PromotionCollectionFactory
+     * @var PromotionsValidator
      */
-    private $promotionCollectionFactory;
+    private $promotionsValidator;
 
     /**
      * @var Data
@@ -30,22 +32,32 @@ class Promotions extends Template
     private $dataHelper;
 
     /**
+     * @var PromotedProducts
+     */
+    private $promotedProductsModel;
+
+    private $promotionsRepository;
+
+    /**
      * Promotions block constructor
      *
      * @param Context $context
      * @param Data $datahelper
-     * @param PromotionCollectionFactory $promotionCollectionFactory
      * @param CollectionFactory $promotionLinksCollectionFactory
      */
     public function __construct(
-        Context                    $context,
-        Data                       $datahelper,
-        PromotionCollectionFactory $promotionCollectionFactory,
-        CollectionFactory          $promotionLinksCollectionFactory
+        Context              $context,
+        Data                 $datahelper,
+        PromotedProducts     $promotedProductsModel,
+        PromotionsRepository $promotionsRepository,
+        PromotionsValidator  $promotionsValidator,
+        CollectionFactory    $promotionLinksCollectionFactory
     ) {
-        $this->promotionCollectionFactory = $promotionCollectionFactory      ;
+        $this->promotionsValidator = $promotionsValidator;
+        $this->promotionsRepository = $promotionsRepository;
         $this->dataHelper = $datahelper;
         $this->promotionLinksCollectionFactory = $promotionLinksCollectionFactory;
+        $this->promotedProductsModel = $promotedProductsModel;
 
         parent::__construct($context);
     }
@@ -57,7 +69,7 @@ class Promotions extends Template
      */
     private function getProductId(): int
     {
-        return (int) $this->dataHelper->getProduct()->getId();
+        return (int)$this->dataHelper->getProduct()->getId();
     }
 
     /**
@@ -68,8 +80,8 @@ class Promotions extends Template
     public function getPromotionsAssignedToCurrentProduct(): array
     {
         return $this->promotionLinksCollectionFactory->create()
-            ->addFieldToFilter('product_id', $this->getProductId())
-            ->addFieldToSelect('promotion_id')
+            ->addFieldToFilter($this->promotedProductsModel::PRODUCT_ID, $this->getProductId())
+            ->addFieldToSelect($this->promotedProductsModel::PROMOTION_ID)
             ->getItems();
     }
 
@@ -79,20 +91,9 @@ class Promotions extends Template
      * @param int $promotionId
      * @return bool
      */
-    public function promotionIsEnabled(int $promotionId): bool
+    public function isPromotionEnabled(int $promotionId): bool
     {
-        $promotion = $this->promotionCollectionFactory->create()
-            ->addFieldToFilter('promotion_id', $promotionId)
-            ->addFieldToSelect('promotion_enabled')
-            ->getItems();
-
-        foreach ($promotion as $item) {
-            if ($item->getData('promotion_enabled') == 1) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->promotionsValidator->isPromotionEnabled($promotionId);
     }
 
     /**
@@ -103,17 +104,8 @@ class Promotions extends Template
      */
     public function getPromotionName(int $promotionId): string
     {
-        $nameInCollection = $this->promotionCollectionFactory->create()
-            ->addFieldToFilter('promotion_id', $promotionId)
-            ->addFieldToSelect('promotion_name')
-            ->getItems();
-        $nameString = '';
+        return $this->promotionsRepository->getById($promotionId)->getName();
 
-        foreach ($nameInCollection as $item) {
-            $nameString = $item->getData('promotion_name');
-        }
-
-        return $nameString;
     }
 
     /**
@@ -124,29 +116,6 @@ class Promotions extends Template
      */
     public function checkPromotionIsActiveNow(int $promotionId): bool
     {
-        $timeCollection = $this->promotionCollectionFactory->create()
-            ->addFieldToFilter('promotion_id', $promotionId)
-            ->addFieldToSelect('start_time')
-            ->addFieldToSelect('finish_time')
-            ->getItems();
-        foreach ($timeCollection as $item) {
-            $startData = $item->getData('start_time');
-            $finishData = $item->getData('finish_time');
-            $start = strtotime($startData);
-            if ($finishData) {
-                $finish = strtotime($finishData);
-            }
-            if (!$finishData) {
-                $finish = null;
-            }
-        }
-        if ($start <= time() && !$finish) {
-            return true;
-        }
-        if ($start <= time() && time() <= $finish) {
-            return true;
-        }
-
-        return false;
+        return $this->promotionsValidator->checkPromotionIsActiveNow($promotionId);
     }
 }

@@ -4,15 +4,11 @@
  */
 $promotionsCollection = $block->getPromotionsAssignedToCurrentProduct();
 
-if (empty($promotionsCollection)) {
-    echo "</br>" . "This product isn`t assigned to any active promotion";
-}
-
 foreach ($promotionsCollection as $item) {
     $item = $item->getData();
     $name = $block->getPromotionName((int)$item['promotion_id']);
 
-    if ($block->promotionIsEnabled($item['promotion_id']) &&
+    if ($block->isPromotionEnabled($item['promotion_id']) &&
         $block->checkPromotionIsActiveNow($item['promotion_id'])) {
         echo "</br>" . "promotion name - $name";
     }

@@ -32,12 +32,12 @@ class PromotedProductLinksRepository implements PromotedProductLinksRepositoryIn
      * Save promoted product
      *
      * @param PromotedProductsInterface $product
-     * @return PromotedProductLinksRepositoryInterface
+     * @return PromotedProductsInterface
      */
-    public function savePromotedProduct(PromotedProductsInterface $product): PromotedProductLinksRepositoryInterface
+    public function savePromotedProduct(PromotedProductsInterface $product): PromotedProductsInterface
     {
         $this->promotionsLinkResource->save($product);
 
-        return $this;
+        return $product;
     }
 }

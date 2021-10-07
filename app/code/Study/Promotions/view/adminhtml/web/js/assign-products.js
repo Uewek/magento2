@@ -1,13 +1,33 @@
-
 define([
     'mage/adminhtml/grid'
 ], function () {
     'use strict';
     require(["jquery", 'mage/url'], function ($, url) {
         "use strict";
+        $(document).ready(function() {
+            $('td input[type=checkbox]').change(function() {
+                var targetInputValue = $("input[name=promoted_products]").val();
+
+                if ($(this).is(':checked')) {
+                    var rowId = targetInputValue+'\"'+$(this).val()+'\"'+' ';
+                    require('uiRegistry').get('index  = promoted_products').value(rowId);
+                }
+
+                if ($(this).is(':not(:checked')) {
+                    var arrayOfIds = targetInputValue.split(' ');
+                    var uniqArray = arrayOfIds.reduce(function(a,b){
+                        if (a.indexOf(b) < 0 ) a.push(b);
+                        return a;},[]);
+                    var deletedElement = uniqArray.indexOf('\"'+$(this).val()+'\"');
+                    uniqArray.splice(deletedElement,1);
+                    var result = uniqArray.join(' ');
+                    require('uiRegistry').get('index  = promoted_products').value(result);
+                }
+            });
+        });
         $(document).on('click', '.promote_products', function () {
-            var productsJson = document.querySelector('input[name=rh_products]').value
-            var promotion = document.querySelector(' input[name=promotion_id]').value;
+            var productsJson = $("input[name=promoted_products]").val();
+            var promotion = $("input[name=promotion_id]").val();
             document.getElementsByClassName("checkbox admin__control-checkbox").checked = false
             jQuery.ajax({
                 url: '/admin/promotions/index/addproductstopromotion',
@@ -17,114 +37,6 @@ define([
                     promotion: promotion
                 }
             });
-            document.getElementsByClassName("checkbox admin__control-checkbox").checked = false
         });
     });
-
-    return function (config) {
-        var selectedProducts = config.selectedProducts,
-            categoryProducts = $H(selectedProducts),
-            gridJsObject = window[config.gridJsObjectName],
-            tabIndex = 1000;
-        /**
-         * Show selected product when edit form in associated product grid
-         */
-        $('rh_products').value = Object.toJSON(categoryProducts);
-
-        /**
-         * Register Category Product
-         *
-         * @param {Object} grid
-         * @param {Object} element
-         * @param {Boolean} checked
-         */
-        function registerCategoryProduct(grid, element, checked) {
-            if (checked) {
-                if (element.positionElement) {
-                    element.positionElement.disabled = false;
-                    categoryProducts.set(element.value, element.positionElement.value);
-                }
-            } else {
-                if (element.positionElement) {
-                    element.positionElement.disabled = true;
-                }
-                categoryProducts.unset(element.value);
-            }
-            var productJson = Object.toJSON(categoryProducts);
-
-            if(document.querySelector(' input[name=promoted_products]')) {
-                require('uiRegistry').get('index  = promoted_products').value(productJson);
-            }
-
-            $('rh_products').value = productJson;
-            grid.reloadParams = {
-                'selected_products[]': categoryProducts.keys()
-            };
-        }
-
-        /**
-         * Click on product row
-         *
-         * @param {Object} grid
-         * @param {String} event
-         */
-        function categoryProductRowClick(grid, event) {
-            var trElement = Event.findElement(event, 'tr'),
-                isInput = Event.element(event).tagName === 'INPUT',
-                checked = false,
-                checkbox = null;
-
-            if (trElement) {
-                checkbox = Element.getElementsBySelector(trElement, 'input');
-
-                if (checkbox[0]) {
-                    checked = isInput ? checkbox[0].checked : !checkbox[0].checked;
-                    gridJsObject.setCheckboxChecked(checkbox[0], checked);
-                }
-            }
-        }
-
-        /**
-         * Change product position
-         *
-         * @param {String} event
-         */
-        function positionChange(event) {
-            var element = Event.element(event);
-
-            if (element && element.checkboxElement && element.checkboxElement.checked) {
-                categoryProducts.set(element.checkboxElement.value, element.value);
-                $('rh_products').value = Object.toJSON(categoryProducts);
-            }
-        }
-
-        /**
-         * Initialize category product row
-         *
-         * @param {Object} grid
-         * @param {String} row
-         */
-        function categoryProductRowInit(grid, row) {
-            var checkbox = $(row).getElementsByClassName('checkbox')[0],
-                position = $(row).getElementsByClassName('input-text')[0];
-
-            if (checkbox && position) {
-                checkbox.positionElement = position;
-                position.checkboxElement = checkbox;
-                position.disabled = !checkbox.checked;
-                position.tabIndex = tabIndex++;
-                Event.observe(position, 'keyup', positionChange);
-            }
-        }
-
-        gridJsObject.rowClickCallback = categoryProductRowClick;
-        gridJsObject.initRowCallback = categoryProductRowInit;
-        gridJsObject.checkboxCheckCallback = registerCategoryProduct;
-
-        if (gridJsObject.rows) {
-            gridJsObject.rows.each(function (row) {
-                categoryProductRowInit(gridJsObject, row);
-            });
-        }
-    };
 });

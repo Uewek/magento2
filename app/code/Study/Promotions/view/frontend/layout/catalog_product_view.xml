@@ -4,16 +4,14 @@
         <block class="Study\Promotions\Block\Product\Promotions"
                name="product.promotions"
                template="Study_Promotions::product.phtml"
-               before="-"
-               cacheable="false">
+               before="-">
         </block>
     </referenceBlock>
     <referenceBlock name="product.info.addtocart.additional">
         <block class="Study\Promotions\Block\Product\Promotions"
                name="product.promotions.additional"
                template="Study_Promotions::product.phtml"
-               before="-"
-               cacheable="false">
+               before="-">
         </block>
     </referenceBlock>
 </body>

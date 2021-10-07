@@ -34,9 +34,9 @@ class DataPatch implements DataPatchInterface
      * @param PromotionsRepository $promotionsRepository
      */
     public function __construct(
-        PromotionsInfoFactory $promotionsInfoFactory,
+        PromotionsInfoFactory    $promotionsInfoFactory,
         ModuleDataSetupInterface $moduleDataSetup,
-        PromotionsRepository $promotionsRepository
+        PromotionsRepository     $promotionsRepository
     ) {
         $this->promotionsInfoFactory = $promotionsInfoFactory;
         $this->moduleDataSetup = $moduleDataSetup;
@@ -55,10 +55,10 @@ class DataPatch implements DataPatchInterface
             $promotion = $this->promotionsInfoFactory->create()
                 ->setDescription(bin2hex(random_bytes(8)))
                 ->setName(bin2hex(random_bytes(8)))
-                ->setStatus(true)
-                ->setStartTime('09/14/2021 3:44 AM')
-                ->setFinishTime('09/14/2022 3:44 AM');
-            $this->promotionsRepository->savePromotion($promotion);
+                ->setStatus(1)
+                ->setStartTime(date('m/d/Y H:i A'))
+                ->setFinishTime(date('d/m/Y H:i A', strtotime("+1 day")));
+            $this->promotionsRepository->save($promotion);
         }
     }
 

@@ -12,11 +12,11 @@ use Magento\Framework\View\Result\Page as Page;
 class NewPromotion extends Action implements HttpGetActionInterface
 {
     /**
-     * Main method
+     * Return page
      *
-     * @return Page
+     * @return ResultInterface
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
     }

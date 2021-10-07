@@ -59,14 +59,24 @@ class PromotionsInfo extends AbstractModel implements PromotionsInfoInterface
     /**
      * Set promotion enabled/disabled status
      *
-     * @param bool $status
+     * @param int $status
      * @return PromotionsInfoInterface
      */
-    public function setStatus(bool $status): PromotionsInfoInterface
+    public function setStatus(int $status): PromotionsInfoInterface
     {
         $this->setData('promotion_enabled', $status);
 
         return $this;
+    }
+
+    /**
+     * Get promotion enabled/disabled status
+     *
+     * @return string
+     */
+    public function getStatus(): string
+    {
+        return $this->getData('promotion_enabled');
     }
 
     /**
@@ -97,8 +107,21 @@ class PromotionsInfo extends AbstractModel implements PromotionsInfoInterface
      *
      * @return string
      */
-    public function getFinishTime(): string
+    public function getFinishTime(): ?string
     {
         return $this->getData('finish_time');
+    }
+
+    /**
+     * Set promotion finish time
+     *
+     * @param string $time
+     * @return PromotionsInfoInterface
+     */
+    public function setFinishTime(string $time): PromotionsInfoInterface
+    {
+        $this->setData('finish_time', $time);
+
+        return $this;
     }
 }

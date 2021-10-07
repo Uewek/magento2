@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Study\Promotions\Model\ResourceModel;
 
-use Magento\Framework\App\Request\Http;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
@@ -16,10 +15,19 @@ use Study\Promotions\Model\PromotedProductLinksRepository;
  */
 class PromotionsInfoResource extends AbstractDb
 {
+    /**
+     * @var PromotedProductLinksRepository
+     */
     private $productLinksRepository;
 
+    /**
+     * @var PromotedProductsFactory
+     */
     private $promotedProductsFactory;
 
+    /**
+     * @var CollectionFactory
+     */
     private $promotionsLinksCollectionFactory;
 
     /**
@@ -28,19 +36,16 @@ class PromotionsInfoResource extends AbstractDb
      * @param PromotedProductsFactory $promotedProductsFactory
      * @param PromotedProductLinksRepository $productLinksRepository
      * @param CollectionFactory $promotionsLinksCollectionFactory
-     * @param Http $request
      */
     public function __construct(
         Context                        $context,
         PromotedProductsFactory        $promotedProductsFactory,
         PromotedProductLinksRepository $productLinksRepository,
-        CollectionFactory              $promotionsLinksCollectionFactory,
-        Http                           $request
+        CollectionFactory              $promotionsLinksCollectionFactory
     ) {
         $this->promotedProductsFactory = $promotedProductsFactory;
         $this->promotionsLinksCollectionFactory = $promotionsLinksCollectionFactory;
         $this->productLinksRepository = $productLinksRepository;
-        $this->request = $request;
 
         parent::__construct($context);
     }
@@ -63,7 +68,7 @@ class PromotionsInfoResource extends AbstractDb
      */
     protected function _afterSave(AbstractModel $object): void
     {
-        $promotedProducts = $this->request->getPost('promoted_products');
+        $promotedProducts = $object->getData('promoted_products');
         $promotionId = (int)$object->getId();
         $linkedProductsArray = $this->promotionsLinksCollectionFactory->create()
             ->addFieldToFilter('promotion_id', $promotionId)->addFieldToSelect('product_id')->getData();

@@ -9,6 +9,7 @@ use Magento\Catalog\Block\Adminhtml\Category\Tab\Product;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Study\Promotions\Block\Adminhtml\Edit\Tab\ProductGrid;
 
 class AssignProducts extends Template
 {
@@ -29,13 +30,12 @@ class AssignProducts extends Template
      * Retrieve instance of grid block
      *
      * @return BlockInterface
-     * @throws LocalizedException
      */
     public function getBlockGrid()
     {
         if (null === $this->blockGrid) {
             $this->blockGrid = $this->getLayout()->createBlock(
-                'Study\Promotions\Block\Adminhtml\Edit\Tab\ProductGrid',
+                ProductGrid::class,
                 'category.product.grid'
             );
         }

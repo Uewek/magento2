@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Study\Promotions\Controller\Adminhtml\Index;
 
-use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\Action;
+use Psr\Log\LoggerInterface;
 use Study\Promotions\Model\PromotedProductsFactory;
 use Study\Promotions\Model\PromotedProductLinksRepository;
 use Study\Promotions\Model\ResourceModel\PromotionsLinks\CollectionFactory;
@@ -14,12 +14,17 @@ use Study\Promotions\Model\ResourceModel\PromotionsLinks\CollectionFactory;
 /**
  * Add selected products to promotion without update promotion data
  */
-class AddProductsToPromotion extends Action implements HttpGetActionInterface, HttpPostActionInterface
+class AddProductsToPromotion extends Action implements  HttpPostActionInterface
 {
     /**
      * @var PromotedProductLinksRepository
      */
     private $productLinksRepository;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * @var PromotedProductsFactory
@@ -42,8 +47,10 @@ class AddProductsToPromotion extends Action implements HttpGetActionInterface, H
         Context                        $context,
         PromotedProductLinksRepository $productLinksRepository,
         CollectionFactory              $collectionFactory,
+        LoggerInterface                $logger,
         PromotedProductsFactory        $promotedProductsFactory
     ) {
+        $this->logger = $logger;
         $this->promotionLinksCollectionFactory = $collectionFactory;
         $this->productLinksRepository = $productLinksRepository;
         $this->promotedProductsFactory = $promotedProductsFactory;
@@ -74,11 +81,14 @@ class AddProductsToPromotion extends Action implements HttpGetActionInterface, H
                 $promotedProduct = $this->promotedProductsFactory->create()
                     ->setPromotedProduct((int)$promotedProductId)
                     ->setPromotion((int)$data['promotion']);
-                $this->productLinksRepository->savePromotedProduct($promotedProduct);
+                try {
+                    $this->productLinksRepository->savePromotedProduct($promotedProduct);
+                } catch (\Exception $e) {
+                    $this->messageManager->addErrorMessage(__('Something went wrong!'));
+                    $this->logger->critical('Error during linking product to promotion', ['exception' => $e]);
+                }
             }
-
         }
         $this->messageManager->addSuccessMessage(__('Products successfully assigned to promotion !'));
-
     }
 }

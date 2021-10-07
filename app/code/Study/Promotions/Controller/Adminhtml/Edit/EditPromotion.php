@@ -3,18 +3,20 @@ declare(strict_types=1);
 
 namespace Study\Promotions\Controller\Adminhtml\Edit;
 
-use Magento\Framework\App\Action\HttpGetActionInterface;
+use Psr\Log\LoggerInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\Action;
-use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Study\Promotions\Model\PromotionsRepository;
 use Study\Promotions\Model\PromotionsInfoFactory;
+use Study\Promotions\Model\PromotionsValidator;
 
 /**
  * Update promotion controller
  */
-class EditPromotion extends Action implements HttpGetActionInterface, HttpPostActionInterface
+class EditPromotion extends Action implements HttpPostActionInterface
 {
     /**
      * @var PromotionsRepository
@@ -27,6 +29,16 @@ class EditPromotion extends Action implements HttpGetActionInterface, HttpPostAc
     private $promotionsInfoFactory;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var PromotionsValidator
+     */
+    private $promotionValidator;
+
+    /**
      * Class constructor
      *
      * @param Context $context
@@ -36,8 +48,12 @@ class EditPromotion extends Action implements HttpGetActionInterface, HttpPostAc
     public function __construct(
         Context               $context,
         PromotionsRepository  $promotionsRepository,
+        LoggerInterface       $logger,
+        PromotionsValidator   $promotionValidator,
         PromotionsInfoFactory $promotionsInfoFactory
     ) {
+        $this->promotionValidator = $promotionValidator;
+        $this->logger = $logger;
         $this->promotionsRepository = $promotionsRepository;
         $this->promotionsInfoFactory = $promotionsInfoFactory;
 
@@ -47,19 +63,15 @@ class EditPromotion extends Action implements HttpGetActionInterface, HttpPostAc
     /**
      * Update promotion
      *
-     * @return Redirect
+     * @return ResultInterface
      */
-    public function execute(): Redirect
+    public function execute(): ResultInterface
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('promotions/');
         $data = $this->getRequest()->getParams();
 
-        if (!$data['finish_time']) {
-            $data['finish_time'] =null;
-        }
-
-        if (isset($data['finish_time']) && (strtotime($data['start_time']) > strtotime($data['finish_time']))) {
+        if (!$this->promotionValidator->isTimeParametersIsCorrect($data['start_time'], $data['finish_time'])) {
             $this->messageManager->addErrorMessage(__('Finish date cannot be less than start date !'));
 
             return $resultRedirect;
@@ -67,36 +79,30 @@ class EditPromotion extends Action implements HttpGetActionInterface, HttpPostAc
 
         if (!isset($data['promotion_id'])) {
             $promotion = $this->promotionsInfoFactory->create();
+            $promotion->setData('promoted_products', $data['promoted_products']);
             $message = 'Promotion created successfully !';
         }
 
         if (isset($data['promotion_id'])) {
-            $promotion = $this->promotionsRepository->getPromotionById((int)$data['promotion_id']);
+            $promotion = $this->promotionsRepository->getById((int)$data['promotion_id']);
+            $promotion->setData('promoted_products', $data['promoted_products']);
             $message = 'Promotion data updated successfully !';
         }
-            $promotion->setDescription($data['promotion_description'])
+
+        $promotion->setDescription($data['promotion_description'])
             ->setName($data['promotion_name'])
-            ->setStatus($this->strToBool($data['promotion_enabled']))
+            ->setStatus((int)$data['promotion_enabled'])
             ->setStartTime($data['start_time'])
             ->setFinishTime($data['finish_time']);
 
-        $this->promotionsRepository->savePromotion($promotion);
+        try {
+            $this->promotionsRepository->save($promotion);
+        } catch (\Exception $e) {
+            $this->messageManager->addErrorMessage(__('Something went wrong!'));
+            $this->logger->critical('Error during save promotion', ['exception' => $e]);
+        }
+
         $this->messageManager->addSuccessMessage(__($message));
         return $resultRedirect;
-    }
-
-    /**
-     * Convert string to boolean
-     *
-     * @param string $str
-     * @return bool
-     */
-    private function strToBool(string $str): bool
-    {
-        $result = true;
-        if ($str === "false") {
-            $result = false;
-        }
-        return $result;
     }
 }

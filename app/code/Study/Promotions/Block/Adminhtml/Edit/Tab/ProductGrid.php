@@ -4,27 +4,32 @@ declare(strict_types=1);
 namespace Study\Promotions\Block\Adminhtml\Edit\Tab;
 
 use Magento\Backend\Block\Template\Context;
-use Magento\Backend\Block\Widget\Grid\Extended ;
+use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Helper\Data;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Registry;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Reduced version of app/code/Magento/Catalog/Block/Adminhtml/Category/Tab/Product.php
+ */
 class ProductGrid extends Extended
 {
-
     /**
      * @var Registry
      */
     protected $coreRegistry = null;
 
     /**
-     * @var ProductFactory
+     * @var ProductInterfaceFactory
      */
     protected $productFactory;
 
@@ -34,26 +39,33 @@ class ProductGrid extends Extended
     protected $productCollFactory;
 
     /**
-     * @param Context    $context
-     * @param Data               $backendHelper
-     * @param ProductFactory      $productFactory
-     * @param Registry                $coreRegistry
-     * @param Manager          $moduleManager
+     * @var ProductInterface
+     */
+    private $productInterface;
+
+    /**
+     * @param Context $context
+     * @param Data $backendHelper
+     * @param ProductInterfaceFactory $productFactory
+     * @param Registry $coreRegistry
+     * @param Manager $moduleManager
      * @param StoreManagerInterface $storeManager
-     * @param Visibility|null                            $visibility
-     * @param array                                      $data
+     * @param Visibility|null $visibility
+     * @param array $data
      */
     public function __construct(
-        Context $context,
-        Data $backendHelper,
-        ProductFactory $productFactory,
-        CollectionFactory $productCollFactory,
-        Registry $coreRegistry,
-        Manager $moduleManager,
-        StoreManagerInterface $storeManager,
-        Visibility $visibility = null,
-        array $data = []
+        Context                 $context,
+        Data                    $backendHelper,
+        ProductInterfaceFactory $productFactory,
+        CollectionFactory       $productCollFactory,
+        Registry                $coreRegistry,
+        Manager                 $moduleManager,
+        ProductInterface        $productInterface,
+        StoreManagerInterface   $storeManager,
+        Visibility              $visibility = null,
+        array                   $data = []
     ) {
+        $this->productInterface = $productInterface;
         $this->productFactory = $productFactory;
         $this->productCollFactory = $productCollFactory;
         $this->coreRegistry = $coreRegistry;
@@ -63,7 +75,9 @@ class ProductGrid extends Extended
         parent::__construct($context, $backendHelper, $data);
     }
 
-
+    /**
+     * @inheirtDoc
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -80,28 +94,32 @@ class ProductGrid extends Extended
     }
 
     /**
-     * [get store id]
+     * Get store
      *
-     * @return Store
+     * @return StoreInterface
      */
-    protected function _getStore()
+    protected function _getStore(): StoreInterface
     {
-        $storeId = (int) $this->getRequest()->getParam('store', 0);
+        $storeId = (int)$this->getRequest()->getParam('store', 0);
         return $this->_storeManager->getStore($storeId);
     }
 
-
-    protected function _prepareCollection()
+    /**
+     * @inheirtDoc
+     *
+     * @return ProductGrid
+     */
+    protected function _prepareCollection(): ProductGrid
     {
         $store = $this->_getStore();
         $collection = $this->productFactory->create()->getCollection()->addAttributeToSelect(
-            'sku'
+            $this->productInterface::SKU
         )->addAttributeToSelect(
-            'name'
+            $this->productInterface::NAME
         )->addAttributeToSelect(
-            'attribute_set_id'
+            $this->productInterface::ATTRIBUTE_SET_ID
         )->addAttributeToSelect(
-            'type_id'
+            $this->productInterface::TYPE_ID
         )->setStore(
             $store
         );
@@ -112,7 +130,7 @@ class ProductGrid extends Extended
                 'cataloginventory_stock_item',
                 'qty',
                 'product_id=entity_id',
-                '{{table}}.stock_id=1',
+                '{{table}}.stock_id=' . StockStatusInterface::STATUS_IN_STOCK,
                 'left'
             );
         }
@@ -150,34 +168,17 @@ class ProductGrid extends Extended
             $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
         }
         $this->setCollection($collection);
+
         return parent::_prepareCollection();
     }
 
 
-    protected function _addColumnFilterToCollection($column)
-    {
-        if ($column->getId() == 'in_products') {
-            $productIds = $this->_getSelectedProducts();
-            if (empty($productIds)) {
-                $productIds = 0;
-            }
-            if ($column->getFilter()->getValue()) {
-                $this->getCollection()->addFieldToFilter('entity_id', ['in' => $productIds]);
-            } else {
-                if ($productIds) {
-                    $this->getCollection()->addFieldToFilter('entity_id', ['nin' => $productIds]);
-                }
-            }
-        } else {
-            parent::_addColumnFilterToCollection($column);
-        }
-        return $this;
-    }
-
     /**
+     * @inheirtDoc
+     *
      * @return Extended
      */
-    protected function _prepareColumns()
+    protected function _prepareColumns(): Extended
     {
         $this->addColumn(
             'in_products',
@@ -230,54 +231,17 @@ class ProductGrid extends Extended
                 'column_css_class' => 'col-price',
             ]
         );
-        $this->addColumn(
-            'position',
-            [
-                'header' => __('Position'),
-                'name' => 'position',
-                'width' => 60,
-                'type' => 'number',
-                'validate_class' => 'validate-number',
-                'index' => 'position',
-                'editable' => true,
-                'edit_only' => true,
-            ]
-        );
         return parent::_prepareColumns();
     }
 
-    /**
-     * @return string
-     */
-    public function getGridUrl()
-    {
-        return $this->getUrl('*/index/grids', ['_current' => true]);
-    }
 
     /**
+     * @inheirtDoc
+     *
      * @return array
      */
-    protected function _getSelectedProducts()
+    protected function _getSelectedProducts(): array
     {
-        $products = array_keys($this->getSelectedProducts());
-        return $products;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSelectedProducts()
-    {
-        $id = $this->getRequest()->getParam('entity_id');
-        $model = $this->productCollFactory->create()->addFieldToFilter('entity_id', $id);
-        $grids = [];
-        foreach ($model as $key => $value) {
-            $grids[] = $value->getProductId();
-        }
-        $prodId = [];
-        foreach ($grids as $obj) {
-            $prodId[$obj] = ['position' => "0"];
-        }
-        return $prodId;
+        return [];
     }
 }

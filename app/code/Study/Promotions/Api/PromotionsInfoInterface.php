@@ -34,7 +34,7 @@ interface PromotionsInfoInterface
      * @param bool $status
      * @return PromotionsInfoInterface
      */
-    public function setStatus(bool $status): PromotionsInfoInterface;
+    public function setStatus(int $status): PromotionsInfoInterface;
 
     /**
      * Set promotion description
@@ -43,4 +43,25 @@ interface PromotionsInfoInterface
      * @return PromotionsInfoInterface
      */
     public function setDescription(string $description): PromotionsInfoInterface;
+
+    /**
+     * Get promotion enabled/disabled status
+     *
+     * @return string
+     */
+    public function getStatus(): string;
+
+    /**
+     * Get promotion start time
+     *
+     * @return string
+     */
+    public function getStartTime(): string;
+
+    /**
+     * Get  promotion finish time
+     *
+     * @return string
+     */
+    public function getFinishTime(): ?string;
 }

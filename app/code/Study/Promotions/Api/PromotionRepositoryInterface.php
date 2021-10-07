@@ -5,20 +5,19 @@ namespace Study\Promotions\Api;
 
 interface PromotionRepositoryInterface
 {
-
     /**
      * Get promotion by id
      *
      * @param int $id
      * @return PromotionsInfoInterface
      */
-    public function getPromotionById(int $id): PromotionsInfoInterface;
+    public function getById(int $id): PromotionsInfoInterface;
 
     /**
      * Save nev promotion
      *
      * @param PromotionsInfoInterface $promotion
-     * @return
+     * @return PromotionsInfoInterface
      */
-    public function savePromotion(PromotionsInfoInterface $promotion): PromotionRepositoryInterface;
+    public function save(PromotionsInfoInterface $promotion): PromotionsInfoInterface;
 }

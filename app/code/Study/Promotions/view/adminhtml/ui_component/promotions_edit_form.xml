@@ -86,11 +86,11 @@
                     <settings>
                         <options>
                             <option name="1" xsi:type="array">
-                                <item name="value" xsi:type="string">true</item>
+                                <item name="value" xsi:type="string">1</item>
                                 <item name="label" xsi:type="string">enabled</item>
                             </option>
                             <option name="2" xsi:type="array">
-                                <item name="value" xsi:type="string">false</item>
+                                <item name="value" xsi:type="string">0</item>
                                 <item name="label" xsi:type="string">disabled</item>
                             </option>
                         </options>

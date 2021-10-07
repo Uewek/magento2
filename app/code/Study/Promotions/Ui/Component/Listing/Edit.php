@@ -27,13 +27,14 @@ class Edit extends Column
      * @param array $data
      */
     public function __construct(
-        ContextInterface $context,
+        ContextInterface   $context,
         UiComponentFactory $uiComponentFactory,
-        UrlInterface $urlBuilder,
-        array $components = [],
-        array $data = []
+        UrlInterface       $urlBuilder,
+        array              $components = [],
+        array              $data = []
     ) {
         $this->urlBuilder = $urlBuilder;
+
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -53,10 +54,10 @@ class Edit extends Column
                         ['id' => $promotion['promotion_id']]
                     ),
                     'label' => __('Edit promotion'),
-                    'hidden' => false,
                 ];
             }
         }
+
         return $dataSource;
     }
 }

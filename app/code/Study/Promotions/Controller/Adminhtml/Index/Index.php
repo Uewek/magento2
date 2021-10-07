@@ -7,7 +7,6 @@ use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\View\Result\Page as Page;
 
 /**
  * Class Index - controller of ui listing page
@@ -15,11 +14,11 @@ use Magento\Framework\View\Result\Page as Page;
 class Index extends Action implements HttpGetActionInterface
 {
     /**
-     * Main method
+     * Return page
      *
-     * @return Page
+     * @return ResultInterface
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
     }

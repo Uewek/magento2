@@ -34,7 +34,8 @@ class PromotionsGridDataProvider extends AbstractDataProvider
         CollectionFactory $collectionFactory,
         array             $meta = [],
         array             $data = []
-    ) {
+    )
+    {
         parent::__construct(
             $name,
             $primaryFieldName,

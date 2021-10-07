@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 namespace Study\Promotions\Model;
 
-use Magento\Framework\Exception\NoSuchEntityException;
+use Psr\Log\LoggerInterface;
 use Study\Promotions\Api\PromotionRepositoryInterface;
-use Study\Promotions\Api\PromotedProductsInterface;
 use Study\Promotions\Api\PromotionsInfoInterface;
 use Study\Promotions\Model\ResourceModel\PromotionsInfoResource;
-use Study\Promotions\Model\ResourceModel\PromotionsLinkResource;
 
 /**
  * That repository used to save promotions and promoted products
@@ -26,14 +24,21 @@ class PromotionsRepository implements PromotionRepositoryInterface
     private $promotionsInfoResource;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Repository constructor
      * @param PromotionsInfoResource $promotionsInfoResource
      * @param PromotionsInfoFactory $promotionsInfoFactory
      */
     public function __construct(
         PromotionsInfoResource    $promotionsInfoResource,
+        LoggerInterface           $logger,
         PromotionsInfoFactory     $promotionsInfoFactory
     ) {
+        $this->logger = $logger;
         $this->promotionsInfoFactory = $promotionsInfoFactory;
         $this->promotionsInfoResource = $promotionsInfoResource;
     }
@@ -44,15 +49,13 @@ class PromotionsRepository implements PromotionRepositoryInterface
      * @param int $id
      * @return PromotionsInfoInterface
      */
-    public function getPromotionById(int $id): PromotionsInfoInterface
+    public function getById(int $id): PromotionsInfoInterface
     {
         $promotion = $this->promotionsInfoFactory->create();
         try {
             $this->promotionsInfoResource->load($promotion, $id);
-        } catch (NoSuchEntityException $noSuchEntityException) {
-            throw new \InvalidArgumentException(
-                'No promotion with that id!"' . $noSuchEntityException->getMessage()
-            );
+        } catch (\Exception $e) {
+            $this->logger->critical('Error during promotion loading', ['exception' => $e]);
         }
 
         return $promotion;
@@ -64,10 +67,10 @@ class PromotionsRepository implements PromotionRepositoryInterface
      * @param PromotionsInfoInterface $promotion
      * @return
      */
-    public function savePromotion(PromotionsInfoInterface $promotion): PromotionRepositoryInterface
+    public function save(PromotionsInfoInterface $promotion): PromotionsInfoInterface
     {
         $this->promotionsInfoResource->save($promotion);
 
-        return $this;
+        return $promotion;
     }
 }
