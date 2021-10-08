@@ -90,7 +90,7 @@ class AddProductsToPromotion extends Action implements  HttpPostActionInterface
     /**
      * Get id`s of products linked to promotion
      *
-     * @param array $linkedProducts
+     * @param int $promotionId
      * @return array
      */
     private function getLinkedProductsIds(int $promotionId): array

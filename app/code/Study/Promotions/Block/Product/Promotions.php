@@ -9,7 +9,7 @@ use Study\Promotions\Model\PromotionsRepository;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Catalog\Helper\Data;
-use Study\Promotions\Model\PromotionsValidator;
+use Study\Promotions\Service\PromotionStatus;
 
 /**
  * Prepare promotions block on product page
@@ -22,19 +22,9 @@ class Promotions extends Template
     private $promotionLinksCollectionFactory;
 
     /**
-     * @var PromotionsValidator
-     */
-    private $promotionsValidator;
-
-    /**
      * @var Data
      */
     private $dataHelper;
-
-    /**
-     * @var PromotedProducts
-     */
-    private $promotedProductsModel;
 
     /**
      * @var PromotionsRepository
@@ -42,22 +32,27 @@ class Promotions extends Template
     private $promotionsRepository;
 
     /**
+     * @var PromotionStatus
+     */
+    private $promotionStatus;
+
+    /**
      * Promotions block constructor
      *
      * @param Context $context
      * @param Data $datahelper
+     * @param PromotionStatus $promotionStatus
      * @param PromotionsRepository $promotionsRepository
-     * @param PromotionsValidator $promotionsValidator
      * @param CollectionFactory $promotionLinksCollectionFactory
      */
     public function __construct(
         Context              $context,
         Data                 $datahelper,
+        PromotionStatus      $promotionStatus,
         PromotionsRepository $promotionsRepository,
-        PromotionsValidator  $promotionsValidator,
         CollectionFactory    $promotionLinksCollectionFactory
     ) {
-        $this->promotionsValidator = $promotionsValidator;
+        $this->promotionStatus = $promotionStatus;
         $this->promotionsRepository = $promotionsRepository;
         $this->dataHelper = $datahelper;
         $this->promotionLinksCollectionFactory = $promotionLinksCollectionFactory;
@@ -96,7 +91,7 @@ class Promotions extends Template
      */
     public function isPromotionEnabled(int $promotionId): bool
     {
-        return $this->promotionsValidator->isPromotionEnabled($promotionId);
+        return $this->promotionStatus->isPromotionEnabled($promotionId);
     }
 
     /**
@@ -108,7 +103,6 @@ class Promotions extends Template
     public function getPromotionName(int $promotionId): string
     {
         return $this->promotionsRepository->getById($promotionId)->getName();
-
     }
 
     /**
@@ -119,6 +113,6 @@ class Promotions extends Template
      */
     public function checkPromotionIsActiveNow(int $promotionId): bool
     {
-        return $this->promotionsValidator->checkPromotionIsActiveNow($promotionId);
+        return $this->promotionStatus->checkPromotionIsActiveNow($promotionId);
     }
 }
