@@ -8,6 +8,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\Action;
 use Psr\Log\LoggerInterface;
 use Study\Promotions\Model\PromotedProductsFactory;
+use Study\Promotions\Model\PromotedProducts;
 use Study\Promotions\Model\PromotedProductLinksRepository;
 use Study\Promotions\Model\ResourceModel\PromotionsLinks\CollectionFactory;
 
@@ -66,29 +67,42 @@ class AddProductsToPromotion extends Action implements  HttpPostActionInterface
     public function execute(): void
     {
         $data = $this->getRequest()->getParams();
-        $linkedProductsArray = $this->promotionLinksCollectionFactory->create()
-            ->addFieldToFilter('promotion_id', $data['promotion'])->addFieldToSelect('product_id')->getData();
-        $productIdsArray = [];
-
-        foreach ($linkedProductsArray as $productId) {
-            $productIdsArray[] = $productId['product_id'];
-        }
+        $productIdsArray = $this->getLinkedProductsIds((int) $data['promotion']);
         $promotedProductIds = explode(' ', trim(preg_replace('@\W+@',
             ' ', $data['productJson'])));
 
         foreach ($promotedProductIds as $promotedProductId) {
-            if (empty($productIdsArray) || in_array($promotedProductId, $productIdsArray) !== true) {
+            if (empty($productIdsArray) || !in_array($promotedProductId, $productIdsArray)) {
                 $promotedProduct = $this->promotedProductsFactory->create()
                     ->setPromotedProduct((int)$promotedProductId)
                     ->setPromotion((int)$data['promotion']);
                 try {
-                    $this->productLinksRepository->savePromotedProduct($promotedProduct);
+                    $this->productLinksRepository->save($promotedProduct);
+                    $this->messageManager->addSuccessMessage(__('Products successfully assigned to promotion !'));
                 } catch (\Exception $e) {
                     $this->messageManager->addErrorMessage(__('Something went wrong!'));
                     $this->logger->critical('Error during linking product to promotion', ['exception' => $e]);
                 }
             }
         }
-        $this->messageManager->addSuccessMessage(__('Products successfully assigned to promotion !'));
+    }
+
+    /**
+     * Get id`s of products linked to promotion
+     *
+     * @param array $linkedProducts
+     * @return array
+     */
+    private function getLinkedProductsIds(int $promotionId): array
+    {
+        $linkedProducts = $this->promotionLinksCollectionFactory->create()
+            ->addFieldToFilter(PromotedProducts::PROMOTION_ID, $promotionId)
+            ->addFieldToSelect(PromotedProducts::PRODUCT_ID)->getData();
+        $productIdsArray = [];
+        foreach ($linkedProducts as $productId) {
+            $productIdsArray[] = $productId['product_id'];
+        }
+
+        return $productIdsArray;
     }
 }

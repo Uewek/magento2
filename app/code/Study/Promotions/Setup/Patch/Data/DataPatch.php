@@ -57,7 +57,7 @@ class DataPatch implements DataPatchInterface
                 ->setName(bin2hex(random_bytes(8)))
                 ->setStatus(1)
                 ->setStartTime(date('m/d/Y H:i A'))
-                ->setFinishTime(date('d/m/Y H:i A', strtotime("+1 day")));
+                ->setFinishTime(date('d/m/Y H:i A', strtotime('+1 day')));
             $this->promotionsRepository->save($promotion);
         }
     }

@@ -56,6 +56,7 @@ class PromotionsRepository implements PromotionRepositoryInterface
             $this->promotionsInfoResource->load($promotion, $id);
         } catch (\Exception $e) {
             $this->logger->critical('Error during promotion loading', ['exception' => $e]);
+            throw new \Exception('We can`t load promotion at this moment');
         }
 
         return $promotion;

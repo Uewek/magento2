@@ -105,7 +105,7 @@ class PromotionsInfo extends AbstractModel implements PromotionsInfoInterface
     /**
      * Get  promotion finish time
      *
-     * @return string
+     * @return string|null
      */
     public function getFinishTime(): ?string
     {

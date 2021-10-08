@@ -46,12 +46,13 @@ class Promotions extends Template
      *
      * @param Context $context
      * @param Data $datahelper
+     * @param PromotionsRepository $promotionsRepository
+     * @param PromotionsValidator $promotionsValidator
      * @param CollectionFactory $promotionLinksCollectionFactory
      */
     public function __construct(
         Context              $context,
         Data                 $datahelper,
-        PromotedProducts     $promotedProductsModel,
         PromotionsRepository $promotionsRepository,
         PromotionsValidator  $promotionsValidator,
         CollectionFactory    $promotionLinksCollectionFactory
@@ -60,7 +61,6 @@ class Promotions extends Template
         $this->promotionsRepository = $promotionsRepository;
         $this->dataHelper = $datahelper;
         $this->promotionLinksCollectionFactory = $promotionLinksCollectionFactory;
-        $this->promotedProductsModel = $promotedProductsModel;
 
         parent::__construct($context);
     }
@@ -83,8 +83,8 @@ class Promotions extends Template
     public function getPromotionsAssignedToCurrentProduct(): array
     {
         return $this->promotionLinksCollectionFactory->create()
-            ->addFieldToFilter($this->promotedProductsModel::PRODUCT_ID, $this->getProductId())
-            ->addFieldToSelect($this->promotedProductsModel::PROMOTION_ID)
+            ->addFieldToFilter(PromotedProducts::PRODUCT_ID, $this->getProductId())
+            ->addFieldToSelect(PromotedProducts::PROMOTION_ID)
             ->getItems();
     }
 

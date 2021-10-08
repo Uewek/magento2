@@ -97,12 +97,12 @@ class EditPromotion extends Action implements HttpPostActionInterface
 
         try {
             $this->promotionsRepository->save($promotion);
+            $this->messageManager->addSuccessMessage(__($message));
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage(__('Something went wrong!'));
             $this->logger->critical('Error during save promotion', ['exception' => $e]);
         }
 
-        $this->messageManager->addSuccessMessage(__($message));
         return $resultRedirect;
     }
 }

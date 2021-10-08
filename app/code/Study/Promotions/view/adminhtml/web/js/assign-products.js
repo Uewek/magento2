@@ -2,7 +2,7 @@ define([
     'mage/adminhtml/grid'
 ], function () {
     'use strict';
-    require(["jquery", 'mage/url'], function ($, url) {
+    require(['jquery', 'mage/url','uiRegistry'], function ($, url, reg) {
         "use strict";
         $(document).ready(function() {
             $('td input[type=checkbox]').change(function() {
@@ -10,7 +10,7 @@ define([
 
                 if ($(this).is(':checked')) {
                     var rowId = targetInputValue+'\"'+$(this).val()+'\"'+' ';
-                    require('uiRegistry').get('index  = promoted_products').value(rowId);
+                    reg.get('index  = promoted_products').value(rowId);
                 }
 
                 if ($(this).is(':not(:checked')) {
@@ -21,7 +21,7 @@ define([
                     var deletedElement = uniqArray.indexOf('\"'+$(this).val()+'\"');
                     uniqArray.splice(deletedElement,1);
                     var result = uniqArray.join(' ');
-                    require('uiRegistry').get('index  = promoted_products').value(result);
+                    reg.get('index  = promoted_products').value(result);
                 }
             });
         });
