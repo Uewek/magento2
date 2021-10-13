@@ -3,26 +3,39 @@ declare(strict_types=1);
 
 namespace Study\Command\Console\Command;
 
+use http\Exception\InvalidArgumentException;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Framework\App\Area;
+use Magento\Framework\Console\Cli;
+use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Command\Command;
+use Magento\Catalog\Api\Data\ProductInterfaceFactory;
+use Magento\Catalog\Api\Data\CategoryInterfaceFactory;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\ProductFactory;
-use Magento\Catalog\Model\CategoryFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\Math\Random;
 
+/**
+ * Create 3 categories with 10 products assigned to everyone
+ */
 class CreateCategoriesWithAssignedProductsByCommand extends Command
 {
     /**
-     * @var ProductFactory
+     * @var ProductInterfaceFactory
      */
     private $productFactory;
 
     /**
-     * @var CategoryFactory
+     * @var CategoryInterfaceFactory
      */
     private $categoryFactory;
 
@@ -42,6 +55,16 @@ class CreateCategoriesWithAssignedProductsByCommand extends Command
     private $state;
 
     /**
+     * @var Random
+     */
+    private $random;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Product prefix
      */
     private const PRODUCT_PREFIX = 'productPrefix';
@@ -50,6 +73,39 @@ class CreateCategoriesWithAssignedProductsByCommand extends Command
      * Category prefix
      */
     private const CATEGORY_PREFIX = 'categoryPrefix';
+
+    /**
+     * Class constructor
+     *
+     * @param Random $random
+     * @param StoreManagerInterface $storeManager
+     * @param ProductInterfaceFactory $productFactory
+     * @param CategoryInterfaceFactory $categoryFactory
+     * @param ProductRepositoryInterface $productRepository
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param State $state
+     * @param string|null $name
+     */
+    public function __construct(
+        Random                      $random,
+        StoreManagerInterface       $storeManager,
+        ProductInterfaceFactory     $productFactory,
+        CategoryInterfaceFactory    $categoryFactory,
+        ProductRepositoryInterface  $productRepository,
+        CategoryRepositoryInterface $categoryRepository,
+        State                       $state,
+        string                      $name = null
+    ) {
+        parent::__construct($name);
+
+        $this->random = $random;
+        $this->storeManager = $storeManager;
+        $this->categoryRepository = $categoryRepository;
+        $this->categoryFactory = $categoryFactory;
+        $this->state = $state;
+        $this->productRepository = $productRepository;
+        $this->productFactory = $productFactory;
+    }
 
     /**
      * Set command options, name and description
@@ -70,7 +126,7 @@ class CreateCategoriesWithAssignedProductsByCommand extends Command
                 'product prefix'
             )
         ];
-        $this->setName('command:createCategoriesAndProductsByCommand');
+        $this->setName('entity-generator');
         $this->setDescription('Create 3 categories with 10 products ');
         $this->setDefinition($options);
 
@@ -78,59 +134,33 @@ class CreateCategoriesWithAssignedProductsByCommand extends Command
     }
 
     /**
-     * Class constructor
-     *
-     * @param ProductFactory $productFactory
-     * @param CategoryFactory $categoryFactory
-     * @param ProductRepositoryInterface $productRepository
-     * @param CategoryRepositoryInterface $categoryRepository
-     * @param State $state
-     * @param string|null $name
-     */
-    public function __construct(
-        ProductFactory              $productFactory,
-        CategoryFactory             $categoryFactory,
-        ProductRepositoryInterface  $productRepository,
-        CategoryRepositoryInterface $categoryRepository,
-        State                       $state,
-        string                      $name = null
-    ) {
-        $this->categoryRepository = $categoryRepository;
-        $this->categoryFactory = $categoryFactory;
-        $this->state = $state;
-        $this->productRepository = $productRepository;
-        $this->productFactory = $productFactory;
-
-        parent::__construct($name);
-    }
-
-    /**
      * Main function, creating 3 categories with 10 products in each
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return void
+     * @return int|void
      */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->state->setAreaCode('frontend');
+        $this->state->setAreaCode(Area::AREA_GLOBAL);
+        if (null === $input->getOption(self::CATEGORY_PREFIX) ||
+            null === $input->getOption(self::PRODUCT_PREFIX)) {
+            $output->writeln('Enter correct prefix !!');
+            throw new InvalidArgumentException(__('Entered incorrect prefix argument!'));
+        }
 
         if (null !== $input->getOption(self::CATEGORY_PREFIX)
             && null !== $input->getOption(self::PRODUCT_PREFIX)) {
             $productPrefix = $input->getOption(self::PRODUCT_PREFIX);
             $categoryPrefix = $input->getOption(self::CATEGORY_PREFIX);
-            for ($i = 0; $i < 3; $i++) {
-                $category = $this->createCategory($categoryPrefix . $this->getRandomString());
-                $parentCatergoryId = (int)$category->getId();
-                for ($j = 0; $j < 10; $j++) {
-                    $this->createProduct($productPrefix . $this->getRandomString(), $parentCatergoryId);
-                }
+
+            $categories = $this->createCategories($categoryPrefix);
+            foreach ($categories as $category) {
+                $this->createAssignedProducts($category, $productPrefix);
             }
             $output->writeln('Products and categories created successfully.');
-        }
 
-        if (null === $input->getOption('categoryPrefix') || null === $input->getOption('productPrefix')) {
-            $output->writeln('Enter correct prefix !!');
+            return Cli::RETURN_SUCCESS;
         }
     }
 
@@ -140,7 +170,7 @@ class CreateCategoriesWithAssignedProductsByCommand extends Command
      * @param string $productName
      * @param int $productCategory
      */
-    private function createProduct(string $productName, int $productCategory): void
+    private function createProduct(string $productName, int $productCategory)
     {
         $stockDataArray = ['use_config_manage_stock' => 0,
             'manage_stock' => 1,
@@ -148,19 +178,22 @@ class CreateCategoriesWithAssignedProductsByCommand extends Command
             'qty' => 999];
         $product = $this->productFactory->create();
         $product->setSku($productName);
-        $product->setUrlKey($productName);
         $product->setName($productName);
-        $product->setAttributeSetId(4);
-        $product->setStatus(1);
+        $product->setAttributeSetId($product->getDefaultAttributeSetId());
+        $product->setStatus(Status::STATUS_ENABLED);
         $product->setWeight(10);
-        $product->setVisibility(4);
+        $product->setVisibility(Visibility::VISIBILITY_BOTH);
         $product->setTaxClassId(0);
-        $product->setTypeId('simple');
+        $product->setTypeId(Type::TYPE_SIMPLE);
         $product->setPrice(100);
-        $product->setWebsiteIds([1]);
+        $product->setWebsiteIds($product->getWebsiteIds());
         $product->setCategoryIds($productCategory);
         $product->setStockData($stockDataArray);
-        $this->productRepository->save($product);
+        try {
+            $this->productRepository->save($product);
+        } catch (\Exception $e) {
+            throw new LocalizedException(__('Can`t save product'));
+        }
     }
 
     /**
@@ -169,13 +202,18 @@ class CreateCategoriesWithAssignedProductsByCommand extends Command
      * @param string $categoryName
      * @return Category
      */
-    private function createCategory(string $categoryName): Category
+    private function createCategory(string $categoryName): CategoryInterface
     {
         $category = $this->categoryFactory->create();
         $category->setName($categoryName);
-        $category->setParentId(2);
+        $category->setParentId($this->getRootCategoryId());
         $category->setIsActive(true);
-        $this->categoryRepository->save($category);
+        try {
+            $this->categoryRepository->save($category);
+
+        } catch (\Exception $e) {
+            throw new LocalizedException(__('Can`t save category'));
+        }
 
         return $category;
     }
@@ -188,6 +226,48 @@ class CreateCategoriesWithAssignedProductsByCommand extends Command
      */
     private function getRandomString(int $length = 8): string
     {
-        return bin2hex(random_bytes($length));
+        return $this->random->getRandomString($length);
+    }
+
+    /**
+     * Get id of root category
+     *
+     * @return int
+     */
+    private function getRootCategoryId(): int
+    {
+        return (int) $this->storeManager->getStore()->getRootCategoryId();
+    }
+
+    /**
+     * Create products named with prefix and assigned to given category
+     *
+     * @param int $categoryId
+     * @param string $productPrefix
+     * @param int $number
+     */
+    private function createAssignedProducts(int $categoryId, string $productPrefix, int $number = 10): void
+    {
+        for ($j = 0; $j < $number; $j++) {
+            $this->createProduct($productPrefix . $this->getRandomString(), $categoryId);
+        }
+    }
+
+    /**
+     * Create categories named with prefix and return array with category id`s
+     *
+     * @param string $categoryPrefix
+     * @param int $number
+     * @return array
+     */
+    private function createCategories(string $categoryPrefix, int $number = 3): array
+    {
+        $categoryIds = [];
+        for ($i = 0; $i < $number; $i++) {
+            $category = $this->createCategory($categoryPrefix . $this->getRandomString());
+            $categoryIds[] = (int)$category->getId();
+        }
+
+        return $categoryIds;
     }
 }
