@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Study\Promotions\Setup\Patch\Data;
 
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Stdlib\DateTime;
 use Study\Promotions\Model\PromotionsInfoFactory;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Study\Promotions\Model\PromotionsRepository;
@@ -28,6 +30,8 @@ class DataPatch implements DataPatchInterface
      */
     private $promotionsRepository;
 
+    private $dataTime;
+
     /**
      * @param PromotionsInfoFactory $promotionsInfoFactory
      * @param ModuleDataSetupInterface $moduleDataSetup
@@ -36,10 +40,12 @@ class DataPatch implements DataPatchInterface
     public function __construct(
         PromotionsInfoFactory    $promotionsInfoFactory,
         ModuleDataSetupInterface $moduleDataSetup,
+        TimezoneInterface        $dataTime,
         PromotionsRepository     $promotionsRepository
     ) {
         $this->promotionsInfoFactory = $promotionsInfoFactory;
         $this->moduleDataSetup = $moduleDataSetup;
+        $this->dataTime = $dataTime;
         $this->promotionsRepository = $promotionsRepository;
     }
 
@@ -51,13 +57,14 @@ class DataPatch implements DataPatchInterface
     public function apply(): void
     {
         $this->moduleDataSetup->startSetup();
+        $today = date($this->dataTime->date()->format('d-m-Y H:i:s'));
         for ($i = 0; $i < 3; $i++) {
             $promotion = $this->promotionsInfoFactory->create()
                 ->setDescription(bin2hex(random_bytes(8)))
                 ->setName(bin2hex(random_bytes(8)))
                 ->setStatus(1)
-                ->setStartTime(date('m/d/Y H:i A'))
-                ->setFinishTime(date('d/m/Y H:i A', strtotime('+1 day')));
+                ->setStartTime($today)
+                ->setFinishTime(date('d-m-Y H:i:s', strtotime($today.' +1 day') ));
             $this->promotionsRepository->save($promotion);
         }
     }
