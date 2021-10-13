@@ -3,7 +3,12 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
         <add id="Study_Promotions::promotions_admin" title="Promotions"
-             translate="title" module="Study_Promotions" parent="Magento_Reports::report_marketing"
+             translate="title" module="Study_Promotions" parent="Magento_Backend::Promotions_module"
              sortOrder="70" action="promotions" resource="Study_Promotions::list"/>
+
+        <add id="Magento_Backend::Promotions_module" title="Promotions Module"
+             translate="title" module="Magento_Backend" sortOrder="50" parent="Magento_Backend::marketing"
+             resource="Magento_Backend::marketing_user_content"/>
+
     </menu>
 </config>
