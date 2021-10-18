@@ -1,0 +1,22 @@
+<?php
+/**
+ * @var $block \Study\ProductLikes\Block\Product\LikeButton
+ */
+$isLog=$block->isLogged();
+$isProductLiked = $block->isThisProductLikedByCustomer() || $block->isThisProductLikedByGuest();
+$label = $isProductLiked ? __('Already liked') : __('Like this product');
+
+?>
+<script type="text/x-magento-init">
+    {
+        "#like": {
+            "transferDataToController": {}
+        }
+    }
+</script>
+
+<div class="actions">
+    <button type="button" title="<?php echo $label ?>"
+            class="action primary like" id="like" <?php if ($isProductLiked) : ?> disabled = "disabled" <?php endIf ?>">
+        <span><span><i class="like-span"></i><?php echo $label ?></span></span></button>
+</div>

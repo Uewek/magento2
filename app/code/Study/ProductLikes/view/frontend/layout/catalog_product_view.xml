@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<body>
+    <referenceContainer name="product.info.social">
+        <block class="Study\ProductLikes\Block\Product\LikeButton"
+               name="product.likes"
+               template="Study_ProductLikes::product/button.phtml"
+               after="-"
+               cacheable="false">
+        </block>
+    </referenceContainer>
+</body>
