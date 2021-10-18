@@ -6,12 +6,17 @@ namespace Study\Promotions\Ui\DataProvider;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 use Study\Promotions\Model\ResourceModel\PromotionsInfo\CollectionFactory;
 use Study\Promotions\Model\ResourceModel\PromotionsInfo\Collection;
+use Magento\Catalog\Model\Session;
 
 /**
  * Prepare data for promotions grid
  */
 class PromotionsGridDataProvider extends AbstractDataProvider
 {
+    /**
+     * @var Session
+     */
+    protected $session;
     /**
      * @var Collection
      */
@@ -32,6 +37,7 @@ class PromotionsGridDataProvider extends AbstractDataProvider
         string            $primaryFieldName,
         string            $requestFieldName,
         CollectionFactory $collectionFactory,
+        Session           $session,
         array             $meta = [],
         array             $data = []
     )
@@ -44,5 +50,6 @@ class PromotionsGridDataProvider extends AbstractDataProvider
             $data
         );
         $this->collection = $collectionFactory->create();
+        $this->session = $session;
     }
 }

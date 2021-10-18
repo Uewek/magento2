@@ -53,7 +53,7 @@ class Edit extends Column
                         'promotions/edit/index',
                         ['id' => $promotion['promotion_id']]
                     ),
-                    'label' => __('Edit promotion'),
+                    'label' => __('Edit promotion')
                 ];
             }
         }

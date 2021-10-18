@@ -5,11 +5,14 @@ namespace Study\Promotions\Ui\DataProvider;
 
 use Study\Promotions\Ui\DataProvider\PromotionsGridDataProvider;
 
+
 /**
  * Prepare data for promotion form
  */
 class PromotionsFormDataProvider extends PromotionsGridDataProvider
 {
+
+
     /**
      * @var array
      */
@@ -27,8 +30,19 @@ class PromotionsFormDataProvider extends PromotionsGridDataProvider
         }
         $items = $this->collection->getItems();
         $promotion = array_shift($items)->getData();
+        $this->pushIdToSession((int) $promotion['promotion_id']);
         $this->loadedData[$promotion[$this->primaryFieldName]] = $promotion;
 
         return $this->loadedData;
+    }
+
+    /**
+     * Add promotion id to session
+     *
+     * @param int $promotionId
+     */
+    private function pushIdToSession(int $promotionId): void
+    {
+        $this->session->setPromotionId($promotionId);
     }
 }

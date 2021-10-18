@@ -8,6 +8,12 @@
     <body>
         <referenceContainer name="content">
             <uiComponent name="promotions_new_form"/>
+            <block class="Study\Promotions\Block\Adminhtml\Edit\AssignProducts"
+                   name="promotions.promoted.products"
+                   template="Study_Promotions::assign_products.phtml"
+                   after="-">
+            </block>
+            <uiComponent name="promotions_product_listing"/>
         </referenceContainer>
     </body>
 </page>
