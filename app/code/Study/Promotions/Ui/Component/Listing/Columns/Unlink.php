@@ -67,8 +67,9 @@ class Unlink extends Column
                 if ($isAssigned === 'Assigned') {
                     $item[$this->getData('name')]['unlink'] = [
                         'href' => $this->urlBuilder->getUrl(
-                            'promotions/edit/unlink',
-                            ['id' => $promotionId]
+                            'promotions/edit/unlink/',
+                            ['promotion_id' => $promotionId,
+                             'product_id' => $item['entity_id']]
                         ),
                         'label' => __('Unlink')
                     ];
@@ -77,7 +78,6 @@ class Unlink extends Column
                     $isAssigned
                 ];
             }
-//            $this->clearSession();
         }
 
         return $dataSource;
@@ -96,23 +96,19 @@ class Unlink extends Column
     }
 
     /**
-     * Clear temporary data from session
-     */
-    private function clearSession(): void
-    {
-        $this->session->unsPromotionId();
-    }
-
-    /**
      * Get promotions assigned to current product
      *
+     * @param string $productId
+     * @return array
      */
     private function getPromotionsAssignedToCurrentProduct(string $productId): array
     {
-        return  $this->promotionLinksCollectionFactory->create()
+        $result =  $this->promotionLinksCollectionFactory->create()
             ->addFieldToFilter(PromotedProducts::PRODUCT_ID, $productId)
             ->addFieldToSelect(PromotedProducts::PROMOTION_ID)
             ->getItems();
+
+        return $result;
 
     }
 
@@ -125,10 +121,13 @@ class Unlink extends Column
     private function getProductAssignmentStatus(string $promotionId, $promotions): string
     {
         $status = 'Unassigned';
-        if(isset($promotions[0])) {
-            if(in_array($promotionId, $promotions[0]->getData())) {
-                $status = 'Assigned';
-            }
+        $promotionsArray = [];
+        foreach ($promotions as $promotion) {
+            $promotionsArray[] = $promotion->getData()['promotion_id'];
+        }
+
+        if (in_array($promotionId, $promotionsArray)) {
+            $status = 'Assigned';
         }
         return $status;
     }

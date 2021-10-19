@@ -7,7 +7,6 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Study\Promotions\Model\PromotionsRepository;
 use Study\Promotions\Model\PromotionsInfoFactory;
@@ -68,10 +67,11 @@ class EditPromotion extends Action implements HttpPostActionInterface
     public function execute(): ResultInterface
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('promotions/');
         $data = $this->getRequest()->getParams();
+        $resultRedirect->setPath('promotions/');
+        $this->promotionValidator->checkIncomingData($data);
 
-        if (!$this->promotionValidator->isTimeParametersIsCorrect($data['start_time'], $data['finish_time'])) {
+        if ($this->promotionValidator->isTimeParametersIsIncorrect($data['start_time'], $data['finish_time'])) {
             $this->messageManager->addErrorMessage(__('Finish date cannot be less than start date !'));
 
             return $resultRedirect;
@@ -80,12 +80,18 @@ class EditPromotion extends Action implements HttpPostActionInterface
         if (!isset($data['promotion_id'])) {
             $promotion = $this->promotionsInfoFactory->create();
             $promotion->setData('promoted_products', $data['promoted_products']);
+            if ($data['promoted_products'] === '') {
+                $promotion->setData('promoted_products');
+            }
             $message = 'Promotion created successfully !';
         }
 
         if (isset($data['promotion_id'])) {
             $promotion = $this->promotionsRepository->getById((int)$data['promotion_id']);
             $promotion->setData('promoted_products', $data['promoted_products']);
+            if ($data['promoted_products'] === '') {
+                $promotion->setData('promoted_products');
+            }
             $message = 'Promotion data updated successfully !';
         }
 
@@ -102,6 +108,8 @@ class EditPromotion extends Action implements HttpPostActionInterface
             $this->messageManager->addErrorMessage(__('Something went wrong!'));
             $this->logger->critical('Error during save promotion', ['exception' => $e]);
         }
+        $promotionId = $promotion->getId();
+        $resultRedirect->setPath('promotions/edit/index/id/' . $promotionId . '/');
 
         return $resultRedirect;
     }

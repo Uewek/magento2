@@ -18,6 +18,9 @@ use Psr\Log\LoggerInterface;
  */
 class PromotionsInfoResource extends AbstractDb
 {
+    /**
+     * @var LoggerInterface
+     */
     protected $logger;
     /**
      * @var PromotedProductLinksRepository
@@ -79,7 +82,8 @@ class PromotionsInfoResource extends AbstractDb
         $productIdsArray = $this->getAlreadyLinkedProductIds($promotionId);
         $promotedProductIds = explode(' ', trim(preg_replace('@\W+@', ' ', $promotedProducts)));
         foreach ($promotedProductIds as $promotedProductId) {
-            if (empty($productIdsArray) || !in_array($promotedProductId, $productIdsArray)) {
+            if ((empty($productIdsArray) || !in_array($promotedProductId, $productIdsArray))
+                && null !== $promotedProducts) {
                 $promotedProduct = $this->promotedProductsFactory->create()
                     ->setPromotedProduct((int)$promotedProductId)
                     ->setPromotion($promotionId);

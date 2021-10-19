@@ -47,16 +47,17 @@
                 <item name="sortOrder" xsi:type="number">20</item>
             </item>
         </argument>
-        <hidden name="promotion_id" >
+        <field name="promotion_id" formElement="hidden">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">int</item>
-                    <item name="label" xsi:type="string" translate="true">Promotion Id</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="disabled" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="source" xsi:type="string">page</item>
                 </item>
             </argument>
-        </hidden>
+            <settings>
+                <dataType>text</dataType>
+            </settings>
+        </field>
         <field name="promotion_name">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

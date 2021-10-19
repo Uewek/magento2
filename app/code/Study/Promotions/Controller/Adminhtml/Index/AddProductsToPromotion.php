@@ -78,13 +78,15 @@ class AddProductsToPromotion extends Action implements  HttpPostActionInterface
                     ->setPromotion((int)$data['promotion']);
                 try {
                     $this->productLinksRepository->save($promotedProduct);
-                    $this->messageManager->addSuccessMessage(__('Products successfully assigned to promotion !'));
                 } catch (\Exception $e) {
                     $this->messageManager->addErrorMessage(__('Something went wrong!'));
                     $this->logger->critical('Error during linking product to promotion', ['exception' => $e]);
+                    break;
                 }
             }
         }
+        $this->messageManager->addSuccessMessage(__('Products successfully assigned to promotion !'));
+
     }
 
     /**

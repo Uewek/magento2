@@ -21,5 +21,7 @@
                 type="Study\Promotions\Model\PromotedProducts" />
     <preference for="Study\Promotions\Api\PromotionsInfoInterface"
                 type="Study\Promotions\Model\PromotionsInfo" />
+    <preference for="Study\Promotions\Api\PromotedProductLinksRepositoryInterface"
+                type="Study\Promotions\Model\PromotedProductLinksRepository" />
 </config>
 

@@ -11,6 +11,27 @@ use Study\Promotions\Model\PromotionsRepository;
  */
 class PromotionsValidator implements PromotionsValidatorInterface
 {
+    private $requiredFields = [
+        'start_time',
+        'promotion_name',
+        'promotion_enabled'
+    ];
+
+    /**
+     * Check required fields
+     *
+     * @param array $data
+     */
+    public function checkIncomingData(array $data): void
+    {
+        foreach ($this->requiredFields as $requiredField) {
+            $data[$requiredField] = strip_tags(trim($data[$requiredField]));
+            if (!isset($data[$requiredField]) || $data[$requiredField] === '') {
+                throw new \InvalidArgumentException('Required field missed or empty');
+            }
+        }
+    }
+
     /**
      * Check is time parameters is correct
      *
@@ -18,19 +39,14 @@ class PromotionsValidator implements PromotionsValidatorInterface
      * @param string $finishTime
      * @return bool
      */
-    public function isTimeParametersIsCorrect(string $startTime, string $finishTime): bool
+    public function isTimeParametersIsIncorrect(string $startTime, string $finishTime): bool
     {
         $result = false;
 
-        if ($startTime !== '' && $finishTime == '') {
-            $result = true;
-        }
-
-        if ($startTime !== '' && (strtotime($finishTime) > strtotime($startTime))) {
-            $result = true;
+        if (((strtotime($finishTime) !== false) && strtotime($finishTime) < strtotime($startTime))) {
+            throw new \InvalidArgumentException('Finish date can`t be earlier than start date');
         }
 
         return $result;
     }
-
 }

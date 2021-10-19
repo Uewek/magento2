@@ -36,8 +36,27 @@ class PromotedProductLinksRepository implements PromotedProductLinksRepositoryIn
      */
     public function save(PromotedProductsInterface $product): PromotedProductsInterface
     {
-        $this->promotionsLinkResource->save($product);
+        try {
+            $this->promotionsLinkResource->save($product);
+        } catch (\Exception $e) {
+
+        }
 
         return $product;
+    }
+
+    /**
+     * Delete product link
+     *
+     * @param PromotedProductsInterface $productLink
+     * @return void
+     */
+    public function delete(PromotedProductsInterface $productLink): void
+    {
+        try {
+            $this->promotionsLinkResource->delete($productLink);
+        } catch (\Exception $e) {
+
+        }
     }
 }
