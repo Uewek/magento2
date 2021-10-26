@@ -66,12 +66,26 @@ class PromotionsRepository implements PromotionRepositoryInterface
      * Save nev promotion
      *
      * @param PromotionsInfoInterface $promotion
-     * @return
+     * @return PromotionsInfoInterface
      */
     public function save(PromotionsInfoInterface $promotion): PromotionsInfoInterface
     {
         $this->promotionsInfoResource->save($promotion);
 
         return $promotion;
+    }
+
+    /**
+     * Delete promotion
+     *
+     * @param PromotionsInfoInterface $promotion
+     */
+    public function delete(PromotionsInfoInterface $promotion): void
+    {
+        try{
+            $this->promotionsInfoResource->delete($promotion);
+        } catch (\Exception $e) {
+
+        }
     }
 }

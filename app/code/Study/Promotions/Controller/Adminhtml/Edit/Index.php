@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Study\Promotions\Controller\Adminhtml\Edit;
 
 use Magento\Backend\App\Action;
-use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;

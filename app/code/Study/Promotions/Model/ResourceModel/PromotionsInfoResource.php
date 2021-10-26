@@ -9,9 +9,8 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 use Study\Promotions\Model\ResourceModel\PromotionsLinks\CollectionFactory;
 use Study\Promotions\Model\PromotedProductsFactory;
 use Study\Promotions\Model\PromotedProductLinksRepository;
-use Study\Promotions\Api\PromotedProductsInterface;
+use Study\Promotions\Service\DeleteLinkedProductsService;
 use Psr\Log\LoggerInterface;
-
 
 /**
  * Promotions resource model
@@ -22,6 +21,7 @@ class PromotionsInfoResource extends AbstractDb
      * @var LoggerInterface
      */
     protected $logger;
+
     /**
      * @var PromotedProductLinksRepository
      */
@@ -33,9 +33,9 @@ class PromotionsInfoResource extends AbstractDb
     private $promotedProductsFactory;
 
     /**
-     * @var CollectionFactory
+     * @var DeleteLinkedProductsService
      */
-    private $promotionsLinksCollectionFactory;
+    private $deleteLinkedProductsService;
 
     /**
      *
@@ -49,12 +49,12 @@ class PromotionsInfoResource extends AbstractDb
         LoggerInterface                $logger,
         PromotedProductsFactory        $promotedProductsFactory,
         PromotedProductLinksRepository $productLinksRepository,
-        CollectionFactory              $promotionsLinksCollectionFactory
+        DeleteLinkedProductsService  $deleteLinkedProductsService
     ) {
         $this->logger = $logger;
         $this->promotedProductsFactory = $promotedProductsFactory;
-        $this->promotionsLinksCollectionFactory = $promotionsLinksCollectionFactory;
         $this->productLinksRepository = $productLinksRepository;
+        $this->deleteLinkedProductsService = $deleteLinkedProductsService;
 
         parent::__construct($context);
     }
@@ -78,12 +78,12 @@ class PromotionsInfoResource extends AbstractDb
     protected function _afterSave(AbstractModel $object): void
     {
         $promotedProducts = $object->getData('promoted_products');
-        $promotionId = (int)$object->getId();
-        $productIdsArray = $this->getAlreadyLinkedProductIds($promotionId);
-        $promotedProductIds = explode(' ', trim(preg_replace('@\W+@', ' ', $promotedProducts)));
-        foreach ($promotedProductIds as $promotedProductId) {
-            if ((empty($productIdsArray) || !in_array($promotedProductId, $productIdsArray))
-                && null !== $promotedProducts) {
+        if (null !== $promotedProducts && $promotedProducts !== '{}') {
+            $promotionId = (int)$object->getId();
+            $links = $this->deleteLinkedProductsService->getLinks($promotionId);
+            $this->deleteLinkedProductsService->deleteLinkedProducts($links);
+            $promotedProductIds = explode(' ', trim(preg_replace('@\W+@', ' ', $promotedProducts)));
+            foreach ($promotedProductIds as $promotedProductId) {
                 $promotedProduct = $this->promotedProductsFactory->create()
                     ->setPromotedProduct((int)$promotedProductId)
                     ->setPromotion($promotionId);
@@ -95,25 +95,5 @@ class PromotionsInfoResource extends AbstractDb
                 }
             }
         }
-    }
-
-    /**
-     * Get array of id`s already linked to current promotion products
-     *
-     * @param int $promotionId
-     * @return array
-     */
-    protected function getAlreadyLinkedProductIds(int $promotionId): array
-    {
-        $linkedProductsArray = $this->promotionsLinksCollectionFactory->create()
-            ->addFieldToFilter(PromotedProductsInterface::PROMOTION_ID, $promotionId)
-            ->addFieldToSelect(PromotedProductsInterface::PRODUCT_ID)->getData();
-
-        $productIdsArray = [];
-        foreach ($linkedProductsArray as $productId) {
-            $productIdsArray[] = $productId['product_id'];
-        }
-
-        return $productIdsArray;
     }
 }

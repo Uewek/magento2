@@ -7,13 +7,10 @@
     </head>
     <body>
         <referenceContainer name="content">
+            <block class="Study\Promotions\Block\Adminhtml\DeletePromotion"
+                   name="delete_promotion"
+                   template="Study_Promotions::delete_promotion.phtml" />
             <uiComponent name="promotions_edit_form"/>
-            <block class="Study\Promotions\Block\Adminhtml\Edit\AssignProducts"
-                   name="promotions.promoted.products"
-                   template="Study_Promotions::assign_products.phtml"
-                   after="-">
-            </block>
-            <uiComponent name="promotions_product_listing"/>
         </referenceContainer>
     </body>
 </page>

@@ -5,7 +5,7 @@
             <item name="provider" xsi:type="string">promotions_new_form.promotions_info_listing_data_source</item>
             <item name="deps" xsi:type="string">promotions_new_form.promotions_info_listing_data_source</item>
         </item>
-        <item name="label" xsi:type="string" translate="true">Improved Contact Information</item>
+        <item name="label" xsi:type="string" translate="true">Create new promotions</item>
         <item name="config" xsi:type="array">
             <item name="dataScope" xsi:type="string">data</item>
             <item name="namespace" xsi:type="string">promotion_new_form</item>
@@ -140,6 +140,23 @@
             </settings>
         </field>
     </fieldset>
-
+    <fieldset name="assign_product_grid">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Products Fieldset</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">30</item>
+            </item>
+        </argument>
+        <container name="assign_products_container" >
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">170</item>
+                </item>
+            </argument>
+            <htmlContent name="html_content">
+                <argument name="block" xsi:type="object">Study\Promotions\Block\Adminhtml\AssignProducts</argument>
+            </htmlContent>
+        </container>
+    </fieldset>
 </form>
-
