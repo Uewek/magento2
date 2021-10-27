@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="page.main.title">
+            <block class="Study\CategoryExternalCode\Block\CategoryExternal"
+                   name="category.external_code"
+                   template="Study_CategoryExternalCode::addition_external_code.phtml"/>
+        </referenceBlock>
+    </body>
+</page>
