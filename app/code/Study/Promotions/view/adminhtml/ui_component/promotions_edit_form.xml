@@ -24,6 +24,8 @@
                 <item name="class" xsi:type="string">reset</item>
                 <item name="url" xsi:type="string">*/</item>
             </item>
+            <item name="deletePromotionButton" xsi:type="string">
+                Study\Promotions\Block\Adminhtml\Button\DeleteButton</item>
         </item>
     </argument>
     <dataSource name="promotions_info_listing_data_source">
@@ -147,23 +149,17 @@
                 <dataType>text</dataType>
             </settings>
         </field>
-        <button name="delete_promotion_button">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="buttonClasses" xsi:type="string">delete</item>
-<!--                    <item name="actions" xsi:type="array">-->
-<!--                        <item name="0" xsi:type="array">-->
-<!--                            <item name="targetName" xsi:type="string">TARGET_NAME</item>-->
-<!--                            <item name="actionName" xsi:type="string">ACTION_NAME</item>-->
-<!--                        </item>-->
-<!--                    </item>-->
-                </item>
-            </argument>
-            <settings>
-                <displayAsLink>false</displayAsLink>
-                <title translate="true">Delete Promotion</title>
-            </settings>
-        </button>
+<!--        <button name="delete_promotion_button">-->
+<!--            <argument name="data" xsi:type="array">-->
+<!--                <item name="config" xsi:type="array">-->
+<!--                    <item name="buttonClasses" xsi:type="string">delete</item>-->
+<!--                </item>-->
+<!--            </argument>-->
+<!--            <settings>-->
+<!--                <displayAsLink>false</displayAsLink>-->
+<!--                <title translate="true">Delete Promotion</title>-->
+<!--            </settings>-->
+<!--        </button>-->
     </fieldset>
     <fieldset name="assign_product_grid">
         <argument name="data" xsi:type="array">
