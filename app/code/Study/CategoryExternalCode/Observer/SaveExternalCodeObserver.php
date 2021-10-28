@@ -12,7 +12,9 @@ use Magento\Framework\Message\ManagerInterface;
 use Study\CategoryExternalCode\Service\ExternalAttributeService;
 use Study\CategoryExternalCode\Model\ResourceModel\CategoryExternalAttribute\CollectionFactory;
 
-
+/**
+ * This observer saving external attribute value from category form
+ */
 class SaveExternalCodeObserver implements ObserverInterface
 {
     /**
@@ -46,6 +48,8 @@ class SaveExternalCodeObserver implements ObserverInterface
     private $attributeCollectionFactory;
 
     /**
+     * Class constructor
+     *
      * @param RequestInterface $request
      * @param ManagerInterface $messageManager
      * @param CollectionFactory $attributeCollectionFactory
@@ -54,11 +58,11 @@ class SaveExternalCodeObserver implements ObserverInterface
      * @param CategoryAttributeModelFactory $attributeModelFactory
      */
     public function __construct(
-        RequestInterface $request,
-        ManagerInterface $messageManager,
-        CollectionFactory $attributeCollectionFactory,
-        ExternalAttributeService $externalAttributeService,
-        CategoryAttributeRepository $categoryAttributeRepository,
+        RequestInterface              $request,
+        ManagerInterface              $messageManager,
+        CollectionFactory             $attributeCollectionFactory,
+        ExternalAttributeService      $externalAttributeService,
+        CategoryAttributeRepository   $categoryAttributeRepository,
         CategoryAttributeModelFactory $attributeModelFactory
     ) {
         $this->request = $request;
@@ -74,18 +78,24 @@ class SaveExternalCodeObserver implements ObserverInterface
      *
      * @param Observer $observer
      */
-    public function execute(Observer $observer)
+    public function execute(Observer $observer): void
     {
         $data = $this->request->getParams();
         $categoryId = $data['entity_id'];
-        $externalAttributeValue = $data['category_external_code'];
+        $categoryName = $data['name'];
+        $externalAttributeValue = $data[CategoryAttributeRepository::EXTERNAL_CODE];
         $existingCode = $this->externalAttributeService->getExternalAttributeValue($categoryId);
-        $isOverride = $this->checkAttributeOverride($externalAttributeValue ,$existingCode);
-        $this->deleteOldAttribute($categoryId);
+        $isOverride = $this->checkAttributeOverride($externalAttributeValue, $existingCode);
+
         if ($isOverride) {
+            $this->deleteOldAttribute($categoryId);
+        }
+
+        if ($isOverride && $externalAttributeValue !== '') {
             $attribute = $this->attributeModelFactory->create();
-            $attribute->setData('category_id', $categoryId)
-                ->setData('category_external_code', $externalAttributeValue);
+            $attribute->setData(CategoryAttributeRepository::CATEGORY_ID, $categoryId)
+                ->setData(CategoryAttributeRepository::CATEGORY_NAME, $categoryName)
+                ->setData(CategoryAttributeRepository::EXTERNAL_CODE, $externalAttributeValue);
             try {
                 $this->categoryAttributeRepository->save($attribute);
                 $this->messageManager->addSuccessMessage(__('External code added successfully'));
@@ -120,9 +130,9 @@ class SaveExternalCodeObserver implements ObserverInterface
     private function deleteOldAttribute(string $categoryId): void
     {
         $oldAttribute = $this->attributeCollectionFactory->create();
-        $oldAttribute->addFieldToFilter('category_id',$categoryId);
+        $oldAttribute->addFieldToFilter(CategoryAttributeRepository::CATEGORY_ID, $categoryId);
 
-        foreach ($oldAttribute as $item){
+        foreach ($oldAttribute as $item) {
             $this->categoryAttributeRepository->delete($item);
         }
     }

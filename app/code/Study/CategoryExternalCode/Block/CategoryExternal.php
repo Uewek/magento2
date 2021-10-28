@@ -21,6 +21,13 @@ class CategoryExternal extends Template
      */
     private $externalAttributeService;
 
+    /**
+     * Class constructor
+     *
+     * @param Context $context
+     * @param Data $dataHelper
+     * @param ExternalAttributeService $externalAttributeService
+     */
     public function __construct(
         Context $context,
         Data $dataHelper,
@@ -48,6 +55,4 @@ class CategoryExternal extends Template
 
         return __($resultCode);
     }
-
-
 }

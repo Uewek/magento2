@@ -5,62 +5,24 @@ namespace Study\CategoryExternalCode\Model;
 
 use Study\CategoryExternalCode\Api\CategoryAttributeModelInterface;
 use Study\CategoryExternalCode\Api\CategoryAttributeRepositoryInterface;
-use Psr\Log\LoggerInterface;
-use Study\CategoryExternalCode\Model\CategoryAttributeModelFactory;
 use Study\CategoryExternalCode\Model\ResourceModel\CategoryAttributeResource;
-use Study\CategoryExternalCode\Model\ResourceModel\CategoryExternalAttribute\CollectionFactory;
 
 class CategoryAttributeRepository implements CategoryAttributeRepositoryInterface
 {
-    /**
-     * @var CategoryAttributeModelFactory
-     */
-    private $categoryAttributeFactory;
-
     /**
      * @var CategoryAttributeResource
      */
     private $categoryAttributeResource;
 
     /**
-     * @var CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    public function __construct(
-        CategoryAttributeResource $categoryAttributeResource,
-        CollectionFactory $collectionFactory,
-        LoggerInterface $logger,
-        CategoryAttributeModelFactory $categoryAttributeModelFactory
-    ) {
-        $this->categoryAttributeModelFactory = $categoryAttributeModelFactory;
-        $this->collectionFactory = $collectionFactory;
-        $this->logger = $logger;
-        $this->categoryAttributeResource = $categoryAttributeResource;
-    }
-
-    /**
-     * Get external category attribute
+     * Class constructor
      *
-     * @param int $id
-     * @return CategoryAttributeModelInterface
-     * @throws \Exception
+     * @param CategoryAttributeResource $categoryAttributeResource
      */
-    public function getCategoryAttribute(int $id): CategoryAttributeModelInterface
-    {
-        $categoryExternalAttribute = $this->categoryAttributeFactory->create();
-        try {
-            $this->categoryAttributeResource->load($categoryExternalAttribute,$id);
-        } catch (\Exception $e) {
-            $this->logger->critical('Error during attribute loading', ['exception' => $e]);
-            throw new \Exception('We can`t load promotion at this moment');
-        }
-        return $categoryExternalAttribute;
+    public function __construct(
+        CategoryAttributeResource $categoryAttributeResource
+    ) {
+        $this->categoryAttributeResource = $categoryAttributeResource;
     }
 
     /**
@@ -90,9 +52,4 @@ class CategoryAttributeRepository implements CategoryAttributeRepositoryInterfac
 
         }
     }
-
-
-
-
-
 }

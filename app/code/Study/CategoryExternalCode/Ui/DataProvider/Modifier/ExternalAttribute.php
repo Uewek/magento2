@@ -7,6 +7,9 @@ use Magento\Catalog\Helper\Data;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Study\CategoryExternalCode\Service\ExternalAttributeService;
 
+/**
+ * Modify data when category form loading
+ */
 class ExternalAttribute implements ModifierInterface
 {
     /**
@@ -19,6 +22,12 @@ class ExternalAttribute implements ModifierInterface
      */
     private $externalAttributeService;
 
+    /**
+     * Class constructor
+     *
+     * @param Data $dataHelper
+     * @param ExternalAttributeService $externalAttributeService
+     */
     public function __construct(
         Data $dataHelper,
         ExternalAttributeService $externalAttributeService
@@ -27,32 +36,24 @@ class ExternalAttribute implements ModifierInterface
         $this->externalAttributeService = $externalAttributeService;
     }
 
+    /**
+     * Add value in the 'Category external code field'
+     *
+     * @param array $meta
+     * @return array
+     */
     public function modifyMeta(array $meta)
     {
         $categoryId = $this->getCurrentCategoryId();
         $existingCode = $this->externalAttributeService->getExternalAttributeValue($categoryId);
         if (isset($existingCode) && $existingCode !== '') {
             $meta['general'] = [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'label' => __('Label For Fieldset'),
-                            'sortOrder' => 50,
-                            'collapsible' => true
-                        ]
-                    ]
-                ],
                 'children' => [
                     'category_external_code' => [
                         'arguments' => [
                             'data' => [
                                 'config' => [
-                                    'formElement' => 'text',
-                                    'componentType' => 'field',
-                                    'value' => $existingCode,
-                                    'visible' => 1,
-                                    'required' => 1,
-                                    'label' => __('Label For Element')
+                                    'value' => $existingCode
                                 ]
                             ]
                         ]
@@ -60,7 +61,6 @@ class ExternalAttribute implements ModifierInterface
                 ]
             ];
         }
-
 
         return $meta;
     }
@@ -80,8 +80,7 @@ class ExternalAttribute implements ModifierInterface
      */
     private function getCurrentCategoryId(): string
     {
-        $category = $this->dataHelper->getCategory();
-        return  $category->getId();
+        return $this->dataHelper->getCategory()->getId();
     }
 
 

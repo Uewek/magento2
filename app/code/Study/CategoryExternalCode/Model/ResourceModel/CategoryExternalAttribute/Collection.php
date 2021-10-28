@@ -7,6 +7,9 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Study\CategoryExternalCode\Model\CategoryAttributeModel;
 use Study\CategoryExternalCode\Model\ResourceModel\CategoryAttributeResource;
 
+/**
+ * Collection of external attributes
+ */
 class Collection extends AbstractCollection
 {
     /**
