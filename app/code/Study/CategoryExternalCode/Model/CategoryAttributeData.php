@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Study\CategoryExternalCode\Model;
 
-use Study\CategoryExternalCode\Api\CategoryAttributeModelInterface;
+use Study\CategoryExternalCode\Api\Data\CategoryAttributeDataInterface;
 use Magento\Framework\Model\AbstractModel;
 use Study\CategoryExternalCode\Model\ResourceModel\CategoryAttributeResource;
 
 /**
  * Model of category attributes
  */
-class CategoryAttributeModel extends AbstractModel implements CategoryAttributeModelInterface
+class CategoryAttributeData extends AbstractModel implements CategoryAttributeDataInterface
 {
     /**
      * Init resource model

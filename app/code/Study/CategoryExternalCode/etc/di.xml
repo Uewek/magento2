@@ -5,7 +5,7 @@
                  type="Magento\Ui\DataProvider\Modifier\Pool">
         <arguments>
             <argument name="modifiers" xsi:type="array">
-                <item name="modifier_name" xsi:type="array">
+                <item name="external_attribute_modifier" xsi:type="array">
                     <item name="class" xsi:type="string">
                         Study\CategoryExternalCode\Ui\DataProvider\Modifier\ExternalAttribute</item>
                     <item name="sortOrder" xsi:type="number">10</item>
@@ -27,6 +27,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Api\CategoryRepositoryInterface">
+        <plugin name="category_repository_plugin"
+                type="Study\CategoryExternalCode\Plugin\CategoryRepositoryInterface"/>
+    </type>
     <preference for="Study\CategoryExternalAttribute\Api\CategoryAttributeModelInterface"
                 type="Study\CategoryExternalAttribute\Model\CategoryAttributeModel" />
+    <preference for="Study\CategoryExternalAttribute\Api\Data\CategoryExternalSearchResultInterface"
+                type="Magento\Framework\Api\SearchResults" />
 </config>

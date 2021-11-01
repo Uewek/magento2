@@ -12,22 +12,18 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 class CategoryAttributeResource extends AbstractDb
 {
     /**
-     * @ingeritdoc
+     * Disable autoincrement
      *
-     * @param Context $context
+     * @var bool
      */
-    public function __construct(
-        Context $context
-    ) {
-        parent::__construct($context);
-    }
+    protected $_isPkAutoIncrement = false;
 
     /**
      * Table init
      */
     protected function _construct()
     {
-        $this->_init('category_external_code_attribute', 'category_external_code_id');
+        $this->_init('category_external_code_attribute', 'category_id');
     }
 }
 

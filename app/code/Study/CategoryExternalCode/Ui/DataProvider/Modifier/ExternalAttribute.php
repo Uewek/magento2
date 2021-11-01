@@ -29,9 +29,10 @@ class ExternalAttribute implements ModifierInterface
      * @param ExternalAttributeService $externalAttributeService
      */
     public function __construct(
-        Data $dataHelper,
+        Data                     $dataHelper,
         ExternalAttributeService $externalAttributeService
-    ) {
+    )
+    {
         $this->dataHelper = $dataHelper;
         $this->externalAttributeService = $externalAttributeService;
     }
@@ -44,7 +45,7 @@ class ExternalAttribute implements ModifierInterface
      */
     public function modifyMeta(array $meta)
     {
-        $categoryId = $this->getCurrentCategoryId();
+        $categoryId = $this->dataHelper->getCategory()->getId();
         $existingCode = $this->externalAttributeService->getExternalAttributeValue($categoryId);
         if (isset($existingCode) && $existingCode !== '') {
             $meta['general'] = [
@@ -66,22 +67,13 @@ class ExternalAttribute implements ModifierInterface
     }
 
     /**
-     * {@inheritdoc}
+     * This method must be implemented
+     *
+     * @param array $data
+     * @return array
      */
     public function modifyData(array $data)
     {
         return $data;
     }
-
-    /**
-     * Get id of current category
-     *
-     * @return string
-     */
-    private function getCurrentCategoryId(): string
-    {
-        return $this->dataHelper->getCategory()->getId();
-    }
-
-
 }

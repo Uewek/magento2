@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Study\CategoryExternalCode\Console;
 
 use Magento\Framework\Console\Cli;
-use Study\CategoryExternalCode\Api\CategoryAttributeRepositoryInterface;
+use Study\CategoryExternalCode\Api\CategoryExternalCodeRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -80,12 +80,12 @@ class MakeExternalCodeTxt extends Command
     {
         $result = '';
         $externalCollection = $this->collectionFactory->create();
-        $externalCollection->addFieldToSelect(CategoryAttributeRepositoryInterface::EXTERNAL_CODE);
-        $externalCollection->addFieldToSelect(CategoryAttributeRepositoryInterface::CATEGORY_NAME);
+        $externalCollection->addFieldToSelect(CategoryExternalCodeRepositoryInterface::EXTERNAL_CODE);
+        $externalCollection->addFieldToSelect(CategoryExternalCodeRepositoryInterface::CATEGORY_NAME);
 
         foreach ($externalCollection as $item) {
-            $name = $item->getData()[CategoryAttributeRepositoryInterface::CATEGORY_NAME];
-            $code = $item->getData()[CategoryAttributeRepositoryInterface::EXTERNAL_CODE];
+            $name = $item->getData()[CategoryExternalCodeRepositoryInterface::CATEGORY_NAME];
+            $code = $item->getData()[CategoryExternalCodeRepositoryInterface::EXTERNAL_CODE];
             $result = $result . $name . ' => ' . $code . "\r\n";
         }
 

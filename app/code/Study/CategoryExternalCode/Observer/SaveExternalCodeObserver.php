@@ -6,8 +6,8 @@ namespace Study\CategoryExternalCode\Observer;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Study\CategoryExternalCode\Model\CategoryAttributeModelFactory;
-use Study\CategoryExternalCode\Model\CategoryAttributeRepository;
+use Study\CategoryExternalCode\Model\CategoryAttributeDataFactory;
+use Study\CategoryExternalCode\Model\CategoryExternalCodeRepository;
 use Magento\Framework\Message\ManagerInterface;
 use Study\CategoryExternalCode\Service\ExternalAttributeService;
 use Study\CategoryExternalCode\Model\ResourceModel\CategoryExternalAttribute\CollectionFactory;
@@ -18,34 +18,14 @@ use Study\CategoryExternalCode\Model\ResourceModel\CategoryExternalAttribute\Col
 class SaveExternalCodeObserver implements ObserverInterface
 {
     /**
-     * @var RequestInterface
+     * @var CategoryAttributeDataFactory
      */
-    private $request;
+    private $attributeDataFactory;
 
     /**
-     * @var ExternalAttributeService
-     */
-    private $externalAttributeService;
-
-    /**
-     * @var CategoryAttributeModelFactory
-     */
-    private $attributeModelFactory;
-
-    /**
-     * @var CategoryAttributeRepository
+     * @var CategoryExternalCodeRepository
      */
     private $categoryAttributeRepository;
-
-    /**
-     * @var ManagerInterface
-     */
-    private $messageManager;
-
-    /**
-     * @var CollectionFactory
-     */
-    private $attributeCollectionFactory;
 
     /**
      * Class constructor
@@ -54,22 +34,18 @@ class SaveExternalCodeObserver implements ObserverInterface
      * @param ManagerInterface $messageManager
      * @param CollectionFactory $attributeCollectionFactory
      * @param ExternalAttributeService $externalAttributeService
-     * @param CategoryAttributeRepository $categoryAttributeRepository
-     * @param CategoryAttributeModelFactory $attributeModelFactory
+     * @param CategoryExternalCodeRepository $categoryAttributeRepository
+     * @param CategoryAttributeDataFactory $attributeDataFactory
      */
     public function __construct(
-        RequestInterface              $request,
-        ManagerInterface              $messageManager,
-        CollectionFactory             $attributeCollectionFactory,
-        ExternalAttributeService      $externalAttributeService,
-        CategoryAttributeRepository   $categoryAttributeRepository,
-        CategoryAttributeModelFactory $attributeModelFactory
+        CollectionFactory              $attributeCollectionFactory,
+        ExternalAttributeService       $externalAttributeService,
+        CategoryExternalCodeRepository $categoryAttributeRepository,
+        CategoryAttributeDataFactory   $attributeDataFactory
     ) {
-        $this->request = $request;
         $this->attributeCollectionFactory = $attributeCollectionFactory;
         $this->externalAttributeService = $externalAttributeService;
-        $this->messageManager = $messageManager;
-        $this->attributeModelFactory = $attributeModelFactory;
+        $this->attributeDataFactory = $attributeDataFactory;
         $this->categoryAttributeRepository = $categoryAttributeRepository;
     }
 
@@ -80,60 +56,16 @@ class SaveExternalCodeObserver implements ObserverInterface
      */
     public function execute(Observer $observer): void
     {
-        $data = $this->request->getParams();
-        $categoryId = $data['entity_id'];
-        $categoryName = $data['name'];
-        $externalAttributeValue = $data[CategoryAttributeRepository::EXTERNAL_CODE];
-        $existingCode = $this->externalAttributeService->getExternalAttributeValue($categoryId);
-        $isOverride = $this->checkAttributeOverride($externalAttributeValue, $existingCode);
+        $categoryId = $observer->getData('entity')->getData(CategoryExternalCodeRepository::ENTITY_ID);
+        $externalAttributeValue = $observer->getData('entity')
+            ->getData(CategoryExternalCodeRepository::EXTERNAL_CODE);
+        $attribute = $this->attributeDataFactory->create();
+        $attribute->setData(CategoryExternalCodeRepository::CATEGORY_ID, $categoryId)
+            ->setData(CategoryExternalCodeRepository::EXTERNAL_CODE, $externalAttributeValue);
+        try {
+            $this->categoryAttributeRepository->save($attribute);
+        } catch (\Exception $e) {
 
-        if ($isOverride) {
-            $this->deleteOldAttribute($categoryId);
-        }
-
-        if ($isOverride && $externalAttributeValue !== '') {
-            $attribute = $this->attributeModelFactory->create();
-            $attribute->setData(CategoryAttributeRepository::CATEGORY_ID, $categoryId)
-                ->setData(CategoryAttributeRepository::CATEGORY_NAME, $categoryName)
-                ->setData(CategoryAttributeRepository::EXTERNAL_CODE, $externalAttributeValue);
-            try {
-                $this->categoryAttributeRepository->save($attribute);
-                $this->messageManager->addSuccessMessage(__('External code added successfully'));
-            } catch (\Exception $e) {
-                $this->messageManager->addErrorMessage(__('Something went wrong!'));
-            }
-        }
-    }
-
-    /**
-     * Check is external attribute is changed
-     *
-     * @param string|null $newAttributeValue
-     * @param string|null $existingAttributeValue
-     * @return bool
-     */
-    private function checkAttributeOverride(string $newAttributeValue, ?string $existingAttributeValue): bool
-    {
-        $result = true;
-        if ($newAttributeValue === $existingAttributeValue) {
-            $result = false;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Delete old external attribute
-     *
-     * @param string $categoryId
-     */
-    private function deleteOldAttribute(string $categoryId): void
-    {
-        $oldAttribute = $this->attributeCollectionFactory->create();
-        $oldAttribute->addFieldToFilter(CategoryAttributeRepository::CATEGORY_ID, $categoryId);
-
-        foreach ($oldAttribute as $item) {
-            $this->categoryAttributeRepository->delete($item);
         }
     }
 }
