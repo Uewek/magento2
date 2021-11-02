@@ -11,6 +11,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Study\CategoryExternalCode\Model\ResourceModel\CategoryExternalAttribute\CollectionFactory;
+use Study\CategoryExternalCode\Service\CreateTxtFileService;
+use Magento\Catalog\Model\CategoryRepository;
 
 /**
  * Create .txt file with names of categories and assigned external attributes
@@ -18,9 +20,14 @@ use Study\CategoryExternalCode\Model\ResourceModel\CategoryExternalAttribute\Col
 class MakeExternalCodeTxt extends Command
 {
     /**
-     * @var Filesystem
+     * @var CategoryRepository
      */
-    private $filesystem;
+    private $categoryRepository;
+
+    /**
+     * @var CreateTxtFileService
+     */
+    private $createTxtFileService;
 
     /**
      * @var CollectionFactory
@@ -35,14 +42,17 @@ class MakeExternalCodeTxt extends Command
      * @param string|null $name
      */
     public function __construct(
-        Filesystem        $filesystem,
-        CollectionFactory $collectionFactory,
-        string            $name = null
+        Filesystem           $filesystem,
+        CategoryRepository   $categoryRepository,
+        CreateTxtFileService $createTxtFileService,
+        CollectionFactory    $collectionFactory,
+        string               $name = null
     ) {
         parent::__construct($name);
 
         $this->collectionFactory = $collectionFactory;
-        $this->filesystem = $filesystem;
+        $this->categoryRepository = $categoryRepository;
+        $this->createTxtFileService = $createTxtFileService;
     }
 
     /**
@@ -65,7 +75,9 @@ class MakeExternalCodeTxt extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->createTextFile();
+        $fileContent = $this->prepareFileData();
+        $filename = $this->prepareFileName();
+        $this->createTxtFileService->createTextFile($fileContent, $filename);
         $output->writeln($this->prepareFileName() . " file created in 'var\' directory");
 
         return Cli::RETURN_SUCCESS;
@@ -81,28 +93,20 @@ class MakeExternalCodeTxt extends Command
         $result = '';
         $externalCollection = $this->collectionFactory->create();
         $externalCollection->addFieldToSelect(CategoryExternalCodeRepositoryInterface::EXTERNAL_CODE);
-        $externalCollection->addFieldToSelect(CategoryExternalCodeRepositoryInterface::CATEGORY_NAME);
+        $externalCollection->addFieldToSelect(CategoryExternalCodeRepositoryInterface::CATEGORY_ID);
 
         foreach ($externalCollection as $item) {
-            $name = $item->getData()[CategoryExternalCodeRepositoryInterface::CATEGORY_NAME];
-            $code = $item->getData()[CategoryExternalCodeRepositoryInterface::EXTERNAL_CODE];
-            $result = $result . $name . ' => ' . $code . "\r\n";
+            $id = (int) $item->getData(CategoryExternalCodeRepositoryInterface::CATEGORY_ID);
+            $name = $this->getCategoryName($id);
+            $code = $item->getData(CategoryExternalCodeRepositoryInterface::EXTERNAL_CODE);
+            if (isset($code) && $code !== '') {
+                $result = $result . $name . ' => ' . $code . "\r\n";
+            }
         }
 
         return $result;
     }
 
-    /**
-     * Create file with given content in 'var' directory
-     */
-    private function createTextFile()
-    {
-        $varDirectory = $this->filesystem->getDirectoryWrite(
-            DirectoryList::VAR_DIR
-        );
-        $content = $this->prepareFileData();
-        $varDirectory->writeFile($this->prepareFileName(), $content);
-    }
 
     /**
      * Prepare file name
@@ -111,7 +115,22 @@ class MakeExternalCodeTxt extends Command
      */
     private function prepareFileName(): string
     {
-        return 'category_codes_' . date("d_m_Y") . '.txt';
+        return 'category_codes_' . date('d_m_Y') . '.txt';
     }
 
+    /**
+     * Get category name by id
+     *
+     * @param int $categoryId
+     * @return string
+     */
+    private function getCategoryName(int $categoryId): string
+    {
+        try {
+            $category = $this->categoryRepository->get($categoryId);
+        } catch (\Exception $e) {
+
+        }
+        return $category->getName();
+    }
 }

@@ -7,5 +7,4 @@ use Magento\Framework\Api\SearchResultsInterface;
 
 interface CategoryExternalSearchResultInterface extends SearchResultsInterface
 {
-
 }

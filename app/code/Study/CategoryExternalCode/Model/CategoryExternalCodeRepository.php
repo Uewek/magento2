@@ -5,19 +5,31 @@ namespace Study\CategoryExternalCode\Model;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Study\CategoryExternalCode\Api\Data\CategoryAttributeDataInterface;
+use Study\CategoryExternalCode\Api\Data\CategoryExternalSearchResultInterfaceFactory;
+use Study\CategoryExternalCode\Api\Data\CategoryExternalSearchResultInterface;
 use Study\CategoryExternalCode\Api\CategoryExternalCodeRepositoryInterface;
 use Study\CategoryExternalCode\Model\ResourceModel\CategoryAttributeResource;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor;
 use Study\CategoryExternalCode\Model\ResourceModel\CategoryExternalAttribute\CollectionFactory;
-
 
 /**
  * Repository of external attributes
  */
 class CategoryExternalCodeRepository implements CategoryExternalCodeRepositoryInterface
 {
+    /**
+     * @var CategoryExternalSearchResultInterfaceFactory
+     */
+    private $searchResultFactory;
+
+    /**
+     * @var CollectionFactory
+     */
     private $collectionFactory;
 
+    /**
+     * @var CollectionProcessor
+     */
     private $collectionProcessor;
 
     /**
@@ -29,12 +41,17 @@ class CategoryExternalCodeRepository implements CategoryExternalCodeRepositoryIn
      * Class constructor
      *
      * @param CategoryAttributeResource $categoryAttributeResource
+     * @param CollectionProcessor $collectionProcessor
+     * @param CategoryExternalSearchResultInterfaceFactory $searchResultFactory
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         CategoryAttributeResource $categoryAttributeResource,
         CollectionProcessor $collectionProcessor,
+        CategoryExternalSearchResultInterfaceFactory $searchResultFactory,
         CollectionFactory $collectionFactory
     ) {
+        $this->searchResultFactory = $searchResultFactory;
         $this->collectionFactory = $collectionFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->categoryAttributeResource = $categoryAttributeResource;
@@ -55,19 +72,11 @@ class CategoryExternalCodeRepository implements CategoryExternalCodeRepositoryIn
     }
 
     /**
-     * Delete category attribute
+     * Get list of External attributes
      *
-     * @param CategoryAttributeDataInterface $categoryAttribute
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return CategoryExternalSearchResultInterface
      */
-    public function delete(CategoryAttributeDataInterface $categoryAttribute): void
-    {
-        try {
-            $this->categoryAttributeResource->delete($categoryAttribute);
-        } catch (\Exception $e) {
-
-        }
-    }
-
     public function getList(SearchCriteriaInterface $searchCriteria): CategoryExternalSearchResultInterface
     {
         $collection = $this->collectionFactory->create();

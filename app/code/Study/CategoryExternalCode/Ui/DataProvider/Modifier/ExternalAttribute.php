@@ -5,7 +5,6 @@ namespace Study\CategoryExternalCode\Ui\DataProvider\Modifier;
 
 use Magento\Catalog\Helper\Data;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
-use Study\CategoryExternalCode\Service\ExternalAttributeService;
 
 /**
  * Modify data when category form loading
@@ -18,23 +17,15 @@ class ExternalAttribute implements ModifierInterface
     private $dataHelper;
 
     /**
-     * @var ExternalAttributeService
-     */
-    private $externalAttributeService;
-
-    /**
      * Class constructor
      *
      * @param Data $dataHelper
      * @param ExternalAttributeService $externalAttributeService
      */
     public function __construct(
-        Data                     $dataHelper,
-        ExternalAttributeService $externalAttributeService
-    )
-    {
+        Data                     $dataHelper
+    ) {
         $this->dataHelper = $dataHelper;
-        $this->externalAttributeService = $externalAttributeService;
     }
 
     /**
@@ -45,16 +36,16 @@ class ExternalAttribute implements ModifierInterface
      */
     public function modifyMeta(array $meta)
     {
-        $categoryId = $this->dataHelper->getCategory()->getId();
-        $existingCode = $this->externalAttributeService->getExternalAttributeValue($categoryId);
-        if (isset($existingCode) && $existingCode !== '') {
+        $category = $this->dataHelper->getCategory();
+        $categoryExternalCode = $category->getExtensionAttributes()->getCategoryExternalCode();
+        if (isset($categoryExternalCode) && $categoryExternalCode !== '') {
             $meta['general'] = [
                 'children' => [
                     'category_external_code' => [
                         'arguments' => [
                             'data' => [
                                 'config' => [
-                                    'value' => $existingCode
+                                    'value' => $categoryExternalCode
                                 ]
                             ]
                         ]

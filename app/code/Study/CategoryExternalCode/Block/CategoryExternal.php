@@ -9,6 +9,9 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Study\CategoryExternalCode\Service\ExternalAttributeService;
 
+/**
+ * This block adding category code to category name on storefront category page
+ */
 class CategoryExternal extends Template
 {
     /**
@@ -17,24 +20,16 @@ class CategoryExternal extends Template
     private $dataHelper;
 
     /**
-     * @var ExternalAttributeService
-     */
-    private $externalAttributeService;
-
-    /**
      * Class constructor
      *
      * @param Context $context
      * @param Data $dataHelper
-     * @param ExternalAttributeService $externalAttributeService
      */
     public function __construct(
         Context $context,
-        Data $dataHelper,
-        ExternalAttributeService $externalAttributeService
+        Data $dataHelper
     ) {
         $this->dataHelper = $dataHelper;
-        $this->externalAttributeService = $externalAttributeService;
 
         parent::__construct($context);
     }
@@ -46,8 +41,8 @@ class CategoryExternal extends Template
      */
     public function getExternalCode(): Phrase
     {
-        $categoryId = $this->dataHelper->getCategory()->getId();
-        $externalCode = $this->externalAttributeService->getExternalAttributeValue($categoryId);
+        $category = $this->dataHelper->getCategory();
+        $externalCode = $category->getExtensionAttributes()->getCategoryExternalCode();
         $resultCode = '';
         if (isset($externalCode) && $externalCode !== '') {
             $resultCode = '( ' . $externalCode . ')';

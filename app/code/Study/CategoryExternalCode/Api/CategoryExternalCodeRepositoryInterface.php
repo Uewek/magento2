@@ -21,19 +21,5 @@ interface CategoryExternalCodeRepositoryInterface
 
     public const EXTERNAL_CODE = 'category_external_code';
 
-    /**
-     * Save category attribute
-     *
-     * @param CategoryAttributeDataInterface $categoryAttribute
-     */
-    public function save(CategoryAttributeDataInterface $categoryAttribute): void;
 
-    /**
-     * Delete category attribute
-     *
-     * @param CategoryAttributeDataInterface $categoryAttribute
-     */
-    public function delete(CategoryAttributeDataInterface $categoryAttribute): void;
-
-    public function getList(SearchCriteriaInterface $searchCriteria): CategoryExternalSearchResultInterface;
 }

@@ -38,10 +38,8 @@ class ExternalAttributeService
         $collection = $this->externalAttributeCollectionFactory->create();
         $collection->addFieldToFilter(CategoryExternalCodeRepositoryInterface::CATEGORY_ID, $categoryId)
             ->addFieldToSelect(CategoryExternalCodeRepositoryInterface::EXTERNAL_CODE);
-        $result = null;
-        foreach ($collection as $item) {
-            $result = $item->getData()[CategoryExternalCodeRepositoryInterface::EXTERNAL_CODE];
-        }
-        return $result;
+
+        return  $collection->getFirstItem()->getData(CategoryExternalCodeRepositoryInterface::EXTERNAL_CODE);
     }
+
 }
