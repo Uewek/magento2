@@ -7,7 +7,6 @@ use Magento\Catalog\Helper\Data;
 use Magento\Framework\Phrase;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Study\CategoryExternalCode\Service\ExternalAttributeService;
 
 /**
  * This block adding category code to category name on storefront category page

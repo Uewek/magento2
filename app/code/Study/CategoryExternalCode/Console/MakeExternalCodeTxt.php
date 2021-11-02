@@ -99,6 +99,7 @@ class MakeExternalCodeTxt extends Command
             $id = (int) $item->getData(CategoryExternalCodeRepositoryInterface::CATEGORY_ID);
             $name = $this->getCategoryName($id);
             $code = $item->getData(CategoryExternalCodeRepositoryInterface::EXTERNAL_CODE);
+
             if (isset($code) && $code !== '') {
                 $result = $result . $name . ' => ' . $code . "\r\n";
             }

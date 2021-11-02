@@ -44,8 +44,7 @@ class SaveExternalCodeObserver implements ObserverInterface
      */
     public function execute(Observer $observer): void
     {
-        $category =  $observer->getData('entity');
-
+        $category = $observer->getData('entity');
         $categoryId = $category->getData(CategoryExternalCodeRepository::ENTITY_ID);
         $externalAttributeValue = $category
             ->getData(CategoryExternalCodeRepository::EXTERNAL_CODE);

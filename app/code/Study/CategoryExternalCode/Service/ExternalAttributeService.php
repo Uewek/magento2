@@ -41,5 +41,4 @@ class ExternalAttributeService
 
         return  $collection->getFirstItem()->getData(CategoryExternalCodeRepositoryInterface::EXTERNAL_CODE);
     }
-
 }

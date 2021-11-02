@@ -20,10 +20,9 @@ class ExternalAttribute implements ModifierInterface
      * Class constructor
      *
      * @param Data $dataHelper
-     * @param ExternalAttributeService $externalAttributeService
      */
     public function __construct(
-        Data                     $dataHelper
+        Data $dataHelper
     ) {
         $this->dataHelper = $dataHelper;
     }
