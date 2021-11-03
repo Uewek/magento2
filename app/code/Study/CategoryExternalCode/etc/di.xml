@@ -22,8 +22,8 @@
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="external:maketxt" xsi:type="object">
-                    Study\CategoryExternalCode\Console\MakeExternalCodeTxt</item>
+                <item name="external-category-codes:export" xsi:type="object">
+                    Study\CategoryExternalCode\Console\ExportCategoryExternalCodes</item>
             </argument>
         </arguments>
     </type>

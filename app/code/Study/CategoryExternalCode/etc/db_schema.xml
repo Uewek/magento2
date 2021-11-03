@@ -2,8 +2,6 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="category_external_code_attribute" resource="default" engine="innodb" comment="Promotions">
-<!--        <column xsi:type="int" name="category_external_code_id" nullable="false" padding="15" identity="false"-->
-<!--                comment="Category attribute ID"/>-->
         <column xsi:type="int" name="category_id" nullable="false"  unsigned="true"  comment="Category Id" />
         <column xsi:type="text" name="category_external_code" nullable="true"  comment="Category attribute value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">

@@ -6,9 +6,13 @@
     </head>
     <body>
         <referenceBlock name="page.main.title">
-            <block class="Study\CategoryExternalCode\Block\CategoryExternal"
-                   name="category.external_code"
-                   template="Study_CategoryExternalCode::addition_external_code.phtml"/>
+            <block name="external.code.viewmodel" template="Study_CategoryExternalCode::addition_external_code.phtml">
+                <arguments>
+                    <argument name="view_model"
+                              xsi:type="object">Study\CategoryExternalCode\ViewModel\CategoryExternalCodeViewModel
+                    </argument>
+                </arguments>
+            </block>
         </referenceBlock>
     </body>
 </page>

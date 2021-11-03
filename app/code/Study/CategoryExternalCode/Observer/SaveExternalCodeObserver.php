@@ -5,8 +5,9 @@ namespace Study\CategoryExternalCode\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Study\CategoryExternalCode\Model\CategoryAttributeDataFactory;
+use Study\CategoryExternalCode\Model\CategoryExternalCodeFactory;
 use Study\CategoryExternalCode\Model\CategoryExternalCodeRepository;
+use Study\CategoryExternalCode\Api\Data\CategoryExternalCodeInterface;
 
 /**
  * This observer saving external attribute value from category form
@@ -14,7 +15,7 @@ use Study\CategoryExternalCode\Model\CategoryExternalCodeRepository;
 class SaveExternalCodeObserver implements ObserverInterface
 {
     /**
-     * @var CategoryAttributeDataFactory
+     * @var CategoryExternalCodeFactory
      */
     private $attributeDataFactory;
 
@@ -27,11 +28,11 @@ class SaveExternalCodeObserver implements ObserverInterface
      * Class constructor
      *
      * @param CategoryExternalCodeRepository $categoryAttributeRepository
-     * @param CategoryAttributeDataFactory $attributeDataFactory
+     * @param CategoryExternalCodeFactory $attributeDataFactory
      */
     public function __construct(
         CategoryExternalCodeRepository $categoryAttributeRepository,
-        CategoryAttributeDataFactory   $attributeDataFactory
+        CategoryExternalCodeFactory   $attributeDataFactory
     ) {
         $this->attributeDataFactory = $attributeDataFactory;
         $this->categoryAttributeRepository = $categoryAttributeRepository;
@@ -45,16 +46,12 @@ class SaveExternalCodeObserver implements ObserverInterface
     public function execute(Observer $observer): void
     {
         $category = $observer->getData('entity');
-        $categoryId = $category->getData(CategoryExternalCodeRepository::ENTITY_ID);
+        $categoryId = $category->getData(CategoryExternalCodeInterface::ENTITY_ID);
         $externalAttributeValue = $category
-            ->getData(CategoryExternalCodeRepository::EXTERNAL_CODE);
+            ->getData(CategoryExternalCodeInterface::EXTERNAL_CODE);
         $attribute = $this->attributeDataFactory->create();
-        $attribute->setData(CategoryExternalCodeRepository::CATEGORY_ID, $categoryId)
-            ->setData(CategoryExternalCodeRepository::EXTERNAL_CODE, $externalAttributeValue);
-        try {
-            $this->categoryAttributeRepository->save($attribute);
-        } catch (\Exception $e) {
-
-        }
+        $attribute->setData(CategoryExternalCodeInterface::CATEGORY_ID, $categoryId)
+            ->setData(CategoryExternalCodeInterface::EXTERNAL_CODE, $externalAttributeValue);
+        $this->categoryAttributeRepository->save($attribute);
     }
 }

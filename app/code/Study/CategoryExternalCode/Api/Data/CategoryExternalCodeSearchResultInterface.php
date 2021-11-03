@@ -5,6 +5,6 @@ namespace Study\CategoryExternalCode\Api\Data;
 
 use Magento\Framework\Api\SearchResultsInterface;
 
-interface CategoryExternalSearchResultInterface extends SearchResultsInterface
+interface CategoryExternalCodeSearchResultInterface extends SearchResultsInterface
 {
 }

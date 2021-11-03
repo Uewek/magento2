@@ -4,9 +4,10 @@ declare(strict_types=1);
 namespace Study\CategoryExternalCode\Model;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Study\CategoryExternalCode\Api\Data\CategoryAttributeDataInterface;
-use Study\CategoryExternalCode\Api\Data\CategoryExternalSearchResultInterfaceFactory;
-use Study\CategoryExternalCode\Api\Data\CategoryExternalSearchResultInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Study\CategoryExternalCode\Api\Data\CategoryExternalCodeInterface;
+use Study\CategoryExternalCode\Api\Data\CategoryExternalCodeSearchResultInterfaceFactory;
+use Study\CategoryExternalCode\Api\Data\CategoryExternalCodeSearchResultInterface;
 use Study\CategoryExternalCode\Api\CategoryExternalCodeRepositoryInterface;
 use Study\CategoryExternalCode\Model\ResourceModel\CategoryAttributeResource;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor;
@@ -18,7 +19,7 @@ use Study\CategoryExternalCode\Model\ResourceModel\CategoryExternalAttribute\Col
 class CategoryExternalCodeRepository implements CategoryExternalCodeRepositoryInterface
 {
     /**
-     * @var CategoryExternalSearchResultInterfaceFactory
+     * @var CategoryExternalCodeSearchResultInterfaceFactory
      */
     private $searchResultFactory;
 
@@ -42,13 +43,13 @@ class CategoryExternalCodeRepository implements CategoryExternalCodeRepositoryIn
      *
      * @param CategoryAttributeResource $categoryAttributeResource
      * @param CollectionProcessor $collectionProcessor
-     * @param CategoryExternalSearchResultInterfaceFactory $searchResultFactory
+     * @param CategoryExternalCodeSearchResultInterfaceFactory $searchResultFactory
      * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         CategoryAttributeResource $categoryAttributeResource,
         CollectionProcessor $collectionProcessor,
-        CategoryExternalSearchResultInterfaceFactory $searchResultFactory,
+        CategoryExternalCodeSearchResultInterfaceFactory $searchResultFactory,
         CollectionFactory $collectionFactory
     ) {
         $this->searchResultFactory = $searchResultFactory;
@@ -60,14 +61,20 @@ class CategoryExternalCodeRepository implements CategoryExternalCodeRepositoryIn
     /**
      * Save category attribute
      *
-     * @param CategoryAttributeDataInterface $categoryAttribute
+     * @param CategoryExternalCodeInterface $categoryAttribute
      */
-    public function save(CategoryAttributeDataInterface $categoryAttribute): void
+    public function save(CategoryExternalCodeInterface $categoryAttribute): void
     {
         try {
             $this->categoryAttributeResource->save($categoryAttribute);
         } catch (\Exception $e) {
-
+            throw new CouldNotSaveException(
+                __(
+                    'Could not save category attribute',
+                    $categoryAttribute->getId()
+                ),
+                $e
+            );
         }
     }
 
@@ -75,9 +82,9 @@ class CategoryExternalCodeRepository implements CategoryExternalCodeRepositoryIn
      * Get list of External attributes
      *
      * @param SearchCriteriaInterface $searchCriteria
-     * @return CategoryExternalSearchResultInterface
+     * @return CategoryExternalCodeSearchResultInterface
      */
-    public function getList(SearchCriteriaInterface $searchCriteria): CategoryExternalSearchResultInterface
+    public function getList(SearchCriteriaInterface $searchCriteria): CategoryExternalCodeSearchResultInterface
     {
         $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
