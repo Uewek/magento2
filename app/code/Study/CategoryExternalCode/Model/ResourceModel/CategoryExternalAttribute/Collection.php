@@ -9,7 +9,7 @@ use Study\CategoryExternalCode\Model\ResourceModel\CategoryAttributeResource;
 
 /**
  * Collection of external attributes
- */
+*/
 class Collection extends AbstractCollection
 {
     /**

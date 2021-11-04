@@ -31,8 +31,10 @@
         <plugin name="category_resource_plugin"
                 type="Study\CategoryExternalCode\Plugin\CategoryResourcePlugin"/>
     </type>
-    <preference for="Study\CategoryExternalAttribute\Api\CategoryAttributeModelInterface"
-                type="Study\CategoryExternalAttribute\Model\CategoryAttributeModel" />
+    <preference for="Study\CategoryExternalCode\Api\Data\CategoryExternalCodeInterface"
+                type="Study\CategoryExternalCode\Model\CategoryExternalCode" />
+    <preference for="Study\CategoryExternalCode\Api\CategoryExternalCodeRepositoryInterface"
+                type="Study\CategoryExternalCode\Model\CategoryExternalCodeRepository" />
     <preference for="Study\CategoryExternalCode\Api\Data\CategoryExternalSearchResultInterface"
                 type="Magento\Framework\Api\SearchResults" />
 </config>
