@@ -30,7 +30,7 @@ class ExternalAttributeService
      * @param $categoryId
      * @return string|null
      */
-    public function getExternalAttributeValue($categoryId): ?string
+    public function getExternalAttributeValue(int $categoryId): ?string
     {
         $externalCode = $this->categoryExternalCodeRepository->getExternalCodeEntity((int) $categoryId);
         $codeValue = $externalCode->getData(CategoryExternalCodeInterface::EXTERNAL_CODE);
