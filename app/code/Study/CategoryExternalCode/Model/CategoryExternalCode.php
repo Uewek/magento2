@@ -20,4 +20,13 @@ class CategoryExternalCode extends AbstractModel implements CategoryExternalCode
         $this->_init(CategoryAttributeResource::class);
     }
 
+    /**
+     * Get attribute code string
+     *
+     * @return string
+     */
+    public function getAttributeCode(): ?string
+    {
+        return $this->getData(self::EXTERNAL_CODE);
+    }
 }

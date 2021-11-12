@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Study\CategoryExternalCode\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Category attribute resource model

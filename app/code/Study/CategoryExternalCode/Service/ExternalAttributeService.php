@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Study\CategoryExternalCode\Service;
 
-use Study\CategoryExternalCode\Api\Data\CategoryExternalCodeInterface;
 use Study\CategoryExternalCode\Api\CategoryExternalCodeRepositoryInterface;
 
 /**
@@ -33,7 +32,7 @@ class ExternalAttributeService
     public function getExternalAttributeValue(int $categoryId): ?string
     {
         $externalCode = $this->categoryExternalCodeRepository->getExternalCodeEntity((int) $categoryId);
-        $codeValue = $externalCode->getData(CategoryExternalCodeInterface::EXTERNAL_CODE);
+        $codeValue = $externalCode->getAttributeCode();
 
         return $codeValue;
     }

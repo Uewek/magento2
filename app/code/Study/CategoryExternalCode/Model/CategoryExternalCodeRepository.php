@@ -19,7 +19,6 @@ use Study\CategoryExternalCode\Model\ResourceModel\CategoryExternalAttribute\Col
  */
 class CategoryExternalCodeRepository implements CategoryExternalCodeRepositoryInterface
 {
-
     /**
      * @var CategoryExternalCodeInterfaceFactory
      */

@@ -5,5 +5,4 @@ namespace Study\CategoryExternalCode\Api;
 
 interface CategoryExternalSearchCriteriaInterface
 {
-
 }

@@ -5,12 +5,12 @@ namespace Study\CategoryExternalCode\Console;
 
 use Magento\Framework\Console\Cli;
 use Study\CategoryExternalCode\Api\Data\CategoryExternalCodeInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Study\CategoryExternalCode\Model\ResourceModel\CategoryExternalAttribute\CollectionFactory;
 use Study\CategoryExternalCode\Service\CreateTxtFileService;
-use Study\CategoryExternalCode\Api\CategoryExternalCodeRepositoryInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 
 /**
@@ -18,6 +18,11 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
  */
 class ExportCategoryExternalCodes extends Command
 {
+    /**
+     * @var TimezoneInterface
+     */
+    private $timeZone;
+
     /**
      * @var CategoryRepositoryInterface
      */
@@ -37,17 +42,20 @@ class ExportCategoryExternalCodes extends Command
      * Class constructor
      *
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param TimezoneInterface $timeZone
      * @param CreateTxtFileService $createTxtFileService
      * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         CategoryRepositoryInterface   $categoryRepository,
         CreateTxtFileService $createTxtFileService,
+        TimezoneInterface    $timeZone,
         CollectionFactory    $collectionFactory
     ) {
         parent::__construct();
 
         $this->collectionFactory = $collectionFactory;
+        $this->timeZone = $timeZone;
         $this->categoryRepository = $categoryRepository;
         $this->createTxtFileService = $createTxtFileService;
     }
@@ -97,14 +105,13 @@ class ExportCategoryExternalCodes extends Command
             $name = $this->getCategoryName($id);
             $code = $item->getData(CategoryExternalCodeInterface::EXTERNAL_CODE);
 
-            if (isset($code) && $code !== '') {
+            if (null !== $code && $code !== '') {
                 $result = $result . $name . ' => ' . $code . "\r\n";
             }
         }
 
         return $result;
     }
-
 
     /**
      * Prepare file name
@@ -113,7 +120,8 @@ class ExportCategoryExternalCodes extends Command
      */
     private function prepareFileName(): string
     {
-        return 'category_codes_' . date('d_m_Y') . '.txt';
+        $currentDate = $this->timeZone->date()->format('d_m_Y');
+        return 'category_codes_' . $currentDate . '.txt';
     }
 
     /**
@@ -124,14 +132,14 @@ class ExportCategoryExternalCodes extends Command
      */
     private function getCategoryName(int $categoryId): ?string
     {
+        $result = null;
         try {
             $category = $this->categoryRepository->get($categoryId);
+            $result = $category->getName();
         } catch (\Exception $e) {
 
         }
-        if (isset($category)) {
-            return $category->getName();
-        }
-        return null;
+
+        return $result;
     }
 }

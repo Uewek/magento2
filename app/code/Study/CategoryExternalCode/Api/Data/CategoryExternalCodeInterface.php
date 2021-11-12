@@ -13,4 +13,11 @@ interface CategoryExternalCodeInterface
     public const CATEGORY_ID = 'category_id';
 
     public const EXTERNAL_CODE = 'category_external_code';
+
+    /**
+     * Get attribute code string
+     *
+     * @return string
+     */
+    public function getAttributeCode(): ?string;
 }

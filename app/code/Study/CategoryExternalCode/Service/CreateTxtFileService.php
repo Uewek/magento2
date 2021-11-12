@@ -29,8 +29,11 @@ class CreateTxtFileService
 
     /**
      * Create file with given content and filename in 'var' directory
+     *
+     * @param string $content
+     * @param string $filename
      */
-    public function createTextFile(string $content, string $filename)
+    public function createTextFile(string $content, string $filename): void
     {
         $varDirectory = $this->filesystem->getDirectoryWrite(
             DirectoryList::VAR_DIR

@@ -20,12 +20,18 @@ interface CategoryExternalCodeRepositoryInterface
     public function save(CategoryExternalCodeInterface $categoryAttribute): void;
 
     /**
+     * Get external code attribute entity by id
+     *
+     * @param int $codeId
+     * @return CategoryExternalCodeInterface
+     */
+    public function getExternalCodeEntity(int $codeId): CategoryExternalCodeInterface;
+
+    /**
      * Get list of External attributes
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return CategoryExternalCodeSearchResultInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria): CategoryExternalCodeSearchResultInterface;
-
-
 }

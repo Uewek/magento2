@@ -42,6 +42,7 @@ class SaveExternalCodeObserver implements ObserverInterface
      * Save category external code
      *
      * @param Observer $observer
+     * @return void
      */
     public function execute(Observer $observer): void
     {
