@@ -1,0 +1,16 @@
+<?php
+/* @var \Study\Promotions\Block\Product\Promotions $block
+ */
+$promotionsCollection = $block->getPromotionsAssignedToCurrentProduct();
+
+foreach ($promotionsCollection as $item) {
+    $item = $item->getData();
+    $name = $block->getPromotionName((int)$item['promotion_id']);
+
+    if ($block->isPromotionEnabled($item['promotion_id']) &&
+        $block->checkPromotionIsActiveNow($item['promotion_id'])) {
+        echo "</br>" . "promotion name - $name";
+    }
+}
+?>
+

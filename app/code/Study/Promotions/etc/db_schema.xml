@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="promotions_info" resource="default" engine="innodb" comment="Promotions">
+        <column xsi:type="int" name="promotion_id" nullable="false" padding="15" identity="true" comment="Like ID"/>
+        <column xsi:type="datetime" name="start_time"  nullable="false" default="CURRENT_TIMESTAMP" comment="Promotion start"/>
+        <column xsi:type="datetime" name="finish_time" nullable="true"  comment="Promotion finish"/>
+        <column xsi:type="varchar" name="promotion_name" default="New promotion"  comment="Promotion name"/>
+        <column xsi:type="text" name="promotion_description" nullable="true"  comment="Promotion description"/>
+        <column xsi:type="boolean" name="promotion_enabled" nullable="false" default="true"  comment="Promotion enabled/disabled"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="promotion_id"/>
+        </constraint>
+    </table>
+    <table name="promoted_products" resource="default" engine="innodb" comment="Promotions">
+        <column xsi:type="int" name="promotion_link_id" nullable="false" padding="15" identity="true"
+                comment="Promotion link ID"/>
+        <column xsi:type="int" name="promotion_id" nullable="false" comment="Promotion Id"/>
+        <column xsi:type="int" name="product_id" nullable="false" comment="Product Id" />
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="promotion_link_id"/>
+        </constraint>
+    </table>
+</schema>
