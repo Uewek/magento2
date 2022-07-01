@@ -120,7 +120,11 @@ define([
             steps().sort(this.sortItems).some(function (element, index) {
                 if (element.isVisible()) {
                     activeIndex = index;
-
+                    // if (activeIndex == 1) {
+                    //     $('.opc-summary-wrapper').show();
+                    // } else {
+                    //     $('.opc-summary-wrapper').hide();
+                    // }
                     return true;
                 }
 
@@ -204,7 +208,9 @@ define([
                     activeIndex = index;
                 }
             });
-
+            if (steps().length > activeIndex + 1) {
+                $('#checkout').removeClass('customer-step');
+            }
             if (steps().length > activeIndex + 1) {
                 code = steps()[activeIndex + 1].code;
                 steps()[activeIndex + 1].isVisible(true);

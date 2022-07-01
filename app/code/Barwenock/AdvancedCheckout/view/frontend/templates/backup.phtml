@@ -1,0 +1,22 @@
+<div id="customData" data-bind="scope:'customerInfo'" class="checkout-container">
+
+    <!--    <span id="target" data-bind="text: customer.fullname"></span>-->
+    <span id="target" data-bind="text: customer().fullname"></span>
+    <!--    <span id="target" data-bind="targetKo"></span>-->
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    <!--    {"components":{"customerInfo":{"component":"Barwenock_AdvancedCheckout\/js\/view\/customer-data"}}}-->
+
+    <script type="text/x-magento-init">
+        {
+            "#customData": {
+                "Magento_Ui/js/core/app": {"components":{
+                                            "customerInfo":{
+                                            "component":"Barwenock_AdvancedCheckout/js/view/customer-data"
+                                            }
+                                    }
+                             }
+            }
+
+        }
+    </script>
+</div>

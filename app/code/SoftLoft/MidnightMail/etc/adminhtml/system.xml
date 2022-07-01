@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="customer" translate="label" sortOrder="300">
+            <label>Customers</label>
+        </tab>
+        <section id="customer" >
+            <group id="track_module" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Track connection functional</label>
+                <field id="track_connections" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Track Connection</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Track customer connection</comment>
+                </field>
+                <field id="track_vebsite_visit" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Send mail for connection</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>If enabled send mail at 00:00 every day</comment>
+                </field>
+                <field id="target_email" translate="label" type="text" sortOrder="3" showInDefault="1" showInStore="0"
+                       showInWebsite="0">
+                    <label>Target email</label>
+                    <validate>validate-email</validate>
+                    <comment>Email address of recepient</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

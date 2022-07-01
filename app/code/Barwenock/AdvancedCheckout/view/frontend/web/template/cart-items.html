@@ -1,0 +1,17 @@
+<div class="content minicart-items" data-role="content">
+    <div class="minicart-items-wrapper">
+        <ol class="minicart-items">
+            <each args="data: items(), as: '$item'">
+                <li class="product-item">
+                    <div class="product">
+                        <div data-bind="text: $item.name"/>
+                        <div data-bind="text: $item.qty"/>
+                        <div data-bind="text: $item.price"/>
+
+<!--                        <each args="$parent.elems()" render=""></each>-->
+                    </div>
+                </li>
+            </each>
+        </ol>
+    </div>
+</div>

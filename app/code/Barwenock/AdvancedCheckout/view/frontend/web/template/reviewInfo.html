@@ -1,0 +1,27 @@
+<!-- Here id review_info is same as review-step.js step_code -->
+<li id="review_info" role="presentation" class="checkout-review-method" data-bind="fadeVisible: isVisible">
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="submit"
+                    data-bind="
+                    attr: {title: $t('Place Order')},
+                    click: placeorder
+                    "
+                    class="action primary checkout-review"
+            >
+                <span data-bind="i18n: 'Place Order'"></span>
+            </button>
+        </div>
+    </div>
+
+    <div data-bind="html: window.checkoutConfig.cms_block"></div>
+    <div data-bind="html: window.checkoutConfig.my_block_content"></div>
+    <div class="checkout-agreements-block">
+        <!-- ko foreach: elems() -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
+        <!-- ko foreach: getRegion('before-place-order') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+    </div>
+</li>

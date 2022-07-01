@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <customer>
+            <track_module>
+                <track_connections>1</track_connections>
+                <track_vebsite_visit>1</track_vebsite_visit>
+                <target_email>admin@fr.christianlouboutin.com</target_email>
+            </track_module>
+        </customer>
+    </default>
+</config>
