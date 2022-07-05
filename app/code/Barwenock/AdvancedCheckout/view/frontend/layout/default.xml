@@ -13,13 +13,30 @@
                     <argument name="jsLayout" xsi:type="array">
                         <item name="components" xsi:type="array">
                             <item name="customerInfo" xsi:type="array">
+<!--                                <item name="component" xsi:type="string">-->
+<!--                                    Barwenock_AdvancedCheckout/js/view/customer-data-->
+<!--                                </item>-->
+                                <item name="children" xsi:type="array">
+<!--                                    <item name="cartData" xsi:type="array">-->
+<!--                                        <item name="component" xsi:type="string">-->
+<!--                                            Barwenock_AdvancedCheckout/js/view/cart-data-->
+<!--                                        </item>-->
+<!--                                    </item>-->
+                                </item>
+                            </item>
+                            <item name="productSearch" xsi:type="array">
                                 <item name="component" xsi:type="string">
-                                    Barwenock_AdvancedCheckout/js/view/customer-data
+                                    Barwenock_AdvancedCheckout/js/view/search-form
                                 </item>
                                 <item name="children" xsi:type="array">
-                                    <item name="cartData" xsi:type="array">
+<!--                                    <item name="searchField" xsi:type="array">-->
+<!--                                        <item name="component" xsi:type="string">-->
+<!--                                            Barwenock_AdvancedCheckout/js/view/search-form-->
+<!--                                        </item>-->
+<!--                                    </item>-->
+                                    <item name="resultList" xsi:type="array">
                                         <item name="component" xsi:type="string">
-                                            Barwenock_AdvancedCheckout/js/view/cart-data
+                                            Barwenock_AdvancedCheckout/js/view/result-list
                                         </item>
                                     </item>
                                 </item>

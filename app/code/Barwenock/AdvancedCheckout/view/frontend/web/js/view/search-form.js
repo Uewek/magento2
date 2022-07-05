@@ -16,7 +16,7 @@ define([
     return uiComponent.extend({
         //свойства класа
         defaults: {
-            template: 'Barwenock_AdvancedCheckout/cartData'
+            template: 'Barwenock_AdvancedCheckout/searchForm'
         },
         cart:customerData.get('cart'),
 
@@ -31,7 +31,7 @@ define([
         },
 
         /** Your function for ajax call */
-        myAjaxCall: function(dataToPass) {
+        productSearch: function(dataToPass) {
 
             fullScreenLoader.startLoader();
             storage.post(
